@@ -1,0 +1,303 @@
+/* =================================================================
+   SALON LNĚNÁ — styles.css
+   Paleta:  lněná písková základna + tlumená šalvějová zeleň (akcent)
+            + espresso text. Display font Fraunces, body Hanken Grotesk.
+   Vše responzivní (mobile-first). Barvy si můžete měnit níže v :root.
+   ================================================================= */
+
+:root {
+  /* ---- BARVY (klidně si je upravte) ---- */
+  --linen:      #f3ede1;  /* základní pozadí — lněná */
+  --linen-deep: #e9e0d0;  /* tmavší lněná pro pruhy sekcí */
+  --cream:      #faf6ee;  /* světlé karty */
+  --espresso:   #2e2a24;  /* hlavní text */
+  --mocha:      #6b6253;  /* sekundární text */
+  --sage:       #7c8466;  /* akcent — šalvějová zeleň */
+  --sage-deep:  #5f6650;  /* tmavší akcent pro hover */
+  --gold:       #c9a86a;  /* jemný teplý detail (hvězdičky) */
+  --line:       #ddd2bf;  /* linky / okraje */
+
+  --maxw: 1180px;
+  --radius: 14px;
+  --shadow: 0 18px 40px -24px rgba(46,42,36,.45);
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+}
+
+/* ---------- RESET / ZÁKLAD ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--espresso);
+  background: var(--linen);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden; /* pojistka proti vodorovnému přetékání */
+}
+
+img { max-width: 100%; display: block; height: auto; }
+
+a { color: inherit; text-decoration: none; }
+
+h1, h2, h3 { font-family: var(--font-display); font-weight: 500; line-height: 1.1; letter-spacing: -.01em; }
+
+.container { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: 1.25rem; }
+
+.eyebrow {
+  font-size: .78rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--sage-deep); font-weight: 600; margin-bottom: .6rem;
+}
+
+/* ---------- TLAČÍTKA ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: .5rem; padding: .85rem 1.6rem; border-radius: 999px;
+  font-weight: 600; font-size: .98rem; cursor: pointer; border: 1.5px solid transparent;
+  transition: transform .15s ease, background .2s ease, color .2s ease, border-color .2s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--sage); color: var(--cream); }
+.btn-primary:hover { background: var(--sage-deep); }
+.btn-ghost { background: transparent; color: var(--espresso); border-color: var(--line); }
+.btn-ghost:hover { border-color: var(--sage); color: var(--sage-deep); }
+.btn-block { width: 100%; }
+
+/* ===================== HLAVIČKA ===================== */
+.site-header {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--linen) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.header-inner { display: flex; align-items: center; justify-content: space-between; min-height: 68px; }
+
+.brand { display: inline-flex; align-items: center; gap: .55rem; color: var(--espresso); }
+.brand-mark { width: 26px; height: 26px; color: var(--sage); }
+.brand-text { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; }
+
+.nav { display: flex; align-items: center; gap: 1.4rem; }
+.nav a { font-size: .95rem; color: var(--mocha); font-weight: 500; transition: color .2s ease; }
+.nav a:hover { color: var(--espresso); }
+.nav .nav-cta {
+  background: var(--espresso); color: var(--cream); padding: .55rem 1.1rem; border-radius: 999px;
+}
+.nav .nav-cta:hover { background: var(--sage-deep); color: var(--cream); }
+
+/* hamburger — skrytý na desktopu */
+.nav-toggle {
+  display: none; flex-direction: column; gap: 5px; background: none; border: 0;
+  padding: 8px; cursor: pointer;
+}
+.nav-toggle span { width: 24px; height: 2px; background: var(--espresso); border-radius: 2px; transition: .25s; }
+.nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ===================== HERO ===================== */
+.hero { position: relative; background: var(--linen); padding-top: 2.5rem; }
+.hero-grid {
+  display: grid; grid-template-columns: 1.05fr .95fr; gap: 3rem; align-items: center;
+  padding-bottom: 4.5rem;
+}
+.hero-title {
+  font-size: clamp(2.6rem, 6vw, 4.4rem); font-weight: 500; margin: .4rem 0 1.1rem;
+}
+.hero-title .dot { color: var(--sage); }
+.hero-lead { font-size: 1.12rem; color: var(--mocha); max-width: 46ch; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin: 1.8rem 0 2rem; }
+
+.hero-facts {
+  list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 1.6rem;
+  border-top: 1px solid var(--line); padding-top: 1.3rem; font-size: .92rem; color: var(--mocha);
+}
+.hero-facts strong { color: var(--espresso); font-family: var(--font-display); font-weight: 600; }
+
+.hero-media { position: relative; }
+.hero-media img {
+  width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.media-badge {
+  position: absolute; left: -14px; bottom: 28px; background: var(--cream);
+  border: 1px solid var(--line); border-radius: var(--radius); padding: .8rem 1rem;
+  display: flex; align-items: center; gap: .7rem; box-shadow: var(--shadow);
+}
+.media-badge-num { font-family: var(--font-display); font-size: 2rem; font-weight: 600; color: var(--sage-deep); line-height: 1; }
+.media-badge-label { font-size: .72rem; color: var(--mocha); line-height: 1.25; }
+.media-badge-label br + * {}
+
+/* vlnitý oddělovač pod hero */
+.wave-divider { display: block; width: 100%; height: 54px; color: var(--cream); margin-bottom: -1px; }
+
+/* ===================== OBECNÉ SEKCE ===================== */
+.section { padding-block: clamp(3.5rem, 7vw, 6rem); }
+.section-head { text-align: center; max-width: 40ch; margin: 0 auto 2.8rem; }
+.section-title { font-size: clamp(2rem, 4.2vw, 2.9rem); }
+
+/* sudé sekce dostanou krémové pozadí pro rytmus */
+.services { background: var(--cream); }
+.about    { background: var(--cream); }
+.reviews  { background: var(--linen-deep); }
+.contact  { background: var(--cream); }
+
+/* ===================== SLUŽBY ===================== */
+.service-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;
+}
+.service-card {
+  background: var(--linen); border: 1px solid var(--line); border-radius: var(--radius);
+  overflow: hidden; transition: transform .2s ease, box-shadow .2s ease;
+}
+.service-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+.service-card img { aspect-ratio: 3/2; object-fit: cover; width: 100%; }
+.service-body { padding: 1.2rem 1.2rem 1.5rem; }
+.service-body h3 { font-size: 1.2rem; margin-bottom: .45rem; }
+.service-body p { font-size: .92rem; color: var(--mocha); }
+
+/* ===================== CENÍK ===================== */
+.price-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem 4rem; max-width: 920px; margin-inline: auto; }
+.price-group-title {
+  font-size: 1.05rem; text-transform: uppercase; letter-spacing: .12em; font-family: var(--font-body);
+  font-weight: 700; color: var(--sage-deep); padding-bottom: .6rem; margin-bottom: .9rem;
+  border-bottom: 2px solid var(--line);
+}
+.price-list { list-style: none; padding: 0; }
+.price-list li { display: flex; align-items: baseline; gap: .5rem; padding: .55rem 0; }
+.pl-name { color: var(--espresso); }
+.pl-dots { flex: 1; border-bottom: 1px dotted var(--line); transform: translateY(-3px); }
+.pl-price { font-family: var(--font-display); font-weight: 600; color: var(--mocha); white-space: nowrap; }
+.price-note { text-align: center; color: var(--mocha); font-size: .9rem; margin-top: 2.4rem; }
+
+/* ===================== O NÁS ===================== */
+.about-grid { display: grid; grid-template-columns: .95fr 1.05fr; gap: 3rem; align-items: center; }
+.about-media img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow); }
+.about-copy p { color: var(--mocha); margin-top: 1rem; }
+.about-copy .section-title { margin-bottom: .4rem; }
+.about-points { list-style: none; padding: 0; margin-top: 1.6rem; display: grid; gap: .7rem; }
+.about-points li { display: flex; align-items: center; gap: .65rem; font-weight: 500; color: var(--espresso); }
+.about-points svg { width: 22px; height: 22px; color: var(--sage); flex: none; }
+
+/* ===================== GALERIE ===================== */
+.gallery-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 220px; gap: 1rem;
+}
+.g-item { margin: 0; border-radius: var(--radius); overflow: hidden; }
+.g-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+.g-item:hover img { transform: scale(1.05); }
+.g-tall { grid-row: span 2; }
+
+/* ===================== RECENZE ===================== */
+.review-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.review-card {
+  background: var(--cream); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 1.6rem 1.5rem; margin: 0;
+}
+.review-card .stars { color: var(--gold); letter-spacing: .12em; margin-bottom: .8rem; }
+.review-card p { font-family: var(--font-display); font-size: 1.08rem; font-style: italic; color: var(--espresso); line-height: 1.5; }
+.review-card footer { margin-top: 1rem; font-size: .9rem; color: var(--mocha); font-style: normal; }
+
+/* ===================== REZERVACE ===================== */
+.booking { background: var(--linen); }
+.booking-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 3rem; align-items: start; }
+.booking-intro p { color: var(--mocha); margin-top: 1rem; }
+.booking-or { font-size: 1rem; }
+.booking-or a { color: var(--sage-deep); font-weight: 700; }
+
+.booking-form {
+  background: var(--cream); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 1.8rem; box-shadow: var(--shadow);
+}
+.field { display: flex; flex-direction: column; margin-bottom: 1rem; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.field label { font-size: .85rem; font-weight: 600; margin-bottom: .35rem; color: var(--espresso); }
+.field input, .field select, .field textarea {
+  font-family: inherit; font-size: .98rem; color: var(--espresso);
+  background: var(--linen); border: 1.5px solid var(--line); border-radius: 10px;
+  padding: .7rem .85rem; width: 100%; transition: border-color .2s ease, box-shadow .2s ease;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none; border-color: var(--sage); box-shadow: 0 0 0 3px color-mix(in srgb, var(--sage) 22%, transparent);
+}
+.field textarea { resize: vertical; }
+.form-hint { font-size: .85rem; color: var(--sage-deep); margin-top: .8rem; min-height: 1.2em; }
+
+/* ===================== KONTAKT ===================== */
+.contact-grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 3rem; align-items: start; }
+.contact-list { list-style: none; padding: 0; margin: 1.4rem 0 2rem; display: grid; gap: 1rem; }
+.contact-list li { display: flex; gap: .8rem; align-items: flex-start; color: var(--mocha); }
+.contact-list svg { width: 22px; height: 22px; color: var(--sage); flex: none; margin-top: 2px; }
+.contact-list a:hover { color: var(--sage-deep); }
+.hours h3 { font-size: 1.15rem; margin-bottom: .6rem; }
+.hours table { width: 100%; max-width: 320px; border-collapse: collapse; }
+.hours td { padding: .4rem 0; border-bottom: 1px solid var(--line); color: var(--mocha); }
+.hours td:last-child { text-align: right; font-weight: 600; color: var(--espresso); }
+
+.contact-map iframe {
+  width: 100%; height: 360px; border: 1px solid var(--line); border-radius: var(--radius); display: block;
+}
+.map-link { display: inline-block; margin-top: .9rem; color: var(--sage-deep); font-weight: 600; font-size: .92rem; }
+.map-link:hover { text-decoration: underline; }
+
+/* ===================== PATIČKA ===================== */
+.site-footer { background: var(--espresso); color: var(--linen); padding-block: 2.6rem; }
+.footer-inner { display: flex; flex-direction: column; align-items: center; gap: .5rem; text-align: center; }
+.footer-brand { display: flex; align-items: center; gap: .5rem; font-family: var(--font-display); font-size: 1.3rem; }
+.footer-brand .brand-mark { color: var(--gold); }
+.footer-note { color: color-mix(in srgb, var(--linen) 75%, transparent); font-size: .92rem; }
+.footer-copy { color: color-mix(in srgb, var(--linen) 50%, transparent); font-size: .82rem; }
+
+/* ===================== PŘÍSTUPNOST ===================== */
+:focus-visible { outline: 3px solid var(--sage); outline-offset: 2px; border-radius: 4px; }
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+/* =================================================================
+   RESPONZIVITA
+   ================================================================= */
+
+/* tablet */
+@media (max-width: 980px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 2.2rem; }
+  .hero-media { order: -1; max-width: 460px; }
+  .service-grid { grid-template-columns: repeat(2, 1fr); }
+  .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .booking-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .review-grid { grid-template-columns: 1fr; }
+  .price-cols { gap: 2.5rem; }
+}
+
+/* mobil — zapnout hamburger menu */
+@media (max-width: 760px) {
+  .nav-toggle { display: flex; }
+  .nav {
+    position: fixed; inset: 68px 0 auto 0;
+    flex-direction: column; align-items: stretch; gap: 0;
+    background: var(--linen); border-bottom: 1px solid var(--line);
+    padding: .5rem 1.25rem 1.25rem;
+    transform: translateY(-130%); transition: transform .3s ease;
+    box-shadow: var(--shadow);
+  }
+  .nav.open { transform: translateY(0); }
+  .nav a { padding: .85rem .2rem; border-bottom: 1px solid var(--line); font-size: 1.05rem; }
+  .nav .nav-cta { text-align: center; margin-top: .8rem; border-bottom: 0; }
+
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px; }
+  .price-cols { grid-template-columns: 1fr; gap: 2rem; }
+  .field-row { grid-template-columns: 1fr; gap: 0; }
+  .hero-facts { gap: 1rem 1.4rem; }
+  .media-badge { left: 8px; }
+}
+
+/* malé mobily (375px a méně) */
+@media (max-width: 420px) {
+  .service-grid { grid-template-columns: 1fr; }
+  .hero-actions .btn { flex: 1; }
+  .booking-form { padding: 1.3rem; }
+}

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ukázkové weby — moderní weby pro malé podniky</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1c1a17; --muted:#6b645c; --line:#e7e1d8;
+    --bg:#f6f1e9; --card:#fffdf9; --accent:#9a6b4f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;color:var(--ink);
+    background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+
+  header{padding:64px 0 36px;text-align:center}
+  .eyebrow{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:0 0 14px}
+  h1{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:clamp(30px,5vw,48px);line-height:1.08;margin:0 0 16px;letter-spacing:-.01em}
+  .lead{max-width:620px;margin:0 auto;color:var(--muted);font-size:clamp(16px,2vw,18px)}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;padding:18px 0 8px}
+  @media(max-width:880px){.grid{grid-template-columns:1fr;max-width:460px;margin:0 auto}}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;
+    display:flex;flex-direction:column;text-decoration:none;color:inherit;
+    box-shadow:0 1px 2px rgba(0,0,0,.04);transition:transform .18s ease,box-shadow .18s ease}
+  .card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(0,0,0,.10)}
+  .thumb{height:148px;position:relative;display:flex;align-items:flex-end;padding:16px}
+  .thumb svg{position:absolute;inset:0;width:100%;height:100%}
+  .tag{position:relative;z-index:1;background:rgba(255,255,255,.92);color:#1c1a17;
+    font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px}
+  .body{padding:20px 20px 22px}
+  .body h2{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:21px;margin:0 0 4px}
+  .body .sub{color:var(--muted);font-size:14px;margin:0 0 14px}
+  .meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+  .chip{font-size:11.5px;color:var(--muted);background:#f1ece3;border-radius:6px;padding:3px 8px}
+  .open{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:14px;color:var(--accent)}
+  .open svg{width:16px;height:16px}
+
+  .note{margin:30px 0 70px;padding:18px 20px;border:1px dashed var(--line);border-radius:14px;
+    background:#fffaf2;color:var(--muted);font-size:14px;max-width:760px}
+  .note b{color:var(--ink)}
+  footer{padding:0 0 50px;text-align:center;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Ukázky · Portfolio</p>
+    <h1>Moderní weby pro malé podniky</h1>
+    <p class="lead">Takhle může vypadat váš nový web — rychlý, přehledný, funguje na mobilu
+      i počítači. Tři ukázky pro různé obory. Kliknutím každou otevřete.</p>
+  </header>
+
+  <div class="grid">
+
+    <!-- KADEŘNICTVÍ -->
+    <a class="card" href="kadernictvi/index.html">
+      <div class="thumb">
+        <svg viewBox="0 0 400 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="200" fill="#efe7d6"/>
+          <path d="M0 150 Q100 120 200 150 T400 150 V200 H0 Z" fill="#7c8466" opacity=".9"/>
+          <path d="M0 168 Q120 140 220 168 T400 165 V200 H0 Z" fill="#5f6650"/>
+          <circle cx="320" cy="64" r="30" fill="#c9a86a" opacity=".55"/>
+        </svg>
+        <span class="tag">Kadeřnictví</span>
+      </div>
+      <div class="body">
+        <h2>Salon Lněná</h2>
+        <p class="sub">Rodinné kadeřnictví · Ivančice</p>
+        <div class="meta"><span class="chip">Ceník</span><span class="chip">Galerie</span><span class="chip">Rezervace</span></div>
+        <span class="open">Otevřít ukázku
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <!-- RESTAURACE -->
+    <a class="card" href="restaurace/index.html">
+      <div class="thumb">
+        <svg viewBox="0 0 400 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="200" fill="#1f3a2e"/>
+          <path d="M0 150 Q100 120 200 150 T400 150 V200 H0 Z" fill="#0f231b"/>
+          <circle cx="318" cy="62" r="30" fill="#c98a3e" opacity=".75"/>
+          <rect x="40" y="40" width="60" height="8" rx="4" fill="#f6f1e7" opacity=".5"/>
+          <rect x="40" y="58" width="40" height="8" rx="4" fill="#f6f1e7" opacity=".3"/>
+        </svg>
+        <span class="tag">Restaurace</span>
+      </div>
+      <div class="body">
+        <h2>U Tří lip</h2>
+        <p class="sub">Hospoda &amp; kuchyně · Ivančice</p>
+        <div class="meta"><span class="chip">Jídelní lístek</span><span class="chip">Denní menu</span><span class="chip">Rezervace</span></div>
+        <span class="open">Otevřít ukázku
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <!-- KOSMETIKA -->
+    <a class="card" href="kosmetika/index.html">
+      <div class="thumb">
+        <svg viewBox="0 0 400 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="200" fill="#f3e7dd"/>
+          <path d="M0 155 Q120 128 230 155 T400 150 V200 H0 Z" fill="#c98b8b" opacity=".85"/>
+          <path d="M0 172 Q130 150 240 172 T400 168 V200 H0 Z" fill="#b06f6f"/>
+          <circle cx="316" cy="60" r="26" fill="#c0a06a" opacity=".55"/>
+        </svg>
+        <span class="tag">Kosmetika</span>
+      </div>
+      <div class="body">
+        <h2>Studio Lumé</h2>
+        <p class="sub">Kosmetické studio · Ivančice</p>
+        <div class="meta"><span class="chip">Služby</span><span class="chip">Ceník</span><span class="chip">Objednání</span></div>
+        <span class="open">Otevřít ukázku
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="note">
+    <b>Pozn.:</b> Jde o ukázkové (vzorové) weby s vymyšlenými názvy a fotkami z volné banky.
+    Pro reálný podnik se přepíše název, kontakt, ceník a fotky za jeho vlastní. Weby jsou statické
+    (HTML/CSS/JS) — hostování zdarma na Netlify nebo Cloudflare Pages.
+  </div>
+
+  <footer>Ukázkové weby · vzor pro oslovení podniků v okolí Ivančic</footer>
+</div>
+</body>
+</html>
