@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matěj Dadák — Weby pro místní firmy | Ivančice, Brno a okolí</title>
+<meta name="description" content="Postavím vaší firmě moderní web do 7 dnů. Funguje na mobilu, najdou vás zákazníci na Googlu. Kadeřnictví, restaurace, řemeslníci — Ivančicko, Brněnsko.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f766e'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='15' font-weight='bold' fill='%23fffbf5' text-anchor='middle'%3EMD%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#1c2431; --ink-soft:#4b5563; --paper:#fffbf5; --card:#ffffff;
+  --teal:#0f766e; --teal-dark:#115e59; --amber:#d97706; --line:#e8e0d4;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--paper);color:var(--ink);line-height:1.65}
+h1,h2,h3{font-family:'Space Grotesk',sans-serif;line-height:1.15}
+a{color:var(--teal)}
+.wrap{max-width:1060px;margin:0 auto;padding:0 22px}
+
+header{position:sticky;top:0;background:rgba(255,251,245,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:10}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;color:var(--ink);text-decoration:none}
+.brand__mark{width:34px;height:34px;border-radius:8px;background:var(--teal);color:#fffbf5;display:grid;place-items:center;font-size:.8rem;font-weight:700}
+.nav a.cta{background:var(--ink);color:#fffbf5;text-decoration:none;padding:9px 18px;border-radius:999px;font-weight:600;font-size:.9rem;transition:background .2s}
+.nav a.cta:hover{background:var(--teal-dark)}
+
+.hero{padding:76px 0 60px}
+.hero .kicker{display:inline-block;background:#0f766e14;color:var(--teal-dark);font-weight:600;font-size:.82rem;padding:6px 14px;border-radius:999px;margin-bottom:18px;letter-spacing:.02em}
+.hero h1{font-size:clamp(2rem,5.4vw,3.3rem);max-width:16ch;font-weight:700}
+.hero h1 em{font-style:normal;color:var(--teal)}
+.hero p.lead{max-width:52ch;margin:20px 0 30px;font-size:1.08rem;color:var(--ink-soft)}
+.hero .btns{display:flex;gap:14px;flex-wrap:wrap}
+.btn{display:inline-block;text-decoration:none;font-weight:600;padding:13px 26px;border-radius:999px;font-size:.98rem;transition:transform .15s,background .2s}
+.btn:active{transform:scale(.97)}
+.btn--primary{background:var(--teal);color:#fffbf5}
+.btn--primary:hover{background:var(--teal-dark)}
+.btn--ghost{border:1.5px solid var(--ink);color:var(--ink)}
+.btn--ghost:hover{background:var(--ink);color:#fffbf5}
+.hero .trust{margin-top:34px;display:flex;gap:26px;flex-wrap:wrap;color:var(--ink-soft);font-size:.88rem}
+.hero .trust b{color:var(--ink);font-family:'Space Grotesk',sans-serif;font-size:1.25rem;display:block}
+
+section{padding:64px 0}
+.sec-head{max-width:60ch;margin-bottom:38px}
+.sec-head h2{font-size:clamp(1.5rem,3.4vw,2.1rem);margin-bottom:10px}
+.sec-head p{color:var(--ink-soft)}
+
+.why{background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.feat{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px}
+.feat .ico{width:42px;height:42px;border-radius:10px;background:#0f766e14;display:grid;place-items:center;margin-bottom:14px}
+.feat h3{font-size:1.05rem;margin-bottom:8px}
+.feat p{font-size:.92rem;color:var(--ink-soft)}
+
+.works .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}
+.work{display:block;text-decoration:none;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);transition:transform .18s,box-shadow .18s}
+.work:hover{transform:translateY(-4px);box-shadow:0 12px 28px #1c243114}
+.work .swatch{height:120px;display:flex;align-items:flex-end;padding:14px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.15rem;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.35)}
+.sw-kader{background:linear-gradient(135deg,#8a9a7b,#d9cbb2)}
+.sw-rest{background:linear-gradient(135deg,#2f4a3c,#b87b4b)}
+.sw-kosm{background:linear-gradient(135deg,#c48b9f,#e8d3b9)}
+.sw-pek{background:linear-gradient(135deg,#7a4a21,#e0a458)}
+.work .body{padding:16px}
+.work .body p{font-size:.88rem;color:var(--ink-soft);margin-bottom:10px}
+.work .body span{font-size:.88rem;font-weight:600;color:var(--teal)}
+
+.how{background:var(--ink);color:#f3efe7}
+.how .sec-head h2{color:#fffbf5}
+.how .sec-head p{color:#c8c2b6}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:22px;counter-reset:krok}
+.step{border:1px solid #ffffff22;border-radius:14px;padding:22px;counter-increment:krok}
+.step::before{content:"0" counter(krok);font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.4rem;color:var(--amber);display:block;margin-bottom:10px}
+.step h3{font-size:1rem;margin-bottom:8px;color:#fffbf5}
+.step p{font-size:.9rem;color:#c8c2b6}
+
+.price .box{background:var(--card);border:1.5px solid var(--teal);border-radius:18px;padding:34px;display:flex;flex-wrap:wrap;gap:30px;align-items:center;justify-content:space-between}
+.price .num{font-family:'Space Grotesk',sans-serif}
+.price .num b{font-size:2.3rem;color:var(--teal-dark)}
+.price ul{list-style:none;font-size:.94rem;color:var(--ink-soft)}
+.price li{padding:4px 0 4px 26px;position:relative}
+.price li::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:700}
+.price .note{font-size:.84rem;color:var(--ink-soft);margin-top:14px;max-width:60ch}
+
+.contact{background:var(--card);border-top:1px solid var(--line)}
+.contact .box{display:flex;flex-wrap:wrap;gap:26px;justify-content:space-between;align-items:center}
+.contact .ways{display:flex;gap:14px;flex-wrap:wrap}
+.way{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:14px 20px;text-decoration:none;color:var(--ink);font-weight:600;transition:border-color .2s}
+.way:hover{border-color:var(--teal)}
+.way small{display:block;font-weight:400;color:var(--ink-soft)}
+
+footer{padding:26px 0;font-size:.84rem;color:var(--ink-soft)}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+@media(max-width:560px){.hero{padding:52px 0 44px}section{padding:48px 0}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#"><span class="brand__mark">MD</span> Matěj Dadák · weby</a>
+    <a class="cta" href="#kontakt">Chci web</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="kicker">Ivančice · Brno a okolí</span>
+    <h1>Nový web pro vaši firmu <em>do 7 dnů</em></h1>
+    <p class="lead">Stavím rychlé a přehledné weby pro místní podniky — restaurace, kadeřnictví, obchody i řemeslníky. Web, který funguje na mobilu, najdou ho lidé na Googlu a přivede vám zákazníky. Žádné složitosti: vy podnikáte, web řeším já.</p>
+    <div class="btns">
+      <a class="btn btn--primary" href="#ukazky">Podívat se na ukázky</a>
+      <a class="btn btn--ghost" href="#kontakt">Nezávazně napsat</a>
+    </div>
+    <div class="trust">
+      <div><b>7 dnů</b> od zadání po spuštění</div>
+      <div><b>100 %</b> funkční na mobilu</div>
+      <div><b>0 Kč</b> ukázka předem, zdarma</div>
+    </div>
+  </div>
+</section>
+
+<section class="why" id="proc">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Proč mít pořádný web?</h2>
+      <p>Většina lidí si dnes firmu nejdřív najde na mobilu. Když web chybí nebo se rozpadá, jdou ke konkurenci.</p>
+    </div>
+    <div class="grid3">
+      <div class="feat">
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg></div>
+        <h3>Funguje na mobilu</h3>
+        <p>Přes 70 % návštěv je z telefonu. Váš web bude čitelný a rychlý na každém displeji.</p>
+      </div>
+      <div class="feat">
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></div>
+        <h3>Najdou vás na Googlu</h3>
+        <p>Správné texty, otevírací doba, mapa a kontakt — aby vás zákazník našel dřív než konkurenci.</p>
+      </div>
+      <div class="feat">
+        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round"><path d="M12 2l2.9 6.3L21 9.2l-4.5 4.4 1 6.4L12 17l-5.5 3 1-6.4L3 9.2l6.1-.9z"/></svg></div>
+        <h3>Působí důvěryhodně</h3>
+        <p>Moderní vzhled = profesionální dojem. Zastaralý web zákazníky odrazuje, i když děláte skvělou práci.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="works" id="ukazky">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Ukázky mé práce</h2>
+      <p>Živé weby — klidně si je proklikejte na mobilu i počítači.</p>
+    </div>
+    <div class="cards">
+      <a class="work" href="https://jetamdadak01-cell.github.io/ukazky-weby/kadernictvi/" target="_blank" rel="noopener">
+        <div class="swatch sw-kader">Salon Lněná</div>
+        <div class="body"><p>Kadeřnictví — ceník, tým, objednání</p><span>Otevřít ukázku →</span></div>
+      </a>
+      <a class="work" href="https://jetamdadak01-cell.github.io/ukazky-weby/restaurace/" target="_blank" rel="noopener">
+        <div class="swatch sw-rest">U Tří lip</div>
+        <div class="body"><p>Restaurace — menu, rezervace, poledňáky</p><span>Otevřít ukázku →</span></div>
+      </a>
+      <a class="work" href="https://jetamdadak01-cell.github.io/ukazky-weby/kosmetika/" target="_blank" rel="noopener">
+        <div class="swatch sw-kosm">Studio Lumé</div>
+        <div class="body"><p>Kosmetika — služby, ceník, objednání</p><span>Otevřít ukázku →</span></div>
+      </a>
+      <a class="work" href="https://jetamdadak01-cell.github.io/pekarstvi-slechticky/" target="_blank" rel="noopener">
+        <div class="swatch sw-pek">Pekařství Šlechtický</div>
+        <div class="body"><p>Pekařství — sortiment, příběh, kontakt</p><span>Otevřít ukázku →</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Jak to probíhá</h2>
+      <p>Jednoduše a bez starostí — celé to zvládneme po telefonu a e-mailu.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><h3>Ozvete se</h3><p>Krátký telefonát nebo e-mail. Řeknete mi, co děláte a co od webu čekáte.</p></div>
+      <div class="step"><h3>Ukázka zdarma</h3><p>Do pár dnů vám pošlu návrh vašeho nového webu. Nezávazně — líbí se, pokračujeme.</p></div>
+      <div class="step"><h3>Doladíme detaily</h3><p>Texty, fotky, ceník, otevírací doba. Vy dodáte podklady, já je zpracuji.</p></div>
+      <div class="step"><h3>Web jede</h3><p>Spustím web na vaší adrese a předám vám ho. Hotovo obvykle do 7 dnů.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="price" id="cena">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Kolik to stojí?</h2>
+      <p>Jedna férová cena za hotový web. Žádné hodinovky, žádná překvapení.</p>
+    </div>
+    <div class="box">
+      <div class="num">Web na míru<br><b>od 7 900 Kč</b></div>
+      <ul>
+        <li>Návrh zdarma předem — platíte, až když se líbí</li>
+        <li>Funkční na mobilu, rychlý, připravený pro Google</li>
+        <li>Texty a struktura na míru vašemu podnikání</li>
+        <li>Provoz a drobné úpravy od 300 Kč/měsíc</li>
+      </ul>
+    </div>
+    <p class="note">Prvním klientům z okolí nabízím zvýhodněnou startovní cenu — stavím si portfolio a záleží mi na referencích. Zeptejte se, nic tím neztratíte.</p>
+  </div>
+</section>
+
+<section class="contact" id="kontakt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Ozvěte se — nezávazně</h2>
+      <p>Napište mi, co děláte, a já vám zdarma připravím ukázku nového webu.</p>
+    </div>
+    <div class="box">
+      <div class="ways">
+        <a class="way" href="tel:+420727890216"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.4 2.1L8.1 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.6 2z"/></svg><span>727 890 216<small>Po–Ne 9–19 h</small></span></a>
+        <a class="way" href="mailto:weby.dadak@gmail.com"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg><span>weby.dadak@gmail.com<small>odpovídám do 24 h</small></span></a>
+      </div>
+      <a class="btn btn--primary" href="mailto:weby.dadak@gmail.com?subject=M%C3%A1m%20z%C3%A1jem%20o%20uk%C3%A1zku%20webu">Chci ukázku zdarma</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Matěj Dadák — weby pro místní firmy</span>
+    <span>Ivančice · Brno-venkov · Znojemsko · Třebíčsko</span>
+  </div>
+</footer>
+
+</body>
+</html>
