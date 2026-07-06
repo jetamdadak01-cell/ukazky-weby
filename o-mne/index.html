@@ -87,7 +87,8 @@ section{padding:64px 0}
 .contact{background:var(--card);border-top:1px solid var(--line)}
 .contact .box{display:flex;flex-wrap:wrap;gap:26px;justify-content:space-between;align-items:center}
 .contact .ways{display:flex;gap:14px;flex-wrap:wrap}
-.way{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:14px 20px;text-decoration:none;color:var(--ink);font-weight:600;transition:border-color .2s}
+.way{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:14px 20px;text-decoration:none;color:var(--ink);font-weight:600;transition:border-color .2s;max-width:100%;min-width:0}
+.way span{min-width:0;overflow-wrap:anywhere}
 .way:hover{border-color:var(--teal)}
 .way small{display:block;font-weight:400;color:var(--ink-soft)}
 
