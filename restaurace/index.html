@@ -1,770 +1,241 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>U Tří lip — Poctivá česká hospoda a kuchyně | Ivančice</title>
-  <meta name="description" content="U Tří lip v Ivančicích — poctivá česká kuchyně, čerstvé suroviny od místních farmářů a tankové pivo. Denní menu, nedělní pečínka, posezení na zahrádce. Rezervujte si stůl." />
-  <meta name="theme-color" content="#1f3a2e" />
-
-  <!-- Open Graph (náhled při sdílení na Facebooku) -->
-  <meta property="og:title" content="U Tří lip — Poctivá česká hospoda | Ivančice" />
-  <meta property="og:description" content="Poctivá česká kuchyně, tankové pivo a posezení na zahrádce. Rezervujte si stůl." />
-  <meta property="og:type" content="restaurant" />
-
-  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <!-- Fonty: Fraunces = elegantní serif nadpisy, Outfit = čistý sans text -->
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>U Tří lip — hospoda &amp; kuchyně, Ivančice</title>
+<meta name="description" content="Poctivá česká kuchyně, tankové pivo a vlastní chleba. Rodinná hospoda U Tří lip v Ivančicích, od roku 1998.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Alegreya+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- ======================= HORNÍ LIŠTA ======================= -->
-  <div class="topbar">
-    <div class="wrap topbar__inner">
-      <span class="topbar__item">
-        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7Z"/><circle cx="12" cy="9" r="2.4" fill="#1f3a2e"/></svg>
-        Palackého náměstí 12, Ivančice
-      </span>
-      <span class="topbar__item topbar__item--hide">
-        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke="#1f3a2e" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
-        Po–Čt 11–22 · Pá–So 11–23 · Ne 11–21
-      </span>
-      <a class="topbar__item topbar__phone" href="tel:+420546123456">
-        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
-        546 123 456
-      </a>
+<div class="topbar">
+  <span>Krumlovská 18, Ivančice</span>
+  <span class="topbar__hours">Po–Čt 11–22 · Pá–So 11–23 · Ne 11–21</span>
+  <a href="tel:+420546123456">546 123 456</a>
+</div>
+
+<header class="top">
+  <a class="brand" href="#uvod" aria-label="U Tří lip — úvod">
+    <svg class="brand__mark" viewBox="0 0 44 30" aria-hidden="true">
+      <g fill="none" stroke="var(--amber)" stroke-width="1.3" stroke-linecap="round">
+        <path d="M10 26 V14 M10 14 C6 12 4 8 6 4 C10 3 13 6 12 10 C14 8 16 9 15 12 C13 14 11 14 10 14"/>
+        <path d="M22 26 V10 M22 10 C17 8 15 3 18 0 C23 -1 27 3 25 8 C28 6 31 8 29 12 C26 14 23 12 22 10"/>
+        <path d="M34 26 V14 M34 14 C30 12 28 8 30 4 C34 3 37 6 36 10 C38 8 40 9 39 12 C37 14 35 14 34 14"/>
+      </g>
+      <path d="M4 27 H40" stroke="var(--amber)" stroke-width="1" opacity=".6"/>
+    </svg>
+    <span>U Tří lip</span>
+  </a>
+  <nav class="nav" id="nav">
+    <a href="#denni">Denní menu</a>
+    <a href="#listek">Jídelní lístek</a>
+    <a href="#pribeh">Náš příběh</a>
+    <a href="#galerie">Galerie</a>
+    <a href="#kontakt">Kontakt</a>
+  </nav>
+  <a class="cta" href="#rezervace">Rezervovat stůl</a>
+  <button class="burger" id="burger" aria-label="Otevřít menu" aria-expanded="false"><span></span><span></span></button>
+</header>
+
+<main>
+
+<!-- ═════════ HERO ═════════ -->
+<section class="hero" id="uvod">
+  <div class="hero__bg" aria-hidden="true"></div>
+  <svg class="branch branch--l" viewBox="0 0 300 220" aria-hidden="true">
+    <g fill="none" stroke="var(--amber)" stroke-linecap="round">
+      <path d="M-20 10 C 60 40, 130 70, 210 150" stroke-width="1.6"/>
+      <path d="M70 44 C 90 30, 96 14, 88 -2" stroke-width="1"/>
+      <path d="M88 -2 C 72 2, 64 16, 70 34 C 84 30, 90 16, 88 -2 Z" stroke-width=".9"/>
+      <path d="M126 72 C 150 62, 160 44, 154 26" stroke-width="1"/>
+      <path d="M154 26 C 136 28, 126 44, 130 64 C 146 60, 154 44, 154 26 Z" stroke-width=".9"/>
+      <path d="M178 116 C 204 110, 218 94, 214 74" stroke-width="1"/>
+      <path d="M214 74 C 196 76, 184 92, 186 112 C 202 110, 212 92, 214 74 Z" stroke-width=".9"/>
+      <path d="M96 52 C 100 60, 100 66, 96 72" stroke-width=".8" opacity=".7"/>
+      <path d="M150 92 C 154 100, 154 106, 150 112" stroke-width=".8" opacity=".7"/>
+    </g>
+  </svg>
+  <svg class="branch branch--r" viewBox="0 0 300 220" aria-hidden="true">
+    <g fill="none" stroke="var(--amber)" stroke-linecap="round">
+      <path d="M320 10 C 240 40, 170 70, 90 150" stroke-width="1.6"/>
+      <path d="M230 44 C 210 30, 204 14, 212 -2" stroke-width="1"/>
+      <path d="M212 -2 C 228 2, 236 16, 230 34 C 216 30, 210 16, 212 -2 Z" stroke-width=".9"/>
+      <path d="M174 72 C 150 62, 140 44, 146 26" stroke-width="1"/>
+      <path d="M146 26 C 164 28, 174 44, 170 64 C 154 60, 146 44, 146 26 Z" stroke-width=".9"/>
+      <path d="M122 116 C 96 110, 82 94, 86 74" stroke-width="1"/>
+      <path d="M86 74 C 104 76, 116 92, 114 112 C 98 110, 88 92, 86 74 Z" stroke-width=".9"/>
+    </g>
+  </svg>
+
+  <div class="hero__inner">
+    <p class="orn" aria-hidden="true">✦ &nbsp;·&nbsp; ✦ &nbsp;·&nbsp; ✦</p>
+    <p class="smallcaps">Hospoda &amp; kuchyně · Ivančice</p>
+    <h1>U Tří lip</h1>
+    <p class="hero__tag">Poctivá česká kuchyně, tankové pivo a chleba z vlastní pece.<br>
+    Pod lipami se u nás sedí <em>od roku 1998</em>.</p>
+    <div class="hero__actions">
+      <a class="btn btn--amber" href="#rezervace">Rezervovat stůl</a>
+      <a class="btn btn--line" href="#listek">Jídelní lístek</a>
     </div>
   </div>
 
-  <!-- ======================= HLAVIČKA / NAVIGACE ======================= -->
-  <header class="header" id="header">
-    <div class="wrap header__inner">
-      <a class="brand" href="#top" aria-label="U Tří lip — domů">
-        <span class="brand__mark" aria-hidden="true">
-          <!-- Logo: tři lípy (kruhy korun) nad stuhou -->
-          <svg viewBox="0 0 48 48">
-            <circle cx="24" cy="16" r="11" fill="#c98a3e"/>
-            <circle cx="13" cy="22" r="8" fill="#1f3a2e"/>
-            <circle cx="35" cy="22" r="8" fill="#1f3a2e"/>
-            <circle cx="24" cy="16" r="8.5" fill="#2e5544"/>
-            <rect x="22.4" y="22" width="3.2" height="14" rx="1.4" fill="#7a5230"/>
-            <rect x="11.4" y="26" width="2.4" height="10" rx="1.1" fill="#7a5230"/>
-            <rect x="34.2" y="26" width="2.4" height="10" rx="1.1" fill="#7a5230"/>
-            <path d="M8 40 Q24 34 40 40 L40 43 Q24 38 8 43 Z" fill="#c98a3e"/>
-          </svg>
-        </span>
-        <span class="brand__txt">
-          <span class="brand__name">U Tří lip</span>
-          <span class="brand__tag">hospoda &amp; kuchyně · Ivančice</span>
-        </span>
-      </a>
+  <div class="hero__facts">
+    <div><strong>11°</strong><span>tanková z Moravy</span></div>
+    <div><strong>1998</strong><span>rodinná tradice</span></div>
+    <div><strong>12 km</strong><span>nejdál to mají suroviny</span></div>
+  </div>
+</section>
 
-      <nav class="nav" id="nav" aria-label="Hlavní navigace">
-        <a href="#o-nas">O nás</a>
-        <a href="#menu">Jídelní lístek</a>
-        <a href="#denni">Denní menu</a>
-        <a href="#galerie">Galerie</a>
-        <a href="#recenze">Recenze</a>
-        <a href="#kontakt">Kontakt</a>
-        <a class="nav__cta" href="#rezervace">Rezervovat stůl</a>
-      </nav>
+<!-- ═════════ DENNÍ MENU ═════════ -->
+<section class="denni" id="denni">
+  <div class="card">
+    <header class="card__head">
+      <h2>Denní menu</h2>
+      <p class="smallcaps">Po–Pá 11.00–14.00 · polévka v ceně</p>
+    </header>
+    <ul class="menu">
+      <li><span class="menu__n">Svíčková na smetaně, karlovarský knedlík</span><span class="menu__d"></span><span class="menu__p">169 Kč</span></li>
+      <li><span class="menu__n">Kuřecí paprikáš s těstovinou</span><span class="menu__d"></span><span class="menu__p">155 Kč</span></li>
+      <li><span class="menu__n">Smažený květák, brambor, tatarka</span><span class="menu__d"></span><span class="menu__p">139 Kč</span></li>
+    </ul>
+    <p class="card__note">★ Ukázková nabídka — denní menu se u nás mění každý den podle trhu.</p>
+  </div>
+</section>
 
-      <button class="burger" id="burger" aria-label="Otevřít menu" aria-expanded="false" aria-controls="nav">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
+<!-- ═════════ JÍDELNÍ LÍSTEK ═════════ -->
+<section class="listek" id="listek">
+  <header class="sec-head">
+    <p class="smallcaps">Stálá nabídka</p>
+    <h2>Jídelní lístek</h2>
   </header>
 
-  <main id="top">
-
-    <!-- ======================= HERO ======================= -->
-    <section class="hero">
-      <div class="hero__bg" aria-hidden="true"></div>
-      <div class="wrap hero__inner">
-        <p class="hero__eyebrow">
-          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 20 12 16.5 6.5 20 8 13.5 3 9l6.5-.5L12 2Z"/></svg>
-          Poctivá kuchyně od roku 1998
-        </p>
-        <h1 class="hero__title">Česká hospoda,<br>jak má&nbsp;být.</h1>
-        <p class="hero__lead">
-          Vaříme z čerstvých surovin od místních farmářů, čepujeme tankové pivo
-          a pečeme vlastní chleba. Přijďte na oběd, na pivo nebo na poctivou
-          nedělní pečínku.
-        </p>
-        <div class="hero__actions">
-          <a class="btn btn--primary" href="#rezervace">Rezervovat stůl</a>
-          <a class="btn btn--ghost" href="#menu">
-            Prohlédnout lístek
-            <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-        </div>
-        <ul class="hero__badges">
-          <li><strong>4,8</strong> hodnocení Google</li>
-          <li><strong>12</strong> piv na čepu</li>
-          <li><strong>26 let</strong> rodinná tradice</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- ======================= PRUH S VÝHODAMI ======================= -->
-    <section class="features" aria-label="Proč k nám">
-      <div class="wrap features__grid">
-        <div class="feature">
-          <span class="feature__ic" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M12 3c-1.5 3-4 4-4 7a4 4 0 0 0 8 0c0-3-2.5-4-4-7Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-          </span>
-          <h3>Suroviny z okolí</h3>
-          <p>Maso, zelenina i vejce od farmářů z Rosicka a Ivančicka.</p>
-        </div>
-        <div class="feature">
-          <span class="feature__ic" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M6 11h12v6a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4v-6Z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M18 12h2a2 2 0 0 1 0 4h-2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M9 4c0 2 1 2 1 4M13 4c0 2 1 2 1 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-          </span>
-          <h3>Tankové pivo</h3>
-          <p>Nepasterizovaný ležák přímo z tanku, vždy čerstvý a vychlazený.</p>
-        </div>
-        <div class="feature">
-          <span class="feature__ic" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M4 20h16M6 20V9a6 6 0 0 1 12 0v11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M12 3v2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-          </span>
-          <h3>Vlastní pekárna</h3>
-          <p>Chleba a koláče pečeme každé ráno z kvásku přímo u nás.</p>
-        </div>
-        <div class="feature">
-          <span class="feature__ic" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M3 21h18M12 3a7 7 0 0 1 7 7c0 4-3 7-7 7s-7-3-7-7a7 7 0 0 1 7-7Z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 8v4l3 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-          </span>
-          <h3>Zahrádka pod lipami</h3>
-          <p>V létě posezení ve stínu tří starých lip přímo na náměstí.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ======================= O NÁS / PŘÍBĚH ======================= -->
-    <section class="story" id="o-nas">
-      <div class="wrap story__inner">
-        <div class="story__media">
-          <img
-            src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=70&auto=format&fit=crop"
-            alt="Útulný interiér restaurace s dřevěnými stoly a teplým osvětlením"
-            loading="lazy" width="900" height="1100" />
-          <span class="story__stamp" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 20 12 16.5 6.5 20 8 13.5 3 9l6.5-.5L12 2Z"/></svg>
-            est. 1998
-          </span>
-        </div>
-        <div class="story__text">
-          <p class="kicker">Náš příběh</p>
-          <h2 class="section-title">Tři generace u jednoho sporáku</h2>
-          <p>
-            Hospodu <strong>U Tří lip</strong> otevřela babička Marie v roce 1998
-            v domě na ivančickém náměstí, kde dodnes stojí tři vzrostlé lípy.
-            Z malé výčepní jsme se za dvacet šest let stali oblíbeným místem,
-            kam chodí rodiny na nedělní oběd i kamarádi na pivo po práci.
-          </p>
-          <p>
-            Dnes vaří dcera Lenka se synem Tomášem. Drží se osvědčeného:
-            <em>poctivé suroviny, žádné polotovary a recepty po babičce.</em>
-            Co můžeme, pořizujeme od sousedů — brambory z Němčic, maso od
-            řezníka v Rosicích, med od včelaře za kopcem.
-          </p>
-          <ul class="story__points">
-            <li>
-              <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Vaříme čerstvě, žádné mražené polotovary
-            </li>
-            <li>
-              <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Bezlepkové a vegetariánské varianty na přání
-            </li>
-            <li>
-              <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Salonek pro oslavy a firemní akce až 40 osob
-            </li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ======================= DENNÍ MENU ======================= -->
-    <section class="daily" id="denni">
-      <div class="wrap">
-        <div class="section-head">
-          <p class="kicker kicker--light">Polední nabídka</p>
-          <h2 class="section-title section-title--light">Denní menu</h2>
-          <p class="section-sub">
-            Každý všední den 11:00–14:00. Polévka v ceně.
-            <!-- POZNÁMKA pro klienta: tohle je ukázkové menu, reálné si měníte sami -->
-            <span class="daily__note">(Ukázková nabídka — ceny a jídla jsou ilustrativní.)</span>
-          </p>
-        </div>
-
-        <div class="daily__grid">
-          <article class="daily__card">
-            <header class="daily__day">Pondělí</header>
-            <p class="daily__soup">Hovězí vývar s játrovými knedlíčky</p>
-            <ul class="daily__meals">
-              <li><span>Svíčková na smetaně, houskový knedlík</span><b>169 Kč</b></li>
-              <li><span>Kuřecí kari s rýží basmati</span><b>159 Kč</b></li>
-              <li><span>Zapečené brambory se smaženým sýrem <em>(vege)</em></span><b>149 Kč</b></li>
-            </ul>
-          </article>
-
-          <article class="daily__card">
-            <header class="daily__day">Úterý</header>
-            <p class="daily__soup">Bramboračka na hříbkách</p>
-            <ul class="daily__meals">
-              <li><span>Vepřo–knedlo–zelo (dušené i kysané)</span><b>165 Kč</b></li>
-              <li><span>Pečené kuřecí stehno, bramborová kaše</span><b>155 Kč</b></li>
-              <li><span>Špagety aglio e olio s česnekem <em>(vege)</em></span><b>145 Kč</b></li>
-            </ul>
-          </article>
-
-          <article class="daily__card daily__card--today">
-            <header class="daily__day">Středa <span class="daily__badge">dnes</span></header>
-            <p class="daily__soup">Květáková krémová polévka</p>
-            <ul class="daily__meals">
-              <li><span>Smažený řízek z kuřecích prsou, bramborový salát</span><b>175 Kč</b></li>
-              <li><span>Hovězí guláš, domácí houskový knedlík</span><b>169 Kč</b></li>
-              <li><span>Rizoto s lesními houbami <em>(vege)</em></span><b>149 Kč</b></li>
-            </ul>
-          </article>
-
-          <article class="daily__card">
-            <header class="daily__day">Čtvrtek</header>
-            <p class="daily__soup">Čočková s párkem</p>
-            <ul class="daily__meals">
-              <li><span>Pečená kachní stehna, červené zelí, knedlík</span><b>189 Kč</b></li>
-              <li><span>Vepřový řízek v bramboráku, okurka</span><b>165 Kč</b></li>
-              <li><span>Zeleninové lečo s vejci a chlebem <em>(vege)</em></span><b>139 Kč</b></li>
-            </ul>
-          </article>
-
-          <article class="daily__card">
-            <header class="daily__day">Pátek</header>
-            <p class="daily__soup">Kulajda se zastřeným vejcem</p>
-            <ul class="daily__meals">
-              <li><span>Pečený pstruh na másle, vařené brambory</span><b>179 Kč</b></li>
-              <li><span>Vepřová panenka na grilu, gratinované brambory</span><b>189 Kč</b></li>
-              <li><span>Smažený hermelín s brusinkami <em>(vege)</em></span><b>155 Kč</b></li>
-            </ul>
-          </article>
-
-          <article class="daily__card daily__card--sun">
-            <header class="daily__day">Neděle</header>
-            <p class="daily__soup">Nedělní pečínka — rodinné menu</p>
-            <ul class="daily__meals">
-              <li><span>Pečené koleno na pivu pro dva, křen, hořčice</span><b>349 Kč</b></li>
-              <li><span>Pečené sele s knedlíkem a zelím</span><b>199 Kč</b></li>
-              <li><span>Domácí ovocné knedlíky <em>(dezert)</em></span><b>119 Kč</b></li>
-            </ul>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- ======================= JÍDELNÍ LÍSTEK ======================= -->
-    <section class="menu" id="menu">
-      <div class="wrap">
-        <div class="section-head">
-          <p class="kicker">Á la carte</p>
-          <h2 class="section-title">Jídelní lístek</h2>
-          <p class="section-sub">Vybrané z naší stálé nabídky. Kompletní lístek najdete u nás na stole.</p>
-        </div>
-
-        <!-- Záložky kategorií -->
-        <div class="menu__tabs" id="menuTabs" role="tablist" aria-label="Kategorie jídel">
-          <button class="menu__tab is-active" data-cat="predkrmy" role="tab" aria-selected="true">Předkrmy</button>
-          <button class="menu__tab" data-cat="polevky" role="tab" aria-selected="false">Polévky</button>
-          <button class="menu__tab" data-cat="hlavni" role="tab" aria-selected="false">Hlavní jídla</button>
-          <button class="menu__tab" data-cat="dezerty" role="tab" aria-selected="false">Dezerty</button>
-          <button class="menu__tab" data-cat="napoje" role="tab" aria-selected="false">Nápoje</button>
-        </div>
-
-        <!-- PŘEDKRMY -->
-        <div class="menu__panel is-active" data-panel="predkrmy">
-          <ul class="menu__list">
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Domácí paštika z kachních jater</h3>
-                <p class="dish__desc">S brusinkovou redukcí a opečeným kváskovým chlebem</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">119 Kč</span>
-            </li>
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Nakládaný hermelín</h3>
-                <p class="dish__desc">Zrající v oleji s cibulí a feferonkou, pečivo</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">95 Kč</span>
-            </li>
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Tlačenka s cibulí a octem</h3>
-                <p class="dish__desc">Domácí tlačenka po staročesku, čerstvý chléb</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">89 Kč</span>
-            </li>
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Utopenci</h3>
-                <p class="dish__desc">Naložení po našem, s cibulí a chlebem</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">79 Kč</span>
-            </li>
-          </ul>
-        </div>
-
-        <!-- POLÉVKY -->
-        <div class="menu__panel" data-panel="polevky" hidden>
-          <ul class="menu__list">
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Hovězí vývar s nudlemi a játrovými knedlíčky</h3>
-                <p class="dish__desc">Vařený osm hodin z poctivé hovězí kosti</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">59 Kč</span>
-            </li>
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Česnečka s vejcem a sýrem</h3>
-                <p class="dish__desc">Podávaná v bochníku chleba</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">79 Kč</span>
-            </li>
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Kulajda se zastřeným vejcem</h3>
-                <p class="dish__desc">Smetanová s koprem a houbami</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">69 Kč</span>
-            </li>
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Bramboračka na hříbkách</h3>
-                <p class="dish__desc">Hustá, se zeleninou a sušenými houbami</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">65 Kč</span>
-            </li>
-          </ul>
-        </div>
-
-        <!-- HLAVNÍ JÍDLA -->
-        <div class="menu__panel" data-panel="hlavni" hidden>
-          <ul class="menu__list">
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Svíčková na smetaně <span class="dish__tag">nej</span></h3>
-                <p class="dish__desc">Hovězí svíčková, karlovarský knedlík, brusinka, šlehačka</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">219 Kč</span>
-            </li>
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Pečené vepřové koleno</h3>
-                <p class="dish__desc">Marinované v tmavém pivu, křen, hořčice, chléb (cca 1 kg)</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">259 Kč</span>
-            </li>
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Smažený řízek z vepřové kotlety</h3>
-                <p class="dish__desc">V domácí strouhance, bramborový salát nebo hranolky</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">189 Kč</span>
-            </li>
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Hovězí guláš s domácím knedlíkem</h3>
-                <p class="dish__desc">Z hovězího líčka, cibule, podávaný s čerstvým chlebem</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">195 Kč</span>
-            </li>
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Pečená kachna, červené zelí, knedlík</h3>
-                <p class="dish__desc">Celé stehno pomalu pečené dokřupava</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">235 Kč</span>
-            </li>
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Grilovaná vepřová panenka</h3>
-                <p class="dish__desc">Demi-glace omáčka, gratinované brambory, restovaná zelenina</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">229 Kč</span>
-            </li>
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Pstruh na másle</h3>
-                <p class="dish__desc">Celý pstruh, petrželka, vařené brambory, citron</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">199 Kč</span>
-            </li>
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Rizoto s lesními houbami <span class="dish__tag dish__tag--vege">vege</span></h3>
-                <p class="dish__desc">Krémové rizoto, parmazán, máslo, bylinky</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">169 Kč</span>
-            </li>
-          </ul>
-        </div>
-
-        <!-- DEZERTY -->
-        <div class="menu__panel" data-panel="dezerty" hidden>
-          <ul class="menu__list">
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Domácí jablečný štrúdl</h3>
-                <p class="dish__desc">Teplý, se skořicí, vanilkovou zmrzlinou a šlehačkou</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">95 Kč</span>
-            </li>
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Ovocné knedlíky</h3>
-                <p class="dish__desc">Z tvarohového těsta, máslo, tvaroh, cukr (dle sezóny)</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">119 Kč</span>
-            </li>
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Medovník po babičce</h3>
-                <p class="dish__desc">Poctivý sedmivrstvý medový dort</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">85 Kč</span>
-            </li>
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Palačinky s tvarohem a ovocem</h3>
-                <p class="dish__desc">Dvě domácí palačinky, ovocná omáčka, šlehačka</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">99 Kč</span>
-            </li>
-          </ul>
-        </div>
-
-        <!-- NÁPOJE -->
-        <div class="menu__panel" data-panel="napoje" hidden>
-          <ul class="menu__list">
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Tankový ležák 12° <span class="dish__tag">čepované</span></h3>
-                <p class="dish__desc">Nepasterizovaný, 0,5 l</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">52 Kč</span>
-            </li>
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Tmavé pivo 11°</h3>
-                <p class="dish__desc">Polotmavý speciál, 0,5 l</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">55 Kč</span>
-            </li>
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Domácí limonáda</h3>
-                <p class="dish__desc">Máta–okurka nebo bezinka, 0,4 l</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">59 Kč</span>
-            </li>
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Moravské víno (0,1 l)</h3>
-                <p class="dish__desc">Veltlín nebo Frankovka od vinaře z Dolních Kounic</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">39 Kč</span>
-            </li>
-            <li class="dish">
-              <div class="dish__main">
-                <h3 class="dish__name">Káva (espresso / s mlékem)</h3>
-                <p class="dish__desc">Zrnková od pražírny z Brna</p>
-              </div>
-              <span class="dish__dots" aria-hidden="true"></span>
-              <span class="dish__price">45 Kč</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ======================= GALERIE ======================= -->
-    <section class="gallery" id="galerie">
-      <div class="wrap">
-        <div class="section-head">
-          <p class="kicker">Nahlédněte k nám</p>
-          <h2 class="section-title">Galerie</h2>
-          <p class="section-sub">Pár fotek z kuchyně, talíře a naší zahrádky.</p>
-        </div>
-        <div class="gallery__grid">
-          <figure class="gallery__item gallery__item--big">
-            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=70&auto=format&fit=crop"
-                 alt="Naservírovaný talíř s pečeným masem, omáčkou a knedlíkem" loading="lazy" width="800" height="800" />
-          </figure>
-          <figure class="gallery__item">
-            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=70&auto=format&fit=crop"
-                 alt="Interiér restaurace s dřevěnými stoly a teplým světlem" loading="lazy" width="600" height="600" />
-          </figure>
-          <figure class="gallery__item">
-            <img src="https://images.unsplash.com/photo-1535958636474-b021ee887b13?w=600&q=70&auto=format&fit=crop"
-                 alt="Čepování čerstvého piva z pípy do sklenice s pěnou" loading="lazy" width="600" height="600" />
-          </figure>
-          <figure class="gallery__item">
-            <img src="https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=600&q=70&auto=format&fit=crop"
-                 alt="Detail talíře s jídlem a příborem na stole" loading="lazy" width="600" height="600" />
-          </figure>
-          <figure class="gallery__item">
-            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&q=70&auto=format&fit=crop"
-                 alt="Útulné posezení v restauraci s lampami" loading="lazy" width="600" height="600" />
-          </figure>
-          <figure class="gallery__item gallery__item--wide">
-            <img src="https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=900&q=70&auto=format&fit=crop"
-                 alt="Čerstvá zelenina a suroviny připravené na vaření" loading="lazy" width="900" height="600" />
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- ======================= REZERVACE ======================= -->
-    <section class="reserve" id="rezervace">
-      <div class="wrap reserve__inner">
-        <div class="reserve__intro">
-          <p class="kicker kicker--light">Rezervace</p>
-          <h2 class="section-title section-title--light">Rezervujte si stůl</h2>
-          <p class="reserve__text">
-            Vyplňte formulář a my vám rezervaci co nejdříve potvrdíme.
-            Pro rychlou domluvu nám raději zavolejte — zvlášť na víkend
-            a větší skupiny.
-          </p>
-          <a class="reserve__phone" href="tel:+420546123456">
-            <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
-            546 123 456
-          </a>
-          <p class="reserve__hours">
-            <strong>Otevřeno:</strong> Po–Čt 11–22 · Pá–So 11–23 · Ne 11–21
-          </p>
-        </div>
-
-        <!-- Formulář bez backendu: poskládá e-mail přes mailto: -->
-        <form class="reserve__form" id="reserveForm" novalidate>
-          <div class="field">
-            <label for="r-name">Jméno a příjmení *</label>
-            <input type="text" id="r-name" name="name" required placeholder="Jan Novák" />
-          </div>
-          <div class="field field--half">
-            <label for="r-date">Datum *</label>
-            <input type="date" id="r-date" name="date" required />
-          </div>
-          <div class="field field--half">
-            <label for="r-time">Čas *</label>
-            <input type="time" id="r-time" name="time" required value="18:00" />
-          </div>
-          <div class="field field--half">
-            <label for="r-people">Počet osob *</label>
-            <input type="number" id="r-people" name="people" min="1" max="40" value="2" required />
-          </div>
-          <div class="field field--half">
-            <label for="r-phone">Telefon *</label>
-            <input type="tel" id="r-phone" name="phone" required placeholder="+420 …" />
-          </div>
-          <div class="field">
-            <label for="r-note">Poznámka <span class="field__opt">(nepovinné)</span></label>
-            <textarea id="r-note" name="note" rows="3" placeholder="Oslava, alergie, místo na zahrádce…"></textarea>
-          </div>
-          <button type="submit" class="btn btn--primary btn--block">Odeslat poptávku rezervace</button>
-          <p class="reserve__disclaimer">
-            Formulář otevře váš e-mailový program s předvyplněnou zprávou na
-            <strong>rezervace@utrilip.cz</strong>. Rezervace je platná až po našem potvrzení.
-          </p>
-          <p class="reserve__status" id="reserveStatus" role="status" aria-live="polite"></p>
-        </form>
-      </div>
-    </section>
-
-    <!-- ======================= RECENZE ======================= -->
-    <section class="reviews" id="recenze">
-      <div class="wrap">
-        <div class="section-head">
-          <p class="kicker">Co o nás říkají</p>
-          <h2 class="section-title">Recenze hostů</h2>
-          <p class="section-sub">Hodnocení 4,8 z 5 na základě 312 recenzí na Googlu.</p>
-        </div>
-        <div class="reviews__grid">
-          <figure class="review">
-            <div class="review__stars" aria-label="5 z 5 hvězd">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 20 12 16.5 6.5 20 8 13.5 3 9l6.5-.5L12 2Z"/></svg>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 20 12 16.5 6.5 20 8 13.5 3 9l6.5-.5L12 2Z"/></svg>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 20 12 16.5 6.5 20 8 13.5 3 9l6.5-.5L12 2Z"/></svg>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 20 12 16.5 6.5 20 8 13.5 3 9l6.5-.5L12 2Z"/></svg>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 20 12 16.5 6.5 20 8 13.5 3 9l6.5-.5L12 2Z"/></svg>
-            </div>
-            <blockquote>„Nejlepší svíčková v okolí. Knedlík jak od babičky a obsluha milá. Chodíme sem každou neděli na oběd."</blockquote>
-            <figcaption>— Petra H., Ivančice</figcaption>
-          </figure>
-          <figure class="review">
-            <div class="review__stars" aria-label="5 z 5 hvězd">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 20 12 16.5 6.5 20 8 13.5 3 9l6.5-.5L12 2Z"/></svg>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 20 12 16.5 6.5 20 8 13.5 3 9l6.5-.5L12 2Z"/></svg>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 20 12 16.5 6.5 20 8 13.5 3 9l6.5-.5L12 2Z"/></svg>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 20 12 16.5 6.5 20 8 13.5 3 9l6.5-.5L12 2Z"/></svg>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 20 12 16.5 6.5 20 8 13.5 3 9l6.5-.5L12 2Z"/></svg>
-            </div>
-            <blockquote>„Tankové pivo jak má být a koleno k tomu. Zahrádka pod lipami je v létě paráda. Doporučuju!"</blockquote>
-            <figcaption>— Martin K., Rosice</figcaption>
-          </figure>
-          <figure class="review">
-            <div class="review__stars" aria-label="5 z 5 hvězd">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 20 12 16.5 6.5 20 8 13.5 3 9l6.5-.5L12 2Z"/></svg>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 20 12 16.5 6.5 20 8 13.5 3 9l6.5-.5L12 2Z"/></svg>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 20 12 16.5 6.5 20 8 13.5 3 9l6.5-.5L12 2Z"/></svg>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 20 12 16.5 6.5 20 8 13.5 3 9l6.5-.5L12 2Z"/></svg>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.5 6.5L21 9l-5 4.5L17.5 20 12 16.5 6.5 20 8 13.5 3 9l6.5-.5L12 2Z"/></svg>
-            </div>
-            <blockquote>„Měli jsme tu firemní večeři v salonku. Skvělé jídlo, vstřícný personál a rozumné ceny. Rádi se vrátíme."</blockquote>
-            <figcaption>— Jana D., Brno</figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- ======================= KONTAKT + MAPA ======================= -->
-    <section class="contact" id="kontakt">
-      <div class="wrap contact__inner">
-        <div class="contact__info">
-          <p class="kicker">Najdete nás</p>
-          <h2 class="section-title">Kontakt &amp; otevírací doba</h2>
-
-          <ul class="contact__list">
-            <li>
-              <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7Z"/><circle cx="12" cy="9" r="2.4" fill="#fff"/></svg>
-              <div>
-                <strong>Adresa</strong><br>
-                Palackého náměstí 12, 664 91 Ivančice
-              </div>
-            </li>
-            <li>
-              <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
-              <div>
-                <strong>Telefon</strong><br>
-                <a href="tel:+420546123456">546 123 456</a>
-              </div>
-            </li>
-            <li>
-              <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m3 7 9 6 9-6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
-              <div>
-                <strong>E-mail</strong><br>
-                <a href="mailto:rezervace@utrilip.cz">rezervace@utrilip.cz</a>
-              </div>
-            </li>
-            <li>
-              <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-              <div>
-                <strong>Otevírací doba</strong><br>
-                Pondělí–Čtvrtek: 11:00–22:00<br>
-                Pátek–Sobota: 11:00–23:00<br>
-                Neděle: 11:00–21:00
-              </div>
-            </li>
-          </ul>
-
-          <div class="contact__social">
-            <a href="#" aria-label="Facebook" class="contact__soc">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v6h3v-6h2.5l.5-3H13v-1.5c0-.8.7-1.5 1-1.5Z"/></svg>
-            </a>
-            <a href="#" aria-label="Instagram" class="contact__soc">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3.4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="7" r="1.2"/></svg>
-            </a>
-          </div>
-        </div>
-
-        <div class="contact__map">
-          <!-- Mapa Ivančic přes OpenStreetMap (bez API klíče, zdarma) -->
-          <iframe
-            title="Mapa — U Tří lip, Ivančice"
-            src="https://www.openstreetmap.org/export/embed.html?bbox=16.367%2C49.097%2C16.388%2C49.107&layer=mapnik&marker=49.102%2C16.377"
-            loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-          <a class="contact__maplink" href="https://www.openstreetmap.org/?mlat=49.102&mlon=16.377#map=16/49.102/16.377" target="_blank" rel="noopener">
-            Otevřít větší mapu
-          </a>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- ======================= PATIČKA ======================= -->
-  <footer class="footer">
-    <div class="wrap footer__inner">
-      <div class="footer__brand">
-        <span class="brand brand--footer">
-          <span class="brand__mark" aria-hidden="true">
-            <svg viewBox="0 0 48 48">
-              <circle cx="24" cy="16" r="11" fill="#c98a3e"/>
-              <circle cx="13" cy="22" r="8" fill="#0f231b"/>
-              <circle cx="35" cy="22" r="8" fill="#0f231b"/>
-              <circle cx="24" cy="16" r="8.5" fill="#2e5544"/>
-              <rect x="22.4" y="22" width="3.2" height="14" rx="1.4" fill="#7a5230"/>
-              <path d="M8 40 Q24 34 40 40 L40 43 Q24 38 8 43 Z" fill="#c98a3e"/>
-            </svg>
-          </span>
-          <span class="brand__txt">
-            <span class="brand__name">U Tří lip</span>
-            <span class="brand__tag">hospoda &amp; kuchyně</span>
-          </span>
-        </span>
-        <p class="footer__note">Poctivá česká kuchyně v srdci Ivančic od roku 1998.</p>
-      </div>
-
-      <nav class="footer__nav" aria-label="Patička">
-        <a href="#o-nas">O nás</a>
-        <a href="#menu">Jídelní lístek</a>
-        <a href="#denni">Denní menu</a>
-        <a href="#galerie">Galerie</a>
-        <a href="#rezervace">Rezervace</a>
-        <a href="#kontakt">Kontakt</a>
-      </nav>
-
-      <div class="footer__contact">
-        <p><a href="tel:+420546123456">546 123 456</a></p>
-        <p><a href="mailto:rezervace@utrilip.cz">rezervace@utrilip.cz</a></p>
-        <p>Palackého náměstí 12, Ivančice</p>
-      </div>
+  <div class="listek__cols">
+    <div class="listek__cat reveal">
+      <h3>Předkrmy</h3>
+      <ul class="menu">
+        <li><span class="menu__n">Škvarková pomazánka, chleba z pece</span><span class="menu__d"></span><span class="menu__p">85 Kč</span></li>
+        <li><span class="menu__n">Nakládaný hermelín, pečivo</span><span class="menu__d"></span><span class="menu__p">95 Kč</span></li>
+        <li><span class="menu__n">Tatarák ze svíčkové, topinky</span><span class="menu__d"></span><span class="menu__p">185 Kč</span></li>
+      </ul>
+      <h3>Polévky</h3>
+      <ul class="menu">
+        <li><span class="menu__n">Silný hovězí vývar s nudlemi</span><span class="menu__d"></span><span class="menu__p">55 Kč</span></li>
+        <li><span class="menu__n">Česnečka se sýrem a krutony</span><span class="menu__d"></span><span class="menu__p">65 Kč</span></li>
+      </ul>
+      <h3>Dezerty</h3>
+      <ul class="menu">
+        <li><span class="menu__n">Domácí jablečný závin se šlehačkou</span><span class="menu__d"></span><span class="menu__p">85 Kč</span></li>
+        <li><span class="menu__n">Tvarohové knedlíky s ovocem</span><span class="menu__d"></span><span class="menu__p">115 Kč</span></li>
+      </ul>
     </div>
-    <div class="footer__bottom">
-      <div class="wrap footer__bottom-inner">
-        <span>© <span id="year">2026</span> U Tří lip · Všechna práva vyhrazena</span>
-        <span class="footer__demo">Ukázkový web — vytvořeno jako vzor</span>
-      </div>
-    </div>
-  </footer>
 
-  <script src="app.js"></script>
+    <div class="listek__cat reveal">
+      <h3>Hlavní jídla</h3>
+      <ul class="menu">
+        <li><span class="menu__n">Svíčková na smetaně, karlovarský knedlík</span><span class="menu__d"></span><span class="menu__p">235 Kč</span></li>
+        <li><span class="menu__n">Vepřo knedlo zelo</span><span class="menu__d"></span><span class="menu__p">215 Kč</span></li>
+        <li><span class="menu__n">Konfitovaná kachní čtvrtka, zelí, lokše</span><span class="menu__d"></span><span class="menu__p">285 Kč</span></li>
+        <li><span class="menu__n">Smažený řízek z krkovice, bramborový salát</span><span class="menu__d"></span><span class="menu__p">225 Kč</span></li>
+        <li><span class="menu__n">Hovězí guláš, cibule, chleba z pece</span><span class="menu__d"></span><span class="menu__p">205 Kč</span></li>
+        <li><span class="menu__n">Pstruh na másle, brambor s pažitkou</span><span class="menu__d"></span><span class="menu__p">265 Kč</span></li>
+      </ul>
+      <h3>Pití</h3>
+      <ul class="menu">
+        <li><span class="menu__n">Tanková 11° 0,5 l</span><span class="menu__d"></span><span class="menu__p">49 Kč</span></li>
+        <li><span class="menu__n">Bezinková limonáda 0,4 l</span><span class="menu__d"></span><span class="menu__p">55 Kč</span></li>
+        <li><span class="menu__n">Moravské víno 0,1 l</span><span class="menu__d"></span><span class="menu__p">od 35 Kč</span></li>
+      </ul>
+    </div>
+  </div>
+  <p class="listek__note">Ceny i sestava lístku jsou ukázkové. Alergeny sdělí obsluha.</p>
+</section>
+
+<!-- ═════════ PŘÍBĚH ═════════ -->
+<section class="pribeh" id="pribeh">
+  <figure class="pribeh__photo reveal">
+    <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=760&q=80"
+         alt="Poctivé jídlo na stole — maso s přílohou" width="640" height="480" loading="lazy">
+  </figure>
+  <div class="pribeh__text reveal">
+    <p class="smallcaps">Náš příběh</p>
+    <h2>Vaříme, jak vařila <em>babička Marie</em></h2>
+    <p>Hospodu otevřela v osmadevadesátém babička Marie a její svíčková se tu dodnes
+    dělá podle sešitu s ohnutými rohy. Maso bereme od řezníka z Oslavan, zeleninu
+    od farmářů z okolí a chleba si pečeme sami — každé ráno, ještě potmě.</p>
+    <p>Večer se u nás svítí jen tolik, kolik je potřeba: aby bylo vidět do talíře
+    a na pěnu půllitru.</p>
+  </div>
+</section>
+
+<!-- ═════════ GALERIE ═════════ -->
+<section class="galerie" id="galerie">
+  <div class="gal">
+    <img class="reveal" src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=680&q=80" alt="Interiér restaurace s dřevěnými stoly" loading="lazy">
+    <img class="reveal" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=680&q=80" alt="Servírované jídlo v šeru restaurace" loading="lazy">
+    <img class="reveal" src="https://images.unsplash.com/photo-1535958636474-b021ee887b13?auto=format&fit=crop&w=680&q=80" alt="Čepování piva" loading="lazy">
+    <img class="reveal" src="https://images.unsplash.com/photo-1466637574441-749b8f19452f?auto=format&fit=crop&w=680&q=80" alt="Příprava jídla v kuchyni" loading="lazy">
+  </div>
+</section>
+
+<!-- ═════════ RECENZE ═════════ -->
+<section class="recenze">
+  <blockquote class="reveal">
+    <p>„Svíčková jako od babičky, pivo s pěnou na tři prsty
+    a obsluha, co vám vyká i tyká přesně tak, jak máte rádi."</p>
+    <footer>— hodnocení hostů <strong>4,8 ★</strong> na Google</footer>
+  </blockquote>
+</section>
+
+<!-- ═════════ REZERVACE ═════════ -->
+<section class="rezervace" id="rezervace">
+  <div class="card card--rez">
+    <header class="card__head">
+      <h2>Rezervovat stůl</h2>
+      <p class="smallcaps">nebo volejte 546 123 456</p>
+    </header>
+    <form id="form" class="form">
+      <div class="form__row">
+        <label>Jméno<input type="text" name="jmeno" required autocomplete="name"></label>
+        <label>Telefon<input type="tel" name="telefon" required autocomplete="tel"></label>
+      </div>
+      <div class="form__row form__row--3">
+        <label>Datum<input type="date" name="datum" required></label>
+        <label>Čas<input type="time" name="cas" value="18:00" required></label>
+        <label>Osob<input type="number" name="osob" min="1" max="30" value="4" required></label>
+      </div>
+      <button class="btn btn--amber" type="submit">Odeslat rezervaci</button>
+      <p class="form__note">Formulář otevře e-mail s předvyplněnou rezervací — platí až po našem potvrzení.</p>
+    </form>
+  </div>
+</section>
+
+<!-- ═════════ KONTAKT ═════════ -->
+<footer class="kontakt" id="kontakt">
+  <div class="kontakt__grid">
+    <div>
+      <h2>U Tří lip</h2>
+      <p>Krumlovská 18<br>664 91 Ivančice</p>
+    </div>
+    <div>
+      <h3>Otevřeno</h3>
+      <p>Po–Čt&emsp;11–22<br>Pá–So&emsp;11–23<br>Ne&emsp;11–21</p>
+    </div>
+    <div>
+      <h3>Spojení</h3>
+      <p><a href="tel:+420546123456">546 123 456</a><br>
+      <a href="mailto:rezervace@utrilip.cz">rezervace@utrilip.cz</a><br>
+      <a href="https://www.google.com/maps/search/?api=1&query=Ivan%C4%8Dice" target="_blank" rel="noopener">Najít na mapě ↗</a></p>
+    </div>
+  </div>
+  <p class="kontakt__note">Ukázkový web — podnik, lístek i fotky jsou vzorové. © 2026 U Tří lip</p>
+</footer>
+
+</main>
+<script src="app.js"></script>
 </body>
 </html>

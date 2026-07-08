@@ -1,500 +1,230 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- ===== SEO / META ===== -->
-  <title>Studio Lumé — kosmetické studio Ivančice | Pleťová péče, obočí, řasy</title>
-  <meta name="description" content="Kosmetické studio Lumé v Ivančicích. Pleťová ošetření, čištění pleti, lash lifting, úprava obočí, depilace a masáže obličeje. Objednejte se online." />
-  <meta name="theme-color" content="#c98b8b" />
-
-  <!-- Sdílení na sítích -->
-  <meta property="og:title" content="Studio Lumé — kosmetické studio Ivančice" />
-  <meta property="og:description" content="Jemná péče o vaši pleť. Pleťová ošetření, obočí a řasy, masáže obličeje. Objednejte se online." />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=1200&q=70&fit=crop" />
-
-  <!-- ===== FONTY (Google Fonts) ===== -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
-
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Studio Lumé — kosmetické studio Ivančice</title>
+<meta name="description" content="Kosmetické studio v Ivančicích. Pleťová ošetření, lash lifting, obočí, masáže obličeje a líčení — péče v měkkém světle.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- ===================== HLAVIČKA / NAVIGACE ===================== -->
-  <header class="site-header" id="top">
-    <nav class="nav container">
-      <a href="#top" class="brand" aria-label="Studio Lumé — domů">
-        <span class="brand-mark" aria-hidden="true">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 3c2.2 2.6 3.5 5 3.5 7.4A3.5 3.5 0 0 1 12 14a3.5 3.5 0 0 1-3.5-3.6C8.5 8 9.8 5.6 12 3Z"/>
-            <path d="M12 14v7"/><path d="M8.5 18.5c1.2.6 2.3.9 3.5.9s2.3-.3 3.5-.9"/>
-          </svg>
-        </span>
-        <span class="brand-text">Studio&nbsp;Lumé</span>
-      </a>
+<div class="aurora" aria-hidden="true">
+  <span class="orb orb--1"></span>
+  <span class="orb orb--2"></span>
+  <span class="orb orb--3"></span>
+</div>
 
-      <button class="nav-toggle" id="navToggle" aria-label="Otevřít menu" aria-expanded="false" aria-controls="navMenu">
-        <span></span><span></span><span></span>
-      </button>
+<header class="pillnav">
+  <a class="brand" href="#uvod">
+    <svg viewBox="0 0 26 26" aria-hidden="true">
+      <defs>
+        <radialGradient id="g" cx="35%" cy="30%">
+          <stop offset="0%" stop-color="#f3c3d3"/>
+          <stop offset="55%" stop-color="#cbb6f2"/>
+          <stop offset="100%" stop-color="#fad3b8"/>
+        </radialGradient>
+      </defs>
+      <circle cx="13" cy="13" r="11" fill="url(#g)"/>
+    </svg>
+    <span>Studio Lumé</span>
+  </a>
+  <nav class="nav" id="nav">
+    <a href="#ritual">Rituál</a>
+    <a href="#sluzby">Služby</a>
+    <a href="#klara">O Kláře</a>
+    <a href="#galerie">Galerie</a>
+    <a href="#kontakt">Kontakt</a>
+  </nav>
+  <a class="cta" href="#objednani">Objednat se</a>
+  <button class="burger" id="burger" aria-label="Otevřít menu" aria-expanded="false"><span></span><span></span></button>
+</header>
 
-      <ul class="nav-menu" id="navMenu">
-        <li><a href="#sluzby">Služby</a></li>
-        <li><a href="#o-mne">O mně</a></li>
-        <li><a href="#galerie">Galerie</a></li>
-        <li><a href="#recenze">Recenze</a></li>
-        <li><a href="#kontakt">Kontakt</a></li>
-        <li><a href="#objednani" class="nav-cta">Objednat se</a></li>
-      </ul>
-    </nav>
+<main>
+
+<!-- ═════════ HERO ═════════ -->
+<section class="hero" id="uvod">
+  <div class="hero__text">
+    <p class="chip">Kosmetické studio · Ivančice</p>
+    <h1>Pleť, která má<br>svou <span class="grad">záři</span></h1>
+    <p class="lead">Lumé znamená světlo. Hodina jen pro vás, měkké ruce, žádný spěch —
+    a pleť, která po ošetření vypadá odpočatě i bez filtru.</p>
+    <div class="hero__actions">
+      <a class="btn btn--grad" href="#objednani">Objednat se</a>
+      <a class="btn btn--soft" href="#sluzby">Služby a ceník</a>
+    </div>
+    <ul class="hero__chips">
+      <li>12+ let praxe</li>
+      <li>profesionální kosmetika</li>
+      <li>studio jen pro vás</li>
+    </ul>
+  </div>
+  <figure class="hero__photo">
+    <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=720&q=80"
+         alt="Pleťové ošetření v kosmetickém studiu" width="560" height="640" loading="eager">
+  </figure>
+</section>
+
+<!-- ═════════ RITUÁL ═════════ -->
+<section class="ritual" id="ritual">
+  <header class="sec-head">
+    <h2>Rituál <span class="grad">Lumé</span></h2>
+    <p>Každé ošetření vedeme ve třech krocích — pořadí má smysl, pleť se na každý další krok připravuje tím předchozím.</p>
   </header>
+  <ol class="steps">
+    <li class="glass reveal">
+      <span class="steps__n">1</span>
+      <h3>Zklidnění</h3>
+      <p>Odlíčení, čištění a teplý obklad. Pleť se uvolní a otevře — a vy s ní.</p>
+    </li>
+    <li class="glass reveal">
+      <span class="steps__n">2</span>
+      <h3>Péče</h3>
+      <p>Ošetření na míru: hydratace, hloubkové čištění nebo lifting — podle toho, co pleť ten den potřebuje.</p>
+    </li>
+    <li class="glass reveal">
+      <span class="steps__n">3</span>
+      <h3>Záře</h3>
+      <p>Masáž obličeje, sérum a ochrana. Odcházíte s pletí, která svítí sama od sebe.</p>
+    </li>
+  </ol>
+</section>
 
-  <main>
+<!-- ═════════ SLUŽBY & CENÍK ═════════ -->
+<section class="sluzby" id="sluzby">
+  <header class="sec-head">
+    <h2>Služby &amp; ceník</h2>
+    <p>Ceny jsou orientační — přesně je upřesníme podle stavu pleti a zvolené péče. <em>(Ukázkový web.)</em></p>
+  </header>
+  <div class="tiles">
+    <article class="glass tile reveal">
+      <h3>Hloubkové čištění pleti</h3>
+      <p>ultrazvuk, maska, závěrečná péče · 60 min</p>
+      <strong>890 Kč</strong>
+    </article>
+    <article class="glass tile reveal">
+      <h3>Ošetření s masáží obličeje</h3>
+      <p>rituál Lumé v plné délce · 75 min</p>
+      <strong>1 090 Kč</strong>
+    </article>
+    <article class="glass tile reveal">
+      <h3>Lash lifting + botox řas</h3>
+      <p>natočení, výživa, barvení · 60 min</p>
+      <strong>990 Kč</strong>
+    </article>
+    <article class="glass tile reveal">
+      <h3>Úprava a barvení obočí</h3>
+      <p>tvar podle rysů obličeje · 30 min</p>
+      <strong>350 Kč</strong>
+    </article>
+    <article class="glass tile reveal">
+      <h3>Denní / večerní líčení</h3>
+      <p>i svatební, se zkouškou · od 60 min</p>
+      <strong>od 900 Kč</strong>
+    </article>
+    <article class="glass tile tile--top reveal">
+      <span class="tile__tag">nejoblíbenější</span>
+      <h3>Balíček Záře</h3>
+      <p>čištění + masáž + obočí · 100 min</p>
+      <strong>1 590 Kč</strong>
+    </article>
+  </div>
+</section>
 
-    <!-- ===================== HERO ===================== -->
-    <section class="hero">
-      <div class="hero-inner container">
-        <div class="hero-text">
-          <p class="eyebrow">Kosmetické studio · Ivančice</p>
-          <h1>Jemná péče,<br />ve které rozkvete vaše pleť</h1>
-          <p class="lead">
-            Vítá vás Studio Lumé — útulné kosmetické studio, kde se na chvíli zastavíte
-            a o vaši pleť se postará někdo, kdo to dělá srdcem. Bez spěchu, na míru vám.
-          </p>
-          <div class="hero-actions">
-            <a href="#objednani" class="btn btn-primary">Objednat se</a>
-            <a href="#sluzby" class="btn btn-ghost">Prohlédnout služby</a>
-          </div>
-          <ul class="hero-badges">
-            <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-              Profesionální kosmetika
-            </li>
-            <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-              Individuální přístup
-            </li>
-            <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-              Příjemné prostředí
-            </li>
-          </ul>
-        </div>
+<!-- ═════════ O KLÁŘE ═════════ -->
+<section class="klara" id="klara">
+  <figure class="klara__photo reveal">
+    <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=680&q=80"
+         alt="Masáž obličeje při kosmetickém ošetření" width="600" height="640" loading="lazy">
+  </figure>
+  <div class="klara__text reveal">
+    <p class="chip">O Kláře</p>
+    <h2>Ruce, kterým se pleť <span class="grad">svěří</span></h2>
+    <p>Jmenuju se Klára a kosmetice se věnuju přes dvanáct let. Nevěřím na zázračné
+    krémy ani na bolestivé procedury — věřím na pravidelnou, jemnou péči a na to,
+    že hodina klidu udělá s obličejem víc než deset produktů.</p>
+    <p>Ve studiu jste vždycky jen vy. Žádná čekárna, žádný provoz — jen měkké světlo,
+    teplé lehátko a čas, který patří vaší pleti.</p>
+  </div>
+</section>
 
-        <div class="hero-media">
-          <img
-            src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=900&q=70&fit=crop"
-            alt="Klientka při relaxační masáži obličeje v kosmetickém studiu"
-            width="900" height="1100" loading="eager" />
-          <div class="hero-card">
-            <span class="hero-card-num">12+</span>
-            <span class="hero-card-label">let zkušeností<br />s péčí o pleť</span>
-          </div>
-        </div>
+<!-- ═════════ GALERIE ═════════ -->
+<section class="galerie" id="galerie">
+  <header class="sec-head">
+    <h2>Ze studia</h2>
+  </header>
+  <div class="gal">
+    <img class="reveal" src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&w=560&q=80" alt="Jadeitový váleček a přírodní kosmetika" loading="lazy">
+    <img class="reveal" src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=560&q=80" alt="Relaxační prostředí kosmetického studia" loading="lazy">
+    <img class="reveal" src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=560&q=80" alt="Dekorativní kosmetika a štětce" loading="lazy">
+    <img class="reveal" src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=560&q=80" alt="Detail líčení" loading="lazy">
+  </div>
+</section>
+
+<!-- ═════════ RECENZE ═════════ -->
+<section class="recenze">
+  <div class="rec">
+    <blockquote class="glass reveal"><p>„Poprvé v životě chodím na kosmetiku pravidelně — protože se sem těším."</p><footer>— Jana M.</footer></blockquote>
+    <blockquote class="glass reveal"><p>„Lash lifting perfektní, vydržel přes dva měsíce. A ta masáž obličeje!"</p><footer>— Veronika S.</footer></blockquote>
+    <blockquote class="glass reveal"><p>„Klára jediná pochopila moje obočí. Už nikam jinam nejdu."</p><footer>— Tereza K.</footer></blockquote>
+  </div>
+</section>
+
+<!-- ═════════ OBJEDNÁNÍ ═════════ -->
+<section class="objednani" id="objednani">
+  <div class="glass obj">
+    <h2>Objednat se</h2>
+    <p>Vyberte si službu a napište, kdy se vám to hodí — ozvu se s volnými termíny.
+    Nebo volejte <a href="tel:+420734125890">734 125 890</a>.</p>
+    <form id="form" class="form">
+      <div class="form__row">
+        <label>Jméno<input type="text" name="jmeno" required autocomplete="name"></label>
+        <label>Telefon<input type="tel" name="telefon" required autocomplete="tel"></label>
       </div>
-    </section>
-
-    <!-- ===================== SLUŽBY + CENÍK ===================== -->
-    <section class="section" id="sluzby">
-      <div class="container">
-        <header class="section-head">
-          <p class="eyebrow">Ceník</p>
-          <h2>Naše služby</h2>
-          <p class="section-sub">
-            Ceny jsou orientační — konečnou cenu vždy upřesníme podle stavu pleti a zvoleného ošetření.
-            <!-- UPRAVUJTE ZDE: názvy služeb a ceny -->
-          </p>
-        </header>
-
-        <div class="price-grid">
-
-          <!-- Skupina: Pleťová ošetření -->
-          <article class="price-card">
-            <div class="price-card-head">
-              <span class="price-ico" aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 14c1 1.3 2.4 2 4 2s3-.7 4-2"/><circle cx="9" cy="10" r=".6" fill="currentColor"/><circle cx="15" cy="10" r=".6" fill="currentColor"/></svg>
-              </span>
-              <h3>Pleťová ošetření</h3>
-            </div>
-            <ul class="price-list">
-              <li><span>Kompletní pleťové ošetření (90 min)</span><b>1 290 Kč</b></li>
-              <li><span>Hloubkové čištění pleti (75 min)</span><b>990 Kč</b></li>
-              <li><span>Hydratační ošetření (60 min)</span><b>790 Kč</b></li>
-              <li><span>Ošetření zralé pleti — anti-age (90 min)</span><b>1 490 Kč</b></li>
-              <li><span>Ošetření pro mladistvou pleť (45 min)</span><b>650 Kč</b></li>
-            </ul>
-          </article>
-
-          <!-- Skupina: Obočí a řasy -->
-          <article class="price-card">
-            <div class="price-card-head">
-              <span class="price-ico" aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13c3-4 7-6 9-6s6 2 9 6"/><path d="M7 12.5 6 15"/><path d="M10.5 11.7 10 14.5"/><path d="M14 11.7l.5 2.8"/><path d="M17.5 12.5 18 15"/></svg>
-              </span>
-              <h3>Obočí &amp; řasy</h3>
-            </div>
-            <ul class="price-list">
-              <li><span>Lash lifting (lifting řas + barva)</span><b>790 Kč</b></li>
-              <li><span>Brow lamination (lifting obočí)</span><b>690 Kč</b></li>
-              <li><span>Úprava a barvení obočí</span><b>350 Kč</b></li>
-              <li><span>Barvení řas</span><b>250 Kč</b></li>
-              <li><span>Komplet obočí + řasy</span><b>520 Kč</b></li>
-            </ul>
-          </article>
-
-          <!-- Skupina: Masáže obličeje -->
-          <article class="price-card">
-            <div class="price-card-head">
-              <span class="price-ico" aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4c4 0 7 3 7 7 0 4-3 8-7 8s-7-4-7-8c0-4 3-7 7-7Z"/><path d="M9 11c.8.7 1.9 1 3 1s2.2-.3 3-1"/></svg>
-              </span>
-              <h3>Masáže obličeje</h3>
-            </div>
-            <ul class="price-list">
-              <li><span>Klasická masáž obličeje (30 min)</span><b>450 Kč</b></li>
-              <li><span>Liftingová masáž Kobido (45 min)</span><b>790 Kč</b></li>
-              <li><span>Lymfatická masáž obličeje (30 min)</span><b>490 Kč</b></li>
-              <li><span>Masáž obličeje, krku a dekoltu (50 min)</span><b>690 Kč</b></li>
-            </ul>
-          </article>
-
-          <!-- Skupina: Depilace -->
-          <article class="price-card">
-            <div class="price-card-head">
-              <span class="price-ico" aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19 19 5"/><path d="M7 9c2-2 5-2 7 0"/><path d="M11 5c1.5-1.5 3.5-1.5 5 0"/><circle cx="6" cy="18" r="1.4"/></svg>
-              </span>
-              <h3>Depilace</h3>
-            </div>
-            <ul class="price-list">
-              <li><span>Horní ret</span><b>150 Kč</b></li>
-              <li><span>Obličej (celý)</span><b>290 Kč</b></li>
-              <li><span>Podpaží</span><b>250 Kč</b></li>
-              <li><span>Půl nohou</span><b>350 Kč</b></li>
-              <li><span>Celé nohy</span><b>550 Kč</b></li>
-            </ul>
-          </article>
-
-          <!-- Skupina: Líčení -->
-          <article class="price-card">
-            <div class="price-card-head">
-              <span class="price-ico" aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20 14 10"/><path d="m13 9 2-2 2 2-2 2z"/><path d="m15 7 2-3 3 3-3 2z"/></svg>
-              </span>
-              <h3>Líčení</h3>
-            </div>
-            <ul class="price-list">
-              <li><span>Denní líčení</span><b>590 Kč</b></li>
-              <li><span>Společenské líčení</span><b>790 Kč</b></li>
-              <li><span>Svatební líčení (vč. zkoušky)</span><b>1 990 Kč</b></li>
-              <li><span>Líčení + úprava obočí</span><b>790 Kč</b></li>
-            </ul>
-          </article>
-
-          <!-- Skupina: Balíčky -->
-          <article class="price-card price-card--accent">
-            <div class="price-card-head">
-              <span class="price-ico" aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 7v6c0 4 3.4 7 8 8 4.6-1 8-4 8-8V7Z"/><path d="m9 12 2 2 4-4"/></svg>
-              </span>
-              <h3>Oblíbené balíčky</h3>
-            </div>
-            <ul class="price-list">
-              <li><span>Lumé Glow — čištění + hydratace + masáž</span><b>1 690 Kč</b></li>
-              <li><span>Pohlazení — ošetření + úprava obočí</span><b>1 190 Kč</b></li>
-              <li><span>Před svatbou — ošetření + lash lifting + líčení</span><b>2 690 Kč</b></li>
-            </ul>
-            <p class="price-note">Dárkové poukazy na jakoukoliv službu k dostání ve studiu i na dálku.</p>
-          </article>
-
-        </div>
+      <div class="form__row">
+        <label>Služba
+          <select name="sluzba">
+            <option>Hloubkové čištění pleti</option>
+            <option>Ošetření s masáží obličeje</option>
+            <option>Lash lifting + botox řas</option>
+            <option>Úprava a barvení obočí</option>
+            <option>Denní / večerní líčení</option>
+            <option>Balíček Záře</option>
+          </select>
+        </label>
+        <label>Kdy se vám to hodí<input type="text" name="termin" placeholder="např. úterý dopoledne"></label>
       </div>
-    </section>
+      <button class="btn btn--grad" type="submit">Odeslat poptávku</button>
+      <p class="form__note">Formulář otevře e-mail s předvyplněnou poptávkou — nic se neodesílá samo.</p>
+    </form>
+  </div>
+</section>
 
-    <!-- ===================== O KOSMETIČCE ===================== -->
-    <section class="section section--soft" id="o-mne">
-      <div class="container about">
-        <div class="about-media">
-          <img
-            src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=800&q=70&fit=crop"
-            alt="Kosmetička nanáší pleťovou masku klientce ve studiu"
-            width="800" height="900" loading="lazy" />
-        </div>
-        <div class="about-text">
-          <p class="eyebrow">O mně</p>
-          <h2>Těší mě, jsem Klára</h2>
-          <p>
-            Kosmetice se věnuji přes dvanáct let a pořád mě to baví stejně jako první den.
-            Než jsem otevřela Studio Lumé, prošla jsem řadou kurzů od pleťové diagnostiky
-            až po japonskou liftingovou masáž Kobido. Věřím, že krása začíná u zdravé,
-            odpočaté pleti — a u pocitu, že na vás mám čas.
-          </p>
-          <p>
-            U mě nečekejte uspěchanou linku. Každé ošetření začíná rozborem pleti a
-            povídáním o tom, co vás trápí. Pak vám sestavím péči přesně na míru —
-            a ráda vám poradím, jak o pleť pečovat i doma.
-          </p>
-
-          <ul class="about-points">
-            <li>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c2.2 2.6 3.5 5 3.5 7.4A3.5 3.5 0 0 1 12 14a3.5 3.5 0 0 1-3.5-3.6C8.5 8 9.8 5.6 12 3Z"/></svg>
-              <div><b>Šetrná kosmetika</b><span>Pracuji s ověřenou profesionální kosmetikou pro citlivou pleť.</span></div>
-            </li>
-            <li>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-              <div><b>Bez spěchu</b><span>Termíny plánuji tak, abyste se nikdy nemusela cítit jako na běžícím páse.</span></div>
-            </li>
-            <li>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.4-9-9a4.5 4.5 0 0 1 9-2 4.5 4.5 0 0 1 9 2c-2 4.6-9 9-9 9Z"/></svg>
-              <div><b>Pro každý věk</b><span>Od první akné péče po anti-age ošetření zralé pleti.</span></div>
-            </li>
-          </ul>
-
-          <a href="#objednani" class="btn btn-primary">Rezervovat termín</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== GALERIE ===================== -->
-    <section class="section" id="galerie">
-      <div class="container">
-        <header class="section-head">
-          <p class="eyebrow">Galerie</p>
-          <h2>Nahlédněte k nám</h2>
-          <p class="section-sub">Pár momentek z ošetření a ze studia.</p>
-        </header>
-
-        <div class="gallery">
-          <figure class="g-item g-tall">
-            <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=700&q=65&fit=crop" alt="Pleťová maska nanesená na obličej klientky během ošetření" width="700" height="900" loading="lazy" />
-          </figure>
-          <figure class="g-item">
-            <img src="https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?w=700&q=65&fit=crop" alt="Interiér moderního kosmetického studia se zrcadly" width="700" height="500" loading="lazy" />
-          </figure>
-          <figure class="g-item">
-            <img src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=700&q=65&fit=crop" alt="Pleťová kosmetika a jadeitový masážní váleček" width="700" height="500" loading="lazy" />
-          </figure>
-          <figure class="g-item g-tall">
-            <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=700&q=65&fit=crop" alt="Líčení očí a úprava obočí klientce" width="700" height="900" loading="lazy" />
-          </figure>
-          <figure class="g-item">
-            <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=700&q=65&fit=crop" alt="Dekorativní kosmetika a líčidla připravená ve studiu" width="700" height="500" loading="lazy" />
-          </figure>
-          <figure class="g-item">
-            <img src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=700&q=65&fit=crop" alt="Relaxační masáž obličeje v kosmetickém studiu" width="700" height="500" loading="lazy" />
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== RECENZE ===================== -->
-    <section class="section section--soft" id="recenze">
-      <div class="container">
-        <header class="section-head">
-          <p class="eyebrow">Recenze</p>
-          <h2>Co o nás říkají klientky</h2>
-        </header>
-
-        <div class="reviews">
-          <blockquote class="review">
-            <div class="stars" aria-label="Hodnocení 5 z 5">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9.9-5 4.8 1.2 6.9L12 17.8 5.9 20.9 7.1 14 2 9.2l6.9-.9z"/></svg>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9.9-5 4.8 1.2 6.9L12 17.8 5.9 20.9 7.1 14 2 9.2l6.9-.9z"/></svg>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9.9-5 4.8 1.2 6.9L12 17.8 5.9 20.9 7.1 14 2 9.2l6.9-.9z"/></svg>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9.9-5 4.8 1.2 6.9L12 17.8 5.9 20.9 7.1 14 2 9.2l6.9-.9z"/></svg>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9.9-5 4.8 1.2 6.9L12 17.8 5.9 20.9 7.1 14 2 9.2l6.9-.9z"/></svg>
-            </div>
-            <p>„Chodím ke Kláře přes rok a moje pleť se proměnila k nepoznání. Vždycky odcházím odpočatá a krásně rozzářená. Doporučuji všema deseti.“</p>
-            <footer>— Petra K., Ivančice</footer>
-          </blockquote>
-
-          <blockquote class="review">
-            <div class="stars" aria-label="Hodnocení 5 z 5">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9.9-5 4.8 1.2 6.9L12 17.8 5.9 20.9 7.1 14 2 9.2l6.9-.9z"/></svg>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9.9-5 4.8 1.2 6.9L12 17.8 5.9 20.9 7.1 14 2 9.2l6.9-.9z"/></svg>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9.9-5 4.8 1.2 6.9L12 17.8 5.9 20.9 7.1 14 2 9.2l6.9-.9z"/></svg>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9.9-5 4.8 1.2 6.9L12 17.8 5.9 20.9 7.1 14 2 9.2l6.9-.9z"/></svg>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9.9-5 4.8 1.2 6.9L12 17.8 5.9 20.9 7.1 14 2 9.2l6.9-.9z"/></svg>
-            </div>
-            <p>„Lash lifting u Kláry je paráda — ráno vstanu a vypadám upraveně bez jediného doteku řasenky. A v studiu je tak příjemně, že se mi nechce odejít.“</p>
-            <footer>— Lucie M., Rosice</footer>
-          </blockquote>
-
-          <blockquote class="review">
-            <div class="stars" aria-label="Hodnocení 5 z 5">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9.9-5 4.8 1.2 6.9L12 17.8 5.9 20.9 7.1 14 2 9.2l6.9-.9z"/></svg>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9.9-5 4.8 1.2 6.9L12 17.8 5.9 20.9 7.1 14 2 9.2l6.9-.9z"/></svg>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9.9-5 4.8 1.2 6.9L12 17.8 5.9 20.9 7.1 14 2 9.2l6.9-.9z"/></svg>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9.9-5 4.8 1.2 6.9L12 17.8 5.9 20.9 7.1 14 2 9.2l6.9-.9z"/></svg>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.3 6.9.9-5 4.8 1.2 6.9L12 17.8 5.9 20.9 7.1 14 2 9.2l6.9-.9z"/></svg>
-            </div>
-            <p>„Svatební líčení mi vydrželo celý den i přes slzy dojetí. Klára je profík a moc milý člověk. Děkuju za krásný start do manželství!“</p>
-            <footer>— Tereza V., Zbýšov</footer>
-          </blockquote>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== OBJEDNÁNÍ (formulář bez backendu) ===================== -->
-    <section class="section" id="objednani">
-      <div class="container booking">
-        <div class="booking-info">
-          <p class="eyebrow">Objednání</p>
-          <h2>Rezervujte si termín</h2>
-          <p>
-            Vyplňte krátkou poptávku a po odeslání se vám otevře váš e-mailový program
-            s předvyplněnou zprávou — stačí ji odeslat. Ozvu se vám zpravidla
-            do jednoho pracovního dne a domluvíme přesný termín.
-          </p>
-          <ul class="booking-contacts">
-            <li>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8.1 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2Z"/></svg>
-              <!-- UPRAVUJTE ZDE: telefon -->
-              <a href="tel:+420734125890">734&nbsp;125&nbsp;890</a>
-            </li>
-            <li>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-              <!-- UPRAVUJTE ZDE: e-mail -->
-              <a href="mailto:ahoj@studio-lume.cz">ahoj@studio-lume.cz</a>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Formulář funguje BEZ serveru: po odeslání sestaví e-mail (mailto) -->
-        <form class="booking-form" id="bookingForm" novalidate>
-          <div class="field">
-            <label for="bf-name">Jméno a příjmení</label>
-            <input type="text" id="bf-name" name="name" autocomplete="name" required placeholder="Jana Nováková" />
-          </div>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="bf-phone">Telefon</label>
-              <input type="tel" id="bf-phone" name="phone" autocomplete="tel" required placeholder="603 123 456" />
-            </div>
-            <div class="field">
-              <label for="bf-service">Služba</label>
-              <select id="bf-service" name="service">
-                <option>Pleťové ošetření</option>
-                <option>Hloubkové čištění pleti</option>
-                <option>Lash lifting</option>
-                <option>Úprava obočí / řas</option>
-                <option>Masáž obličeje</option>
-                <option>Depilace</option>
-                <option>Líčení</option>
-                <option>Nevím, poradíte mi?</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="bf-term">Preferovaný termín (nezávazně)</label>
-            <input type="text" id="bf-term" name="term" placeholder="např. čtvrtek dopoledne nebo příští týden" />
-          </div>
-
-          <div class="field">
-            <label for="bf-msg">Zpráva (nepovinné)</label>
-            <textarea id="bf-msg" name="message" rows="3" placeholder="Cokoliv, co bych měla vědět předem…"></textarea>
-          </div>
-
-          <button type="submit" class="btn btn-primary btn-block">Odeslat poptávku</button>
-          <p class="form-hint" id="formHint" role="status">
-            Po odeslání se otevře váš e-mailový program s hotovou zprávou. Je to nezávazná poptávka.
-          </p>
-        </form>
-      </div>
-    </section>
-
-    <!-- ===================== KONTAKT + MAPA ===================== -->
-    <section class="section section--soft" id="kontakt">
-      <div class="container contact">
-        <div class="contact-info">
-          <p class="eyebrow">Kontakt</p>
-          <h2>Najdete nás v centru Ivančic</h2>
-
-          <ul class="contact-list">
-            <li>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
-              <div>
-                <b>Adresa</b>
-                <!-- UPRAVUJTE ZDE: adresa -->
-                <span>Palackého náměstí 27<br />664 91 Ivančice</span>
-              </div>
-            </li>
-            <li>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8.1 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2Z"/></svg>
-              <div>
-                <b>Telefon</b>
-                <span><a href="tel:+420734125890">734&nbsp;125&nbsp;890</a></span>
-              </div>
-            </li>
-            <li>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-              <div>
-                <b>E-mail</b>
-                <span><a href="mailto:ahoj@studio-lume.cz">ahoj@studio-lume.cz</a></span>
-              </div>
-            </li>
-            <li>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-              <div>
-                <b>Otevírací doba</b>
-                <!-- UPRAVUJTE ZDE: otevírací doba -->
-                <span class="hours">
-                  <span>Po – Pá</span><span>9:00 – 18:00</span>
-                  <span>Sobota</span><span>9:00 – 13:00 (po domluvě)</span>
-                  <span>Neděle</span><span>zavřeno</span>
-                </span>
-              </div>
-            </li>
-          </ul>
-
-          <div class="social">
-            <a href="#" aria-label="Instagram" class="social-link">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-            </a>
-            <a href="#" aria-label="Facebook" class="social-link">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h-2a4 4 0 0 0-4 4v3H6v4h3v7h4v-7h3l1-4h-4V7a1 1 0 0 1 1-1h2z"/></svg>
-            </a>
-          </div>
-        </div>
-
-        <div class="contact-map">
-          <!-- Mapa Ivančic (OpenStreetMap embed — bez API klíče) -->
-          <iframe
-            title="Mapa — Studio Lumé, Ivančice"
-            src="https://www.openstreetmap.org/export/embed.html?bbox=16.366%2C49.096%2C16.392%2C49.108&layer=mapnik&marker=49.1018%2C16.3787"
-            loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ===================== PATIČKA ===================== -->
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <span class="brand-text">Studio Lumé</span>
-        <p>Kosmetické studio v Ivančicích. Jemná péče o pleť, obočí, řasy a dobrý pocit.</p>
-      </div>
-      <nav class="footer-nav" aria-label="Patička">
-        <a href="#sluzby">Služby</a>
-        <a href="#o-mne">O mně</a>
-        <a href="#galerie">Galerie</a>
-        <a href="#objednani">Objednat se</a>
-        <a href="#kontakt">Kontakt</a>
-      </nav>
+<!-- ═════════ KONTAKT ═════════ -->
+<footer class="kontakt" id="kontakt">
+  <div class="kontakt__grid">
+    <div>
+      <h2>Studio <span class="grad">Lumé</span></h2>
+      <p>Palackého náměstí 27<br>664 91 Ivančice</p>
     </div>
-    <div class="footer-bottom container">
-      <span>© <span id="year">2026</span> Studio Lumé · Ukázkový web</span>
-      <span>Návrh webu na míru</span>
+    <div>
+      <h3>Otevírací doba</h3>
+      <p>Po–Pá&emsp;9–18<br>So&emsp;9–13 <span class="mut">(na objednání)</span></p>
     </div>
-  </footer>
+    <div>
+      <h3>Spojení</h3>
+      <p><a href="tel:+420734125890">734 125 890</a><br>
+      <a href="mailto:ahoj@studio-lume.cz">ahoj@studio-lume.cz</a><br>
+      <a href="https://www.google.com/maps/search/?api=1&query=Palack%C3%A9ho+n%C3%A1m%C4%9Bst%C3%AD+27+Ivan%C4%8Dice" target="_blank" rel="noopener">Najít na mapě ↗</a></p>
+    </div>
+  </div>
+  <p class="kontakt__note">Ukázkový web — jména, fotky i ceník jsou vzorové. © 2026 Studio Lumé</p>
+</footer>
 
-  <script src="app.js"></script>
+</main>
+<script src="app.js"></script>
 </body>
 </html>

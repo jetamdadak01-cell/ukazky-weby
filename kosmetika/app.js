@@ -1,91 +1,49 @@
-/* =========================================================
-   Studio Lumé — interaktivita (čistý JS, bez knihoven)
-   ========================================================= */
-(function () {
-  "use strict";
+"use strict";
+(function(){
+  var STUDIO_EMAIL = "ahoj@studio-lume.cz"; /* UPRAVTE ZDE pro reálné studio */
 
-  /* ---------- Rok v patičce ---------- */
-  var yearEl = document.getElementById("year");
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
-
-  /* ---------- Mobilní menu ---------- */
-  var toggle = document.getElementById("navToggle");
-  var menu = document.getElementById("navMenu");
-
-  if (toggle && menu) {
-    toggle.addEventListener("click", function () {
-      var isOpen = menu.classList.toggle("open");
-      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
-      toggle.setAttribute("aria-label", isOpen ? "Zavřít menu" : "Otevřít menu");
+  /* mobilní menu */
+  var burger = document.getElementById("burger");
+  var nav = document.getElementById("nav");
+  if (burger && nav){
+    burger.addEventListener("click", function(){
+      var open = nav.classList.toggle("open");
+      burger.setAttribute("aria-expanded", open ? "true" : "false");
     });
-
-    // Po kliknutí na odkaz menu zavřít (mobil)
-    menu.addEventListener("click", function (e) {
-      if (e.target.closest("a")) {
-        menu.classList.remove("open");
-        toggle.setAttribute("aria-expanded", "false");
-        toggle.setAttribute("aria-label", "Otevřít menu");
-      }
+    nav.addEventListener("click", function(e){
+      if (e.target.tagName === "A") nav.classList.remove("open");
     });
   }
 
-  /* ---------- Objednávkový formulář → mailto (bez serveru) ---------- */
-  // UPRAVUJTE ZDE: e-mail, kam má poptávka chodit
-  var SALON_EMAIL = "ahoj@studio-lume.cz";
+  /* reveal při scrollu */
+  var els = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
+      });
+    }, { threshold: .12 });
+    els.forEach(function(el){ io.observe(el); });
+  } else {
+    els.forEach(function(el){ el.classList.add("in"); });
+  }
 
-  var form = document.getElementById("bookingForm");
-  var hint = document.getElementById("formHint");
-
-  if (form) {
-    form.addEventListener("submit", function (e) {
+  /* poptávka -> předvyplněný e-mail (mailto), nic se neodesílá samo */
+  var form = document.getElementById("form");
+  if (form){
+    form.addEventListener("submit", function(e){
       e.preventDefault();
-
-      var name = form.name.value.trim();
-      var phone = form.phone.value.trim();
-      var service = form.service.value;
-      var term = form.term.value.trim();
-      var message = form.message.value.trim();
-
-      // Jednoduchá validace
-      if (!name || !phone) {
-        showHint("Vyplňte prosím jméno a telefon, ať se vám můžeme ozvat.", true);
-        if (!name) form.name.focus(); else form.phone.focus();
-        return;
-      }
-
-      // Sestavení e-mailu
-      var subject = "Poptávka termínu — " + service;
-      var bodyLines = [
-        "Dobrý den,",
-        "",
-        "ráda bych se objednala na: " + service + ".",
-        "",
-        "Jméno: " + name,
-        "Telefon: " + phone,
-        "Preferovaný termín: " + (term || "—"),
-      ];
-      if (message) {
-        bodyLines.push("");
-        bodyLines.push("Poznámka: " + message);
-      }
-      bodyLines.push("");
-      bodyLines.push("Děkuji a budu se těšit.");
-
-      var mailto =
-        "mailto:" + SALON_EMAIL +
-        "?subject=" + encodeURIComponent(subject) +
-        "&body=" + encodeURIComponent(bodyLines.join("\n"));
-
-      // Otevře e-mailový program s předvyplněnou zprávou
-      window.location.href = mailto;
-
-      showHint("Otevřeli jsme váš e-mailový program s hotovou zprávou — stačí ji odeslat.", false);
+      var d = new FormData(form);
+      var body =
+        "Dobrý den,\n\nráda/rád bych se objednal(a) do Studia Lumé.\n\n" +
+        "Jméno: " + (d.get("jmeno") || "") + "\n" +
+        "Telefon: " + (d.get("telefon") || "") + "\n" +
+        "Služba: " + (d.get("sluzba") || "") + "\n" +
+        "Termín: " + (d.get("termin") || "dle domluvy") + "\n\n" +
+        "Děkuji.";
+      location.href = "mailto:" + STUDIO_EMAIL +
+        "?subject=" + encodeURIComponent("Objednání — Studio Lumé") +
+        "&body=" + encodeURIComponent(body);
     });
-  }
-
-  function showHint(text, isError) {
-    if (!hint) return;
-    hint.textContent = text;
-    hint.classList.toggle("error", !!isError);
   }
 })();

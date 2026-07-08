@@ -2,135 +2,214 @@
 <html lang="cs">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ukázkové weby — moderní weby pro malé podniky</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tři ukázkové weby — moderní stránky pro malé podniky</title>
+<meta name="description" content="Tři ukázky, tři různé styly: kadeřnictví, hospoda a kosmetické studio. Takhle může vypadat nový web vaší firmy.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Spectral:ital,wght@0,300;0,400;1,300&family=Sora:wght@400;600&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#1c1a17; --muted:#6b645c; --line:#e7e1d8;
-    --bg:#f6f1e9; --card:#fffdf9; --accent:#9a6b4f;
+    --wall:#141110; --wall-2:#1b1715; --text:#efe9df; --mut:#9b917f;
+    --line:rgba(239,233,223,.14);
   }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;color:var(--ink);
-    background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--wall); color:var(--text);
+    font-family:"Manrope", system-ui, sans-serif; font-size:16px; line-height:1.65;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  a{ color:inherit; }
 
-  header{padding:64px 0 36px;text-align:center}
-  .eyebrow{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:0 0 14px}
-  h1{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:clamp(30px,5vw,48px);line-height:1.08;margin:0 0 16px;letter-spacing:-.01em}
-  .lead{max-width:620px;margin:0 auto;color:var(--muted);font-size:clamp(16px,2vw,18px)}
+  header{
+    text-align:center; padding:clamp(52px,8vw,104px) 22px clamp(34px,5vw,60px);
+  }
+  .eyebrow{
+    font-size:12px; letter-spacing:.3em; text-transform:uppercase;
+    color:var(--mut); margin:0 0 18px; font-weight:700;
+  }
+  h1{
+    font-family:"Instrument Serif", Georgia, serif; font-weight:400;
+    font-size:clamp(36px,5.6vw,68px); line-height:1.08; margin:0 0 18px;
+  }
+  h1 em{ font-style:italic; }
+  .lead{ max-width:56ch; margin:0 auto; color:var(--mut); font-size:clamp(15.5px,1.7vw,18px); }
 
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;padding:18px 0 8px}
-  @media(max-width:880px){.grid{grid-template-columns:1fr;max-width:460px;margin:0 auto}}
+  .grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:22px;
+    max-width:1180px; margin:0 auto; padding:10px 22px 26px;
+  }
+  @media (max-width: 960px){ .grid{ grid-template-columns:1fr; max-width:520px; } }
 
-  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;
-    display:flex;flex-direction:column;text-decoration:none;color:inherit;
-    box-shadow:0 1px 2px rgba(0,0,0,.04);transition:transform .18s ease,box-shadow .18s ease}
-  .card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(0,0,0,.10)}
-  .thumb{height:148px;position:relative;display:flex;align-items:flex-end;padding:16px}
-  .thumb svg{position:absolute;inset:0;width:100%;height:100%}
-  .tag{position:relative;z-index:1;background:rgba(255,255,255,.92);color:#1c1a17;
-    font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px}
-  .body{padding:20px 20px 22px}
-  .body h2{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:21px;margin:0 0 4px}
-  .body .sub{color:var(--muted);font-size:14px;margin:0 0 14px}
-  .meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
-  .chip{font-size:11.5px;color:var(--muted);background:#f1ece3;border-radius:6px;padding:3px 8px}
-  .open{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:14px;color:var(--accent)}
-  .open svg{width:16px;height:16px}
+  .exhibit{
+    display:flex; flex-direction:column; text-decoration:none;
+    border-radius:18px; overflow:hidden;
+    border:1px solid var(--line);
+    background:var(--wall-2);
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .exhibit:hover{ transform:translateY(-6px); box-shadow:0 30px 60px rgba(0,0,0,.45); }
+  .exhibit:focus-visible{ outline:2px solid var(--text); outline-offset:3px; }
 
-  .note{margin:30px 0 70px;padding:18px 20px;border:1px dashed var(--line);border-radius:14px;
-    background:#fffaf2;color:var(--muted);font-size:14px;max-width:760px}
-  .note b{color:var(--ink)}
-  footer{padding:0 0 50px;text-align:center;color:var(--muted);font-size:13px}
+  /* náhledová „stěna" karty — každý web ve svém světě */
+  .spec{ position:relative; height:210px; padding:22px 24px; overflow:hidden; }
+  .spec .aa{ position:absolute; right:20px; bottom:2px; line-height:1; }
+  .spec .name{ position:relative; z-index:2; margin:0; }
+  .spec .dots{ position:absolute; left:24px; bottom:20px; display:flex; gap:7px; z-index:2; }
+  .spec .dots i{ width:16px; height:16px; border-radius:50%; display:block; }
+
+  /* 1 · Lněná */
+  .spec--lnena{ background:#fbf8f2; color:#1c1611; }
+  .spec--lnena .name{ font-family:"Instrument Serif", serif; font-size:30px; font-weight:400; }
+  .spec--lnena .name em{ color:#b3542a; }
+  .spec--lnena .aa{ font-family:"Instrument Serif", serif; font-style:italic; font-size:150px; color:#b3542a; opacity:.9; }
+  .spec--lnena svg{ position:absolute; inset:0; width:100%; height:100%; }
+  .spec--lnena .dots i{ box-shadow:0 0 0 1px rgba(28,22,17,.15); }
+
+  /* 2 · Lípy */
+  .spec--lipy{ background:#0f0c09; color:#f0e6d0; }
+  .spec--lipy .name{ font-family:"Spectral", serif; font-size:29px; font-weight:400; letter-spacing:.02em; }
+  .spec--lipy .aa{ font-family:"Spectral", serif; font-weight:300; font-size:150px; color:#dfa04c; opacity:.85; }
+  .spec--lipy::before{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(70% 90% at 30% 0%, rgba(223,160,76,.22), transparent 70%);
+  }
+  .spec--lipy .dots i{ box-shadow:0 0 0 1px rgba(240,230,208,.2); }
+
+  /* 3 · Lumé */
+  .spec--lume{ background:#fdfcfa; color:#37303f; }
+  .spec--lume .name{ font-family:"Sora", sans-serif; font-size:26px; font-weight:600; letter-spacing:-.01em; }
+  .spec--lume .aa{ font-family:"Sora", sans-serif; font-weight:600; font-size:140px;
+    background:linear-gradient(100deg,#a98ae0,#e08fb0 55%,#eaa46e);
+    -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .spec--lume::before{
+    content:""; position:absolute; width:280px; height:280px; left:-70px; top:-90px;
+    border-radius:50%; filter:blur(46px); opacity:.6;
+    background:radial-gradient(circle at 40% 40%, #cbb6f2, #f3c3d3 60%, transparent 75%);
+  }
+  .spec--lume .dots i{ box-shadow:0 0 0 1px rgba(55,48,63,.12); }
+
+  .body{ padding:20px 24px 24px; display:flex; flex-direction:column; gap:12px; flex:1; }
+  .style-tag{
+    font-size:11.5px; font-weight:700; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--mut); margin:0;
+  }
+  .desc{ margin:0; color:#cfc7b8; font-size:14.5px; }
+  .chips{ display:flex; flex-wrap:wrap; gap:6px; margin-top:2px; }
+  .chips span{
+    font-size:11.5px; font-weight:600; color:var(--mut);
+    border:1px solid var(--line); border-radius:999px; padding:4px 10px;
+  }
+  .open{
+    margin-top:auto; padding-top:14px;
+    font-weight:700; font-size:14px; display:inline-flex; align-items:center; gap:8px;
+  }
+  .open svg{ width:15px; height:15px; transition:transform .2s ease; }
+  .exhibit:hover .open svg{ transform:translateX(4px); }
+
+  .note{
+    max-width:760px; margin:28px auto 0; padding:0 22px;
+    text-align:center; color:var(--mut); font-size:13.5px;
+  }
+  .contact{
+    max-width:760px; margin:clamp(36px,6vw,64px) auto clamp(48px,7vw,80px);
+    padding:26px 28px; text-align:center;
+    border:1px solid var(--line); border-radius:16px;
+  }
+  .contact p{ margin:0 0 6px; font-family:"Instrument Serif", serif; font-size:clamp(21px,2.6vw,27px); }
+  .contact small{ color:var(--mut); font-size:14px; }
+  .contact a{ text-decoration:none; border-bottom:1px solid var(--mut); }
+  .contact a:hover{ border-bottom-color:var(--text); }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <p class="eyebrow">Ukázky · Portfolio</p>
-    <h1>Moderní weby pro malé podniky</h1>
-    <p class="lead">Takhle může vypadat váš nový web — rychlý, přehledný, funguje na mobilu
-      i počítači. Tři ukázky pro různé obory. Kliknutím každou otevřete.</p>
-  </header>
 
-  <div class="grid">
+<header>
+  <p class="eyebrow">Ukázkové weby · tři obory, tři styly</p>
+  <h1>Jeden podnik, <em>jeden vlastní styl</em>.<br>Žádné šablony.</h1>
+  <p class="lead">Tři ukázky, jak může vypadat nový web malé firmy — každá v úplně jiném
+  duchu. Rozklikněte je: fungují na mobilu i počítači, s ceníkem, fotkami a objednáním.</p>
+</header>
 
-    <!-- KADEŘNICTVÍ -->
-    <a class="card" href="kadernictvi/index.html">
-      <div class="thumb">
-        <svg viewBox="0 0 400 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="200" fill="#efe7d6"/>
-          <path d="M0 150 Q100 120 200 150 T400 150 V200 H0 Z" fill="#7c8466" opacity=".9"/>
-          <path d="M0 168 Q120 140 220 168 T400 165 V200 H0 Z" fill="#5f6650"/>
-          <circle cx="320" cy="64" r="30" fill="#c9a86a" opacity=".55"/>
-        </svg>
-        <span class="tag">Kadeřnictví</span>
-      </div>
-      <div class="body">
-        <h2>Salon Lněná</h2>
-        <p class="sub">Rodinné kadeřnictví · Ivančice</p>
-        <div class="meta"><span class="chip">Ceník</span><span class="chip">Galerie</span><span class="chip">Rezervace</span></div>
-        <span class="open">Otevřít ukázku
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </span>
-      </div>
-    </a>
+<div class="grid">
 
-    <!-- RESTAURACE -->
-    <a class="card" href="restaurace/index.html">
-      <div class="thumb">
-        <svg viewBox="0 0 400 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="200" fill="#1f3a2e"/>
-          <path d="M0 150 Q100 120 200 150 T400 150 V200 H0 Z" fill="#0f231b"/>
-          <circle cx="318" cy="62" r="30" fill="#c98a3e" opacity=".75"/>
-          <rect x="40" y="40" width="60" height="8" rx="4" fill="#f6f1e7" opacity=".5"/>
-          <rect x="40" y="58" width="40" height="8" rx="4" fill="#f6f1e7" opacity=".3"/>
-        </svg>
-        <span class="tag">Restaurace</span>
-      </div>
-      <div class="body">
-        <h2>U Tří lip</h2>
-        <p class="sub">Hospoda &amp; kuchyně · Ivančice</p>
-        <div class="meta"><span class="chip">Jídelní lístek</span><span class="chip">Denní menu</span><span class="chip">Rezervace</span></div>
-        <span class="open">Otevřít ukázku
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </span>
-      </div>
-    </a>
+  <!-- 1 · KADEŘNICTVÍ -->
+  <a class="exhibit" href="kadernictvi/index.html">
+    <div class="spec spec--lnena">
+      <svg viewBox="0 0 400 210" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <path d="M-20 150 C 90 130, 150 60, 250 70 C 330 78, 360 130, 420 110" fill="none" stroke="#b3542a" stroke-width="1.8"/>
+        <path d="M-20 170 C 100 155, 170 90, 265 96 C 340 101, 370 150, 420 135" fill="none" stroke="#c2933f" stroke-width="1.3"/>
+        <path d="M-20 190 C 110 180, 190 120, 280 122 C 350 124, 380 170, 420 160" fill="none" stroke="#6d4832" stroke-width="1"/>
+      </svg>
+      <p class="name">Salon <em>Lněná</em></p>
+      <span class="aa" aria-hidden="true">Aa</span>
+      <span class="dots" aria-hidden="true">
+        <i style="background:#b3542a"></i><i style="background:#c2933f"></i>
+        <i style="background:#6d4832"></i><i style="background:#1c1611"></i>
+      </span>
+    </div>
+    <div class="body">
+      <p class="style-tag">Kadeřnictví — styl „Vlasová linie"</p>
+      <p class="desc">Editorial klid, vzorník koloristky místo obyčejného ceníku
+      a linie pramenů vedené celým webem.</p>
+      <div class="chips"><span>Ceník se vzorníkem</span><span>Galerie</span><span>Objednání</span></div>
+      <span class="open">Otevřít ukázku
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+    </div>
+  </a>
 
-    <!-- KOSMETIKA -->
-    <a class="card" href="kosmetika/index.html">
-      <div class="thumb">
-        <svg viewBox="0 0 400 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="200" fill="#f3e7dd"/>
-          <path d="M0 155 Q120 128 230 155 T400 150 V200 H0 Z" fill="#c98b8b" opacity=".85"/>
-          <path d="M0 172 Q130 150 240 172 T400 168 V200 H0 Z" fill="#b06f6f"/>
-          <circle cx="316" cy="60" r="26" fill="#c0a06a" opacity=".55"/>
-        </svg>
-        <span class="tag">Kosmetika</span>
-      </div>
-      <div class="body">
-        <h2>Studio Lumé</h2>
-        <p class="sub">Kosmetické studio · Ivančice</p>
-        <div class="meta"><span class="chip">Služby</span><span class="chip">Ceník</span><span class="chip">Objednání</span></div>
-        <span class="open">Otevřít ukázku
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </span>
-      </div>
-    </a>
+  <!-- 2 · HOSPODA -->
+  <a class="exhibit" href="restaurace/index.html">
+    <div class="spec spec--lipy">
+      <p class="name">U Tří lip</p>
+      <span class="aa" aria-hidden="true">Aa</span>
+      <span class="dots" aria-hidden="true">
+        <i style="background:#dfa04c"></i><i style="background:#f0e6d0"></i>
+        <i style="background:#93a271"></i><i style="background:#171209"></i>
+      </span>
+    </div>
+    <div class="body">
+      <p class="style-tag">Hospoda — styl „Po setmění"</p>
+      <p class="desc">Teplá tma, jantarové světlo a jídelní lístek vysázený postaru —
+      s tečkovanými linkami a rytou lipovou větví.</p>
+      <div class="chips"><span>Jídelní lístek</span><span>Denní menu</span><span>Rezervace</span></div>
+      <span class="open">Otevřít ukázku
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+    </div>
+  </a>
 
-  </div>
+  <!-- 3 · KOSMETIKA -->
+  <a class="exhibit" href="kosmetika/index.html">
+    <div class="spec spec--lume">
+      <p class="name">Studio Lumé</p>
+      <span class="aa" aria-hidden="true">Aa</span>
+      <span class="dots" aria-hidden="true">
+        <i style="background:#cbb6f2"></i><i style="background:#f3c3d3"></i>
+        <i style="background:#fad3b8"></i><i style="background:#37303f"></i>
+      </span>
+    </div>
+    <div class="body">
+      <p class="style-tag">Kosmetika — styl „Měkké světlo"</p>
+      <p class="desc">Vzdušná moderna: aurora barev, skleněné karty a rituál péče
+      ve třech krocích. Žádná nostalgie, jen záře.</p>
+      <div class="chips"><span>Služby &amp; ceník</span><span>Rituál</span><span>Objednání</span></div>
+      <span class="open">Otevřít ukázku
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+    </div>
+  </a>
 
-  <div class="note">
-    <b>Pozn.:</b> Jde o ukázkové (vzorové) weby s vymyšlenými názvy a fotkami z volné banky.
-    Pro reálný podnik se přepíše název, kontakt, ceník a fotky za jeho vlastní. Weby jsou statické
-    (HTML/CSS/JS) — hostování zdarma na Netlify nebo Cloudflare Pages.
-  </div>
-
-  <footer>Ukázkové weby · vzor pro oslovení podniků v okolí Ivančic</footer>
 </div>
+
+<p class="note">Ukázkové weby s vymyšlenými podniky a fotkami z volné banky. Pro reálnou firmu
+se přepíše název, texty, ceník i fotky — základ je hotový za pár dní. Hosting zdarma.</p>
+
+<div class="contact">
+  <p>Chcete web v podobném duchu pro svou firmu?</p>
+  <small>Matěj Dadák · <a href="tel:+420727890216">727 890 216</a> · <a href="mailto:weby.dadak@gmail.com">weby.dadak@gmail.com</a></small>
+</div>
+
 </body>
 </html>

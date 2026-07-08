@@ -1,96 +1,49 @@
-/* =================================================================
-   SALON LNĚNÁ — app.js
-   1) Mobilní menu (hamburger)
-   2) Rezervační formulář → sestaví e-mail (mailto), nic neodesílá sám
-   Žádné knihovny, žádný build. Funguje i přes file:// i přes serve.py.
-   ================================================================= */
+"use strict";
+(function(){
+  var SALON_EMAIL = "salon.lnena@email.cz"; /* UPRAVTE ZDE pro reálný salon */
 
-(function () {
-  "use strict";
-
-  /* ---------- E-MAIL SALONU (sem chodí poptávky) ---------- */
-  var SALON_EMAIL = "salon.lnena@email.cz";
-
-  /* ===== 1) MOBILNÍ MENU ===== */
-  var toggle = document.getElementById("navToggle");
+  /* mobilní menu */
+  var burger = document.getElementById("burger");
   var nav = document.getElementById("nav");
-
-  if (toggle && nav) {
-    toggle.addEventListener("click", function () {
+  if (burger && nav){
+    burger.addEventListener("click", function(){
       var open = nav.classList.toggle("open");
-      toggle.setAttribute("aria-expanded", open ? "true" : "false");
-      toggle.setAttribute("aria-label", open ? "Zavřít menu" : "Otevřít menu");
+      burger.setAttribute("aria-expanded", open ? "true" : "false");
     });
+    nav.addEventListener("click", function(e){
+      if (e.target.tagName === "A") nav.classList.remove("open");
+    });
+  }
 
-    // klik na odkaz v menu → zavřít
-    nav.querySelectorAll("a").forEach(function (link) {
-      link.addEventListener("click", function () {
-        nav.classList.remove("open");
-        toggle.setAttribute("aria-expanded", "false");
+  /* reveal při scrollu */
+  var els = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
       });
-    });
+    }, { threshold: .12 });
+    els.forEach(function(el){ io.observe(el); });
+  } else {
+    els.forEach(function(el){ el.classList.add("in"); });
   }
 
-  /* ===== 2) REZERVAČNÍ FORMULÁŘ → MAILTO ===== */
-  var form = document.getElementById("bookingForm");
-  var hint = document.getElementById("formHint");
-
-  if (form) {
-    form.addEventListener("submit", function (e) {
+  /* poptávkový formulář -> předvyplněný e-mail (mailto), nic se neodesílá samo */
+  var form = document.getElementById("form");
+  if (form){
+    form.addEventListener("submit", function(e){
       e.preventDefault();
-
-      // jednoduchá kontrola povinných polí
-      var name = form.name.value.trim();
-      var phone = form.phone.value.trim();
-
-      if (!name || !phone) {
-        if (hint) hint.textContent = "Vyplňte prosím jméno a telefon, ať se vám můžeme ozvat.";
-        return;
-      }
-
-      var service = form.service.value;
-      var date = form.date.value;   // formát RRRR-MM-DD
-      var time = form.time.value;
-      var note = form.note.value.trim();
-
-      // datum do hezčího českého tvaru (DD. MM. RRRR)
-      var datePretty = date
-        ? date.split("-").reverse().join(". ")
-        : "(neuvedeno)";
-
-      var subject = "Poptávka termínu — " + service;
-
-      var bodyLines = [
-        "Dobrý den,",
-        "",
-        "ráda/rád bych se objednal(a):",
-        "",
-        "Jméno: " + name,
-        "Telefon: " + phone,
-        "Služba: " + service,
-        "Preferovaný den: " + datePretty,
-        "Přibližný čas: " + (time || "(neuvedeno)"),
-        "Poznámka: " + (note || "—"),
-        "",
-        "Děkuji a budu se těšit."
-      ];
-
-      var mailto =
-        "mailto:" + SALON_EMAIL +
-        "?subject=" + encodeURIComponent(subject) +
-        "&body=" + encodeURIComponent(bodyLines.join("\n"));
-
-      // otevře e-mailový program s předvyplněnou zprávou
-      window.location.href = mailto;
-
-      if (hint) {
-        hint.textContent =
-          "Otevřeli jsme váš e-mailový program s hotovou zprávou — stačí ji odeslat. Pokud se nic neotevřelo, zavolejte nám na 734 221 558.";
-      }
+      var d = new FormData(form);
+      var body =
+        "Dobrý den,\n\nráda/rád bych se objednal(a) do Salonu Lněná.\n\n" +
+        "Jméno: " + (d.get("jmeno") || "") + "\n" +
+        "Telefon: " + (d.get("telefon") || "") + "\n" +
+        "Služba: " + (d.get("sluzba") || "") + "\n" +
+        "Termín: " + (d.get("termin") || "dle domluvy") + "\n\n" +
+        "Děkuji.";
+      location.href = "mailto:" + SALON_EMAIL +
+        "?subject=" + encodeURIComponent("Objednání — Salon Lněná") +
+        "&body=" + encodeURIComponent(body);
     });
   }
-
-  /* ===== 3) ROK V PATIČCE (drobnost, ať je vždy aktuální) ===== */
-  // pozn.: rok je napevno v HTML, ale kdyby chtěl uživatel auto-rok,
-  // může sem doplnit element a my ho naplníme.
 })();

@@ -1,419 +1,230 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- ===== SEO / META ===== -->
-  <title>Salon Lněná — kadeřnictví Ivančice | dámské, pánské i dětské střihy</title>
-  <meta name="description" content="Salon Lněná v Ivančicích. Dámské, pánské a dětské střihy, barvení, melír a společenské účesy. Rezervujte se online." />
-  <meta name="theme-color" content="#7c8466" />
-
-  <!-- Open Graph (náhled při sdílení na FB / messengeru) -->
-  <meta property="og:title" content="Salon Lněná — kadeřnictví Ivančice" />
-  <meta property="og:description" content="Střihy, barvení, melír a společenské účesy v srdci Ivančic." />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?w=1200&q=80" />
-
-  <!-- ===== FONTY (Google Fonts) ===== -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salon Lněná — kadeřnictví Ivančice</title>
+<meta name="description" content="Rodinné kadeřnictví v Ivančicích. Dámské, pánské i dětské střihy, barvení, melíry a společenské účesy.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- ===================== HLAVIČKA / NAVIGACE ===================== -->
-  <header class="site-header" id="top">
-    <div class="container header-inner">
-      <a href="#top" class="brand" aria-label="Salon Lněná — domů">
-        <!-- logo: jemný "pramen vlasů" jako SVG -->
-        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
-          <path d="M6 26c4-2 4-8 0-12s4-10 8-10M14 26c4-2 4-8 0-12s4-10 8-10M22 26c4-2 4-8 0-12s4-10 8-10"
-                fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-        </svg>
-        <span class="brand-text">Salon&nbsp;Lněná</span>
-      </a>
+<header class="top">
+  <a class="brand" href="#uvod" aria-label="Salon Lněná — úvod">
+    <svg class="brand__mark" viewBox="0 0 34 34" aria-hidden="true">
+      <path d="M6 26 C 12 20, 10 10, 17 7 C 24 10, 22 20, 28 26" fill="none" stroke="var(--copper)" stroke-width="2" stroke-linecap="round"/>
+      <path d="M9 28 C 14 22, 13 13, 17 11 C 21 13, 20 22, 25 28" fill="none" stroke="var(--gold)" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span>Salon <em>Lněná</em></span>
+  </a>
+  <nav class="nav" id="nav">
+    <a href="#vzornik">Služby &amp; ceník</a>
+    <a href="#salon">O salonu</a>
+    <a href="#galerie">Galerie</a>
+    <a href="#recenze">Recenze</a>
+    <a href="#kontakt">Kontakt</a>
+  </nav>
+  <a class="cta" href="#objednani">Objednat se</a>
+  <button class="burger" id="burger" aria-label="Otevřít menu" aria-expanded="false">
+    <span></span><span></span>
+  </button>
+</header>
 
-      <nav class="nav" id="nav" aria-label="Hlavní navigace">
-        <a href="#sluzby">Služby</a>
-        <a href="#cenik">Ceník</a>
-        <a href="#o-nas">O nás</a>
-        <a href="#galerie">Galerie</a>
-        <a href="#recenze">Recenze</a>
-        <a href="#kontakt">Kontakt</a>
-        <a href="#rezervace" class="nav-cta">Rezervovat</a>
-      </nav>
+<main>
 
-      <button class="nav-toggle" id="navToggle" aria-label="Otevřít menu" aria-expanded="false" aria-controls="nav">
-        <span></span><span></span><span></span>
-      </button>
+<!-- ═════════ HERO ═════════ -->
+<section class="hero" id="uvod">
+  <svg class="strands" viewBox="0 0 1400 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <path d="M-40 520 C 240 470, 380 250, 660 260 C 900 270, 1010 430, 1460 300" fill="none" stroke="var(--copper)" stroke-width="2.4"/>
+    <path d="M-40 560 C 260 520, 420 300, 700 306 C 930 312, 1030 470, 1460 350" fill="none" stroke="var(--gold)" stroke-width="1.8"/>
+    <path d="M-40 600 C 280 570, 460 350, 740 352 C 960 354, 1050 510, 1460 400" fill="none" stroke="var(--chestnut)" stroke-width="1.4"/>
+    <path d="M-40 480 C 220 420, 340 200, 620 214 C 870 226, 990 390, 1460 250" fill="none" stroke="var(--ink)" stroke-width="1" opacity=".35"/>
+  </svg>
+
+  <div class="hero__grid">
+    <div class="hero__text">
+      <p class="eyebrow">Kadeřnictví · Ivančice · od roku 2014</p>
+      <h1>Střih je čára<br>vedená <em>jistou rukou</em>.</h1>
+      <p class="lead">Malý rodinný salon na Palackého náměstí. Posloucháme, radíme
+      a stříháme tak, aby účes držel linii i bez hodiny fénování.</p>
+      <div class="hero__actions">
+        <a class="btn btn--ink" href="#objednani">Objednat se</a>
+        <a class="btn btn--ghost" href="#vzornik">Vzorník služeb</a>
+      </div>
     </div>
+    <figure class="hero__photo">
+      <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=760&q=80"
+           alt="Interiér kadeřnického salonu — křesla a zrcadla u oken" width="560" height="700" loading="eager">
+      <figcaption><span>4,9 ★</span> hodnocení klientek</figcaption>
+    </figure>
+  </div>
+
+  <p class="runhead" aria-hidden="true">střih — barva — melír — foukaná — účes — péče — střih — barva — melír — foukaná — účes — péče</p>
+</section>
+
+<!-- ═════════ VZORNÍK: SLUŽBY + CENÍK ═════════ -->
+<section class="vzornik" id="vzornik">
+  <header class="sec-head">
+    <h2>Vzorník služeb</h2>
+    <p>Barvy vedle cen nejsou dekorace — je to náš vzorník koloristky: odstín, se kterým
+    u dané služby pracujeme nejčastěji.</p>
   </header>
 
-  <main>
+  <ul class="vz">
+    <li class="vz__row reveal">
+      <span class="vz__swatch" style="--sw:var(--chestnut)"></span>
+      <div class="vz__name"><h3>Dámský střih &amp; foukaná</h3><p>konzultace, mytí, střih, styling</p></div>
+      <span class="vz__dots" aria-hidden="true"></span>
+      <span class="vz__price">od 590 Kč</span>
+    </li>
+    <li class="vz__row reveal">
+      <span class="vz__swatch" style="--sw:var(--ink)"></span>
+      <div class="vz__name"><h3>Pánský střih</h3><p>nůžky i strojek, úprava kontur</p></div>
+      <span class="vz__dots" aria-hidden="true"></span>
+      <span class="vz__price">350 Kč</span>
+    </li>
+    <li class="vz__row reveal">
+      <span class="vz__swatch" style="--sw:var(--gold)"></span>
+      <div class="vz__name"><h3>Dětský střih</h3><p>do 12 let, s trpělivostí</p></div>
+      <span class="vz__dots" aria-hidden="true"></span>
+      <span class="vz__price">250 Kč</span>
+    </li>
+    <li class="vz__row reveal">
+      <span class="vz__swatch" style="--sw:var(--copper)"></span>
+      <div class="vz__name"><h3>Barvení</h3><p>jednobarevné, přeliv, oživení odstínu</p></div>
+      <span class="vz__dots" aria-hidden="true"></span>
+      <span class="vz__price">od 990 Kč</span>
+    </li>
+    <li class="vz__row reveal">
+      <span class="vz__swatch vz__swatch--duo"></span>
+      <div class="vz__name"><h3>Melír / airtouch</h3><p>prosvětlení, které odrůstá hezky</p></div>
+      <span class="vz__dots" aria-hidden="true"></span>
+      <span class="vz__price">od 1 490 Kč</span>
+    </li>
+    <li class="vz__row reveal">
+      <span class="vz__swatch" style="--sw:var(--chestnut)"></span>
+      <div class="vz__name"><h3>Společenský účes</h3><p>plesy, svatby, zkouška předem</p></div>
+      <span class="vz__dots" aria-hidden="true"></span>
+      <span class="vz__price">od 790 Kč</span>
+    </li>
+    <li class="vz__row reveal">
+      <span class="vz__swatch" style="--sw:var(--gold)"></span>
+      <div class="vz__name"><h3>Regenerační rituál</h3><p>hloubková péče + masáž hlavy</p></div>
+      <span class="vz__dots" aria-hidden="true"></span>
+      <span class="vz__price">450 Kč</span>
+    </li>
+  </ul>
+  <p class="vz__note">Ceny jsou orientační — přesnou řekneme po konzultaci délky a hustoty vlasů. <em>(Ukázkový web — ceník si každý salon upraví.)</em></p>
+</section>
 
-    <!-- ===================== HERO ===================== -->
-    <section class="hero">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <p class="eyebrow">Kadeřnictví v Ivančicích · od roku 2014</p>
-          <h1 class="hero-title">Vlasy, ze&nbsp;kterých máte radost<span class="dot">.</span></h1>
-          <p class="hero-lead">
-            Malý rodinný salon, kde si na vás vždycky uděláme čas. Poradíme se střihem,
-            barvou i péčí — a odejdete s účesem, co vám sedí do běžného dne i na velkou událost.
-          </p>
-          <div class="hero-actions">
-            <a href="#rezervace" class="btn btn-primary">Objednat se</a>
-            <a href="#cenik" class="btn btn-ghost">Prohlédnout ceník</a>
-          </div>
-          <ul class="hero-facts">
-            <li><strong>Po–So</strong> otevřeno</li>
-            <li><strong>10+ let</strong> zkušeností</li>
-            <li><strong>Bez čekání</strong> na termín</li>
-          </ul>
-        </div>
+<!-- ═════════ O SALONU ═════════ -->
+<section class="salon" id="salon">
+  <figure class="salon__photo reveal">
+    <img src="https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=720&q=80"
+         alt="Kadeřnice stříhá klientku, detail práce s nůžkami" width="640" height="480" loading="lazy">
+  </figure>
+  <div class="salon__text reveal">
+    <p class="eyebrow">O salonu</p>
+    <h2>Deset let posloucháme, <em>než střihneme</em></h2>
+    <p>Salon vedeme jako rodina — máma s dcerou a jedno křeslo navíc pro kolegyni.
+    Nespěcháme: ke každé návštěvě patří káva, konzultace a upřímná rada, co vlasům
+    pomůže a co je zbytečný výmysl.</p>
+    <ul class="salon__list">
+      <li>Objednání na přesný čas — nečekáte</li>
+      <li>Pracujeme s profesionální vlasovou kosmetikou</li>
+      <li>Poradíme domácí péči bez tlačení na nákup</li>
+    </ul>
+  </div>
+</section>
 
-        <div class="hero-media">
-          <img
-            src="https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?w=900&q=80"
-            alt="Detail dlouhých vlnitých vlasů po barvení v salonu"
-            width="900" height="1200" loading="eager" />
-          <!-- malá "vizitka" přes fotku -->
-          <div class="media-badge">
-            <span class="media-badge-num">4,9</span>
-            <span class="media-badge-label">★★★★★<br>hodnocení klientek</span>
-          </div>
-        </div>
+<!-- ═════════ GALERIE ═════════ -->
+<section class="galerie" id="galerie">
+  <header class="sec-head">
+    <h2>Z našeho křesla</h2>
+  </header>
+  <div class="gal">
+    <img class="reveal" src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=640&q=80" alt="Barvení vlasů — nanášení barvy štětcem" loading="lazy">
+    <img class="reveal" src="https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=640&q=80" alt="Hotový účes — vlny na dlouhých vlasech" loading="lazy">
+    <img class="reveal" src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=640&q=80" alt="Portrét klientky s čerstvým střihem" loading="lazy">
+    <img class="reveal" src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=640&q=80" alt="Pánský střih strojkem v salonu" loading="lazy">
+    <img class="reveal" src="https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?auto=format&fit=crop&w=640&q=80" alt="Detail zdravých rozpuštěných vlasů" loading="lazy">
+    <img class="reveal" src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?auto=format&fit=crop&w=640&q=80" alt="Foukaná — kadeřnice pracuje s kulatým kartáčem" loading="lazy">
+  </div>
+</section>
+
+<!-- ═════════ RECENZE ═════════ -->
+<section class="recenze" id="recenze">
+  <blockquote class="q-big reveal">
+    <p>„Konečně kadeřnictví, kde mě <em>poslouchají</em>. Střih drží tvar
+    i po měsíci a barva vypadá pořád živě."</p>
+    <footer>— Markéta H., Ivančice</footer>
+  </blockquote>
+  <div class="q-small">
+    <blockquote class="reveal"><p>„Syn se sem těší na stříhání. To považuju za zázrak."</p><footer>— Petra V.</footer></blockquote>
+    <blockquote class="reveal"><p>„Melír airtouch přesně podle fotky, co jsem přinesla."</p><footer>— Lucie K.</footer></blockquote>
+  </div>
+</section>
+
+<!-- ═════════ OBJEDNÁNÍ ═════════ -->
+<section class="objednani" id="objednani">
+  <div class="obj__box">
+    <h2>Objednat se</h2>
+    <p>Napište nám, kdy se vám to hodí — ozveme se s potvrzením termínu.
+    Nebo rovnou volejte <a href="tel:+420734221558">734 221 558</a>.</p>
+    <form id="form" class="form">
+      <div class="form__row">
+        <label>Jméno<input type="text" name="jmeno" required autocomplete="name"></label>
+        <label>Telefon<input type="tel" name="telefon" required autocomplete="tel"></label>
       </div>
-
-      <!-- signature: vlnitá křivka jako oddělovač -->
-      <svg class="wave-divider" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0,48 C240,16 480,80 720,48 C960,16 1200,80 1440,48 L1440,80 L0,80 Z" fill="currentColor"/>
-      </svg>
-    </section>
-
-    <!-- ===================== SLUŽBY ===================== -->
-    <section class="section services" id="sluzby">
-      <div class="container">
-        <header class="section-head">
-          <p class="eyebrow">Co u nás zvládneme</p>
-          <h2 class="section-title">Naše služby</h2>
-        </header>
-
-        <div class="service-grid">
-          <article class="service-card">
-            <img src="https://images.unsplash.com/photo-1562322140-8baeececf3df?w=600&q=80"
-                 alt="Kadeřnice stylizuje klientce vlasy fénem" loading="lazy" width="600" height="400" />
-            <div class="service-body">
-              <h3>Dámský střih &amp; styling</h3>
-              <p>Střih na míru tvaru obličeje, mytí, masáž hlavy a finální úprava. Poradíme i s každodenní péčí doma.</p>
-            </div>
-          </article>
-
-          <article class="service-card">
-            <img src="https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?w=600&q=80"
-                 alt="Vlasy po barvení do fialového odstínu" loading="lazy" width="600" height="400" />
-            <div class="service-body">
-              <h3>Barvení &amp; melír</h3>
-              <p>Celkové barvení, melír, balayage i jemné prosvětlení. Používáme šetrné barvy s ochranou vlasu.</p>
-            </div>
-          </article>
-
-          <article class="service-card">
-            <img src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=600&q=80"
-                 alt="Foukaná — úprava vlasů kulatým kartáčem a fénem" loading="lazy" width="600" height="400" />
-            <div class="service-body">
-              <h3>Foukaná &amp; společenský účes</h3>
-              <p>Foukaná do objemu, vlny i nažehlení. Svatby a plesy řešíme v klidu a s předstihem.</p>
-            </div>
-          </article>
-
-          <article class="service-card">
-            <img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=600&q=80"
-                 alt="Pánský střih a úprava u křesla" loading="lazy" width="600" height="400" />
-            <div class="service-body">
-              <h3>Pánský &amp; dětský střih</h3>
-              <p>Klasika i moderní fade, úprava vousů a trpělivé střihání i pro ty nejmenší.</p>
-            </div>
-          </article>
-        </div>
+      <div class="form__row">
+        <label>Služba
+          <select name="sluzba">
+            <option>Dámský střih &amp; foukaná</option>
+            <option>Pánský střih</option>
+            <option>Dětský střih</option>
+            <option>Barvení</option>
+            <option>Melír / airtouch</option>
+            <option>Společenský účes</option>
+            <option>Regenerační rituál</option>
+          </select>
+        </label>
+        <label>Kdy se vám to hodí<input type="text" name="termin" placeholder="např. čtvrtek odpoledne"></label>
       </div>
-    </section>
+      <button class="btn btn--ink" type="submit">Odeslat poptávku</button>
+      <p class="form__note">Formulář otevře e-mail s předvyplněnou poptávkou — nic se neodesílá samo.</p>
+    </form>
+  </div>
+</section>
 
-    <!-- ===================== CENÍK ===================== -->
-    <section class="section pricing" id="cenik">
-      <div class="container">
-        <header class="section-head">
-          <p class="eyebrow">Ceny jsou orientační — finální cena podle délky a hustoty vlasů</p>
-          <h2 class="section-title">Ceník</h2>
-        </header>
-
-        <!-- ====== UPRAVTE SI CENY ZDE ====== -->
-        <div class="price-cols">
-          <div class="price-group">
-            <h3 class="price-group-title">Dámské</h3>
-            <ul class="price-list">
-              <li><span class="pl-name">Mytí, střih, foukaná</span><span class="pl-dots"></span><span class="pl-price">od 590 Kč</span></li>
-              <li><span class="pl-name">Foukaná</span><span class="pl-dots"></span><span class="pl-price">od 350 Kč</span></li>
-              <li><span class="pl-name">Barvení (1 barva)</span><span class="pl-dots"></span><span class="pl-price">od 790 Kč</span></li>
-              <li><span class="pl-name">Melír / balayage</span><span class="pl-dots"></span><span class="pl-price">od 1 290 Kč</span></li>
-              <li><span class="pl-name">Společenský účes</span><span class="pl-dots"></span><span class="pl-price">od 690 Kč</span></li>
-            </ul>
-          </div>
-
-          <div class="price-group">
-            <h3 class="price-group-title">Pánské</h3>
-            <ul class="price-list">
-              <li><span class="pl-name">Mytí a střih</span><span class="pl-dots"></span><span class="pl-price">od 290 Kč</span></li>
-              <li><span class="pl-name">Střih strojkem</span><span class="pl-dots"></span><span class="pl-price">od 230 Kč</span></li>
-              <li><span class="pl-name">Úprava vousů</span><span class="pl-dots"></span><span class="pl-price">od 180 Kč</span></li>
-            </ul>
-
-            <h3 class="price-group-title" style="margin-top:2rem">Dětské</h3>
-            <ul class="price-list">
-              <li><span class="pl-name">Dětský střih (do 10 let)</span><span class="pl-dots"></span><span class="pl-price">od 190 Kč</span></li>
-            </ul>
-          </div>
-        </div>
-
-        <p class="price-note">Platba hotově i kartou. Termín stačí zrušit den předem.</p>
-      </div>
-    </section>
-
-    <!-- ===================== O NÁS ===================== -->
-    <section class="section about" id="o-nas">
-      <div class="container about-grid">
-        <div class="about-media">
-          <img src="https://images.unsplash.com/photo-1559599101-f09722fb4948?w=800&q=80"
-               alt="Tým kadeřnic salonu Lněná s nářadím v rukou" loading="lazy" width="800" height="534" />
-        </div>
-        <div class="about-copy">
-          <p class="eyebrow">O nás</p>
-          <h2 class="section-title">Tři páry rukou, jeden klid v duši</h2>
-          <p>
-            Salon Lněná vznikl v roce 2014 jako malé místo, kam si lidé z Ivančic
-            a okolí chodí nejen pro střih, ale i odpočinout. Děláme práci, která nás baví —
-            a je to na výsledku poznat.
-          </p>
-          <p>
-            Vzděláváme se v nových technikách barvení a péče o vlasy, ale nikdy nezapomínáme
-            na to hlavní: vyslechnout si, co opravdu chcete, a doporučit jen to, co vám sedne.
-          </p>
-          <ul class="about-points">
-            <li>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Šetrná kosmetika s ochranou vlasu
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Bezbariérový přístup z ulice
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Konzultace barvy vždy zdarma
-            </li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== GALERIE ===================== -->
-    <section class="section gallery" id="galerie">
-      <div class="container">
-        <header class="section-head">
-          <p class="eyebrow">Pár momentek z naší práce</p>
-          <h2 class="section-title">Galerie</h2>
-        </header>
-
-        <div class="gallery-grid">
-          <figure class="g-item g-tall">
-            <img src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=600&q=80"
-                 alt="Klientka s objemnými kudrnatými vlasy" loading="lazy" width="600" height="800" />
-          </figure>
-          <figure class="g-item">
-            <img src="https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?w=600&q=80"
-                 alt="Moderní interiér salonu se zrcadly" loading="lazy" width="600" height="400" />
-          </figure>
-          <figure class="g-item">
-            <img src="https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=600&q=80"
-                 alt="Mytí vlasů u umyvadla před střihem" loading="lazy" width="600" height="400" />
-          </figure>
-          <figure class="g-item">
-            <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&q=80"
-                 alt="Pracovní místa salonu s křesly a zrcadly" loading="lazy" width="600" height="400" />
-          </figure>
-          <figure class="g-item g-tall">
-            <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=600&q=80"
-                 alt="Úprava vousů u pánské klientely" loading="lazy" width="600" height="800" />
-          </figure>
-          <figure class="g-item">
-            <img src="https://images.unsplash.com/photo-1562322140-8baeececf3df?w=600&q=80"
-                 alt="Stylizace vlasů fénem po střihu" loading="lazy" width="600" height="400" />
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== RECENZE ===================== -->
-    <section class="section reviews" id="recenze">
-      <div class="container">
-        <header class="section-head">
-          <p class="eyebrow">Co o nás říkají</p>
-          <h2 class="section-title">Recenze klientek</h2>
-        </header>
-
-        <div class="review-grid">
-          <blockquote class="review-card">
-            <div class="stars" aria-label="5 z 5 hvězd">★★★★★</div>
-            <p>„Konečně kadeřnice, která mě poslouchá. Odešla jsem s barvou přesně podle představy a vydržela mi krásně dlouho.“</p>
-            <footer>— Petra H., Ivančice</footer>
-          </blockquote>
-
-          <blockquote class="review-card">
-            <div class="stars" aria-label="5 z 5 hvězd">★★★★★</div>
-            <p>„Vodím sem celou rodinu včetně syna, který u holiče nikdy nevydržel. Tady ho vždycky zabaví a ostříhají v pohodě.“</p>
-            <footer>— Lucie M., Oslavany</footer>
-          </blockquote>
-
-          <blockquote class="review-card">
-            <div class="stars" aria-label="5 z 5 hvězd">★★★★★</div>
-            <p>„Dělali mi účes na svatbu a byla jsem nadšená. Profesionální, milé a vždycky se tu cítím vítaná.“</p>
-            <footer>— Kristýna V., Rosice</footer>
-          </blockquote>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== REZERVACE ===================== -->
-    <section class="section booking" id="rezervace">
-      <div class="container booking-grid">
-        <div class="booking-intro">
-          <p class="eyebrow">Nezávazná poptávka</p>
-          <h2 class="section-title">Objednejte se</h2>
-          <p>
-            Vyplňte formulář a my vám potvrdíme termín telefonicky nebo e-mailem.
-            Tlačítkem se otevře váš e-mailový program s předvyplněnou zprávou —
-            nic se neodesílá automaticky, vše máte pod kontrolou.
-          </p>
-          <p class="booking-or">
-            Raději zavoláte? <a href="tel:+420734221558">734&nbsp;221&nbsp;558</a>
-          </p>
-        </div>
-
-        <!-- Formulář bez backendu: app.js z něj poskládá e-mail (mailto) -->
-        <form class="booking-form" id="bookingForm" novalidate>
-          <div class="field">
-            <label for="bf-name">Jméno a příjmení</label>
-            <input type="text" id="bf-name" name="name" required placeholder="Jana Nováková" />
-          </div>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="bf-phone">Telefon</label>
-              <input type="tel" id="bf-phone" name="phone" required placeholder="123 456 789" />
-            </div>
-            <div class="field">
-              <label for="bf-service">Služba</label>
-              <select id="bf-service" name="service">
-                <option>Dámský střih</option>
-                <option>Pánský střih</option>
-                <option>Dětský střih</option>
-                <option>Barvení</option>
-                <option>Melír / balayage</option>
-                <option>Foukaná</option>
-                <option>Společenský účes</option>
-                <option>Jiné / poradit</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="bf-date">Preferovaný den</label>
-              <input type="date" id="bf-date" name="date" />
-            </div>
-            <div class="field">
-              <label for="bf-time">Přibližný čas</label>
-              <input type="time" id="bf-time" name="time" />
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="bf-note">Poznámka (nepovinné)</label>
-            <textarea id="bf-note" name="note" rows="3" placeholder="Např. delší vlasy, alergie, dotaz na barvu…"></textarea>
-          </div>
-
-          <button type="submit" class="btn btn-primary btn-block">Odeslat poptávku e-mailem</button>
-          <p class="form-hint" id="formHint" role="status"></p>
-        </form>
-      </div>
-    </section>
-
-    <!-- ===================== KONTAKT + MAPA ===================== -->
-    <section class="section contact" id="kontakt">
-      <div class="container contact-grid">
-        <div class="contact-info">
-          <p class="eyebrow">Najdete nás</p>
-          <h2 class="section-title">Kontakt</h2>
-
-          <!-- ====== UPRAVTE SI ÚDAJE ZDE ====== -->
-          <ul class="contact-list">
-            <li>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.5-7-11a7 7 0 1114 0c0 4.5-7 11-7 11z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
-              <span>Palackého náměstí 12<br>664 91 Ivančice</span>
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h3l1.5 4-2 1.5a11 11 0 005 5l1.5-2 4 1.5V19a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-              <a href="tel:+420734221558">734 221 558</a>
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4 7l8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
-              <a href="mailto:salon.lnena@email.cz">salon.lnena@email.cz</a>
-            </li>
-          </ul>
-
-          <div class="hours">
-            <h3>Otevírací doba</h3>
-            <table>
-              <tr><td>Pondělí–Pátek</td><td>9:00 – 18:00</td></tr>
-              <tr><td>Sobota</td><td>8:00 – 13:00</td></tr>
-              <tr><td>Neděle</td><td>zavřeno</td></tr>
-            </table>
-          </div>
-        </div>
-
-        <div class="contact-map">
-          <!-- Mapa: odkaz na Google Maps (embed nevyžaduje API klíč přes ?output) -->
-          <iframe
-            title="Mapa — Salon Lněná, Ivančice"
-            src="https://maps.google.com/maps?q=Palack%C3%A9ho%20n%C3%A1m%C4%9Bst%C3%AD%20Ivan%C4%8Dice&t=&z=15&ie=UTF8&iwloc=&output=embed"
-            loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Palack%C3%A9ho+n%C3%A1m%C4%9Bst%C3%AD+Ivan%C4%8Dice" target="_blank" rel="noopener">
-            Otevřít v Google Mapách
-          </a>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ===================== PATIČKA ===================== -->
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
-          <path d="M6 26c4-2 4-8 0-12s4-10 8-10M14 26c4-2 4-8 0-12s4-10 8-10M22 26c4-2 4-8 0-12s4-10 8-10"
-                fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-        </svg>
-        <span>Salon Lněná</span>
-      </div>
-      <p class="footer-note">Palackého náměstí 12, Ivančice · 734 221 558</p>
-      <p class="footer-copy">© 2026 Salon Lněná. Ukázkový web.</p>
+<!-- ═════════ KONTAKT ═════════ -->
+<footer class="kontakt" id="kontakt">
+  <svg class="strands strands--foot" viewBox="0 0 1400 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <path d="M-40 150 C 300 110, 520 40, 820 70 C 1080 96, 1200 150, 1460 100" fill="none" stroke="var(--copper)" stroke-width="1.6"/>
+    <path d="M-40 180 C 320 150, 560 80, 860 104 C 1110 124, 1220 180, 1460 140" fill="none" stroke="var(--gold)" stroke-width="1.2"/>
+  </svg>
+  <div class="kontakt__grid">
+    <div>
+      <h2>Salon <em>Lněná</em></h2>
+      <p>Palackého náměstí 12<br>664 91 Ivančice</p>
     </div>
-  </footer>
+    <div>
+      <h3>Otevírací doba</h3>
+      <p>Po–Pá&emsp;9–18<br>So&emsp;8–13 <span class="mut">(na objednání)</span></p>
+    </div>
+    <div>
+      <h3>Spojení</h3>
+      <p><a href="tel:+420734221558">734 221 558</a><br>
+      <a href="mailto:salon.lnena@email.cz">salon.lnena@email.cz</a><br>
+      <a href="https://www.google.com/maps/search/?api=1&query=Palack%C3%A9ho+n%C3%A1m%C4%9Bst%C3%AD+12+Ivan%C4%8Dice" target="_blank" rel="noopener">Najít na mapě ↗</a></p>
+    </div>
+  </div>
+  <p class="kontakt__note">Ukázkový web — jména, fotky i ceník jsou vzorové. © 2026 Salon Lněná</p>
+</footer>
 
-  <script src="app.js"></script>
+</main>
+<script src="app.js"></script>
 </body>
 </html>
