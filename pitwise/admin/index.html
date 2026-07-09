@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>PitWise — Feedback admin</title>
+<style>
+  :root{--bg:#0b0e14;--card:#161b27;--line:#232a3a;--txt:#e6ebf5;--muted:#9aa6bd;--accent:#22e584;--amber:#ffcf5c;--red:#ff6b6b;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--txt);line-height:1.55;padding:24px}
+  .wrap{max-width:820px;margin:0 auto}
+  h1{font-size:1.4rem;display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  h1 .g{color:var(--accent)}
+  .sub{color:var(--muted);font-size:.9rem;margin-bottom:20px}
+  .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:20px}
+  input{background:var(--card);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:10px 12px;font-size:.95rem}
+  input#tok{flex:1;min-width:200px}
+  button{background:var(--accent);color:#04140b;border:0;border-radius:8px;padding:10px 18px;font-weight:700;cursor:pointer;font-size:.95rem}
+  button.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+  .stat{color:var(--muted);font-size:.9rem;margin-bottom:14px}
+  .stat b{color:var(--txt)}
+  .fb{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:12px}
+  .fb .meta{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:.8rem;margin-bottom:8px}
+  .fb .meta .em{color:var(--accent)}
+  .fb .msg{white-space:pre-wrap;font-size:.98rem}
+  .chip{border:1px solid var(--line);border-radius:999px;padding:2px 9px}
+  .err{color:var(--red)} .ok{color:var(--accent)}
+  .empty{color:var(--muted);text-align:center;padding:40px 0}
+  .search{margin-bottom:14px;width:100%}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Pit<span class="g">Wise</span> · Feedback admin</h1>
+  <p class="sub">Private dashboard — feedback submitted from the app lands here.</p>
+
+  <div class="bar">
+    <input id="tok" type="password" placeholder="Admin token" autocomplete="off">
+    <button id="load">Load</button>
+    <button id="refresh" class="ghost">Refresh</button>
+    <label style="color:var(--muted);font-size:.85rem;display:flex;gap:6px;align-items:center"><input type="checkbox" id="remember" style="width:auto"> remember</label>
+  </div>
+
+  <div id="status" class="stat"></div>
+  <input id="search" class="search" placeholder="Filter messages…" style="display:none">
+  <div id="list"></div>
+</div>
+
+<script>
+  const $ = (s) => document.querySelector(s);
+  const API = "/api/feedback";
+  let ITEMS = [];
+
+  function fmtDate(ts){ try { return new Date(ts).toLocaleString(); } catch(e){ return ""; } }
+  function esc(s){ return (s||"").replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+  function render(){
+    const q = ($("#search").value || "").toLowerCase();
+    const rows = ITEMS.filter(it => !q || (it.message||"").toLowerCase().includes(q) || (it.email||"").toLowerCase().includes(q));
+    if (!rows.length){ $("#list").innerHTML = '<div class="empty">No feedback' + (ITEMS.length ? ' matches your filter.' : ' yet.') + '</div>'; return; }
+    $("#list").innerHTML = rows.map(it => `
+      <div class="fb">
+        <div class="meta">
+          <span>${fmtDate(it.ts)}</span>
+          ${it.email ? `<span class="em">${esc(it.email)}</span>` : '<span>no email</span>'}
+          ${it.country ? `<span class="chip">${esc(it.country)}</span>` : ''}
+          ${it.ver ? `<span class="chip">v${esc(it.ver)}</span>` : ''}
+        </div>
+        <div class="msg">${esc(it.message)}</div>
+      </div>`).join("");
+  }
+
+  async function load(){
+    const tok = $("#tok").value.trim();
+    if (!tok){ $("#status").innerHTML = '<span class="err">Enter your admin token.</span>'; return; }
+    if ($("#remember").checked) localStorage.setItem("pw_admin_tok", tok); else localStorage.removeItem("pw_admin_tok");
+    $("#status").textContent = "Loading…";
+    try {
+      const r = await fetch(API + "?token=" + encodeURIComponent(tok));
+      const d = await r.json();
+      if (!r.ok || !d.ok){ $("#status").innerHTML = '<span class="err">' + (d.error === "unauthorized" ? "Wrong token." : ("Error: " + (d.error||r.status))) + '</span>'; return; }
+      ITEMS = d.items || [];
+      $("#status").innerHTML = '<b>' + ITEMS.length + '</b> messages';
+      $("#search").style.display = ITEMS.length ? "block" : "none";
+      render();
+    } catch(e){
+      $("#status").innerHTML = '<span class="err">Could not reach the API. Is this running on Cloudflare (not GitHub Pages)?</span>';
+    }
+  }
+
+  $("#load").addEventListener("click", load);
+  $("#refresh").addEventListener("click", load);
+  $("#search").addEventListener("input", render);
+  $("#tok").addEventListener("keydown", e => { if (e.key === "Enter") load(); });
+
+  const saved = localStorage.getItem("pw_admin_tok");
+  if (saved){ $("#tok").value = saved; $("#remember").checked = true; load(); }
+</script>
+</body>
+</html>
