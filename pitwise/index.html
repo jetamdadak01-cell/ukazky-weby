@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
-<html lang="cs">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PitWise 🏁 — český závodní inženýr do ucha (Assetto Corsa, ACC, F1 23, iRacing)</title>
-<meta name="description" content="Závodní inženýr, na kterého MLUVÍŠ přímo ze hry — vysílačka na tlačítko volantu, odpovědi hlasem v reálném čase. Spotter, strategie, rozbor ztrát po sektorech, zápis setupů do hry. AC, ACC, F1 23 i iRacing. Bez předplatného.">
+<title>PitWise 🏁 — your AI race engineer on the radio (Assetto Corsa, ACC, F1 23, iRacing)</title>
+<meta name="description" content="A race engineer you TALK to, mid-race — push-to-talk on your wheel, voice answers in real time. Spotter, strategy, corner-by-corner time loss, writes setups into the game. AC, ACC, F1 23 and iRacing. No subscription.">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160"><rect x="2" y="2" width="156" height="156" rx="34" fill="%230e1016"/><path d="M 39 128 A 49 49 0 1 1 107 128" fill="none" stroke="%232a3242" stroke-width="11" stroke-linecap="round" transform="rotate(-8 73 94)"/><path d="M 39 128 A 49 49 0 0 1 52 56" fill="none" stroke="%2334e284" stroke-width="11" stroke-linecap="round" transform="rotate(-8 73 94)"/><line x1="73" y1="94" x2="106" y2="58" stroke="%23e9edf5" stroke-width="8" stroke-linecap="round"/><circle cx="73" cy="94" r="10" fill="%2334e284"/><path d="M 106 42 A 17 17 0 0 1 122 58" fill="none" stroke="%2334e284" stroke-width="6" stroke-linecap="round"/><path d="M 114 30 A 30 30 0 0 1 134 58" fill="none" stroke="%2334e284" stroke-width="6" stroke-linecap="round" opacity="0.55"/></svg>'>
 <style>
   :root{
@@ -31,7 +31,6 @@
   .sub{font-size:1.15rem;color:var(--muted);max-width:660px;margin:0 auto 30px}
   .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;align-items:center}
   .price-tag{font-size:.95rem;color:var(--muted)} .price-tag b{color:var(--txt);font-size:1.3rem}
-  /* mock */
   .mock{margin:44px auto 0;max-width:600px;background:var(--card);border:1px solid var(--line);
     border-radius:var(--radius);padding:22px;text-align:left;box-shadow:0 20px 60px rgba(0,0,0,.4);
     display:grid;grid-template-columns:1fr 1fr;gap:20px}
@@ -53,6 +52,13 @@
   .honest li{padding:5px 0 5px 26px;position:relative}
   .honest li::before{content:"✓";position:absolute;left:0;color:var(--accent);font-weight:800}
   .honest li.warn::before{content:"!";color:var(--amber)}
+  .langs{max-width:720px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+  .langs .l-row{display:flex;gap:14px;align-items:flex-start;padding:12px 0}
+  .langs .l-row+.l-row{border-top:1px solid var(--line)}
+  .langs .l-ico{font-size:1.6rem;line-height:1}
+  .langs b{color:var(--txt)} .langs p{color:var(--muted);font-size:.95rem;margin-top:2px}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+  .chip{font-size:.8rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:3px 11px}
   .buybox{max-width:460px;margin:0 auto;text-align:center;background:var(--card);
     border:1px solid var(--line);border-radius:var(--radius);padding:34px}
   .buybox .big{font-size:3rem;font-weight:800} .buybox .big small{font-size:1.1rem;color:var(--muted);font-weight:500}
@@ -75,38 +81,38 @@
       <svg width="46" height="46" viewBox="0 0 160 160" aria-hidden="true"><rect x="2" y="2" width="156" height="156" rx="34" fill="#0e1016" stroke="#232a3a"/><path d="M 39 128 A 49 49 0 1 1 107 128" fill="none" stroke="#2a3242" stroke-width="11" stroke-linecap="round" transform="rotate(-8 73 94)"/><path d="M 39 128 A 49 49 0 0 1 52 56" fill="none" stroke="#22e584" stroke-width="11" stroke-linecap="round" transform="rotate(-8 73 94)"/><line x1="73" y1="94" x2="106" y2="58" stroke="#e9edf5" stroke-width="8" stroke-linecap="round"/><circle cx="73" cy="94" r="10" fill="#22e584"/><path d="M 106 42 A 17 17 0 0 1 122 58" fill="none" stroke="#22e584" stroke-width="6" stroke-linecap="round"/><path d="M 114 30 A 30 30 0 0 1 134 58" fill="none" stroke="#22e584" stroke-width="6" stroke-linecap="round" opacity="0.55"/></svg>
       <span style="font-size:1.6rem;font-weight:800;letter-spacing:-0.5px">Pit<span style="color:var(--accent)">Wise</span></span>
     </div>
-    <span class="pill">🏁 Assetto Corsa · ACC · F1 23 · iRacing — žádné předplatné</span>
-    <h1>Drž tlačítko. Zeptej se.<br><span>Inženýr odpoví. Česky.</span></h1>
-    <p class="sub">PitWise ti dá <b>závodního inženýra s vysílačkou</b>: podržíš tlačítko na volantu,
-      řekneš <i>„kolik kol mi vyjde palivo?"</i> — a on ti <b>hlasem odpoví přímo ze živé telemetrie</b>,
-      i když má hra fokus. Hlídá palivo, gumy a pit okno, <b>hlásí auta vedle tebe</b>, po každém kole
-      ti řekne, <b>kde ztrácíš čas</b> — a v ACC ti i <b>zapíše setup do hry</b>. Rozpoznávání řeči
-      i hlas běží <b>offline na tvém PC</b>. Bez zásahu do hry, bez měsíčních poplatků.</p>
+    <span class="pill">🏁 Assetto Corsa · ACC · F1 23 · iRacing — no subscription</span>
+    <h1>Hold the button. Ask.<br><span>Your engineer answers.</span></h1>
+    <p class="sub">PitWise gives you a <b>race engineer on the radio</b>: hold a button on your wheel,
+      ask <i>“how many laps will my fuel last?”</i> — and he <b>answers out loud, straight from live telemetry</b>,
+      even while the game has focus. He watches fuel, tyres and your pit window, <b>calls cars alongside you</b>,
+      tells you <b>where you're losing time</b> after every lap — and in ACC he even <b>writes a setup into the game</b>.
+      Speech recognition and voice run <b>offline on your PC</b>. No game injection, no monthly fees.</p>
     <div class="cta-row">
-      <a href="#koupit" class="btn">Chci PitWise — 99 Kč</a>
-      <span class="price-tag"><s style="opacity:.55">149 Kč</s> · <b>99 Kč</b> startovací cena · aktualizace navždy zdarma</span>
+      <a href="#buy" class="btn">Get PitWise — €3.99</a>
+      <span class="price-tag"><s style="opacity:.55">€11.99</s> · <b>€3.99</b> launch price · free updates forever</span>
     </div>
 
     <div class="mock">
       <div style="grid-column:1/-1;font-family:ui-monospace,Consolas,monospace;font-size:.9rem;border-bottom:1px solid var(--line);padding-bottom:14px">
-        <div class="k" style="margin-bottom:6px">📻 Rádio (vysílačka)</div>
-        <div style="color:var(--muted)">[14:02:11] <b style="color:var(--txt)">TY:</b> Kolik kol mi vyjde palivo?</div>
-        <div style="color:var(--muted)">[14:02:12] <b style="color:var(--accent)">INŽENÝR:</b> Palivo 15,4 litru, bereme 2,2 na kolo — vydrží 7 kol. Do konce 10, dotankuj plus 6,5 litru. Tak makej.</div>
+        <div class="k" style="margin-bottom:6px">📻 Team radio</div>
+        <div style="color:var(--muted)">[14:02:11] <b style="color:var(--txt)">YOU:</b> How many laps will my fuel last?</div>
+        <div style="color:var(--muted)">[14:02:12] <b style="color:var(--accent)">ENGINEER:</b> Fuel 15.4 litres, using 2.2 a lap — good for 7 laps. Ten to go, add 6.5 litres. Now push.</div>
       </div>
       <div>
-        <div class="k">Aktuální kolo</div>
+        <div class="k">Current lap</div>
         <div class="big">1:41.8</div>
-        <div class="row"><span>Nejlepší</span><b>1:41.203</b></div>
-        <div class="row"><span>Rozdíl</span><span style="color:var(--accent);font-weight:700">-0.42 s</span></div>
-        <div class="row"><span>Konzistence</span><b>± 0.31 s</b></div>
+        <div class="row"><span>Best</span><b>1:41.203</b></div>
+        <div class="row"><span>Delta</span><span style="color:var(--accent);font-weight:700">-0.42 s</span></div>
+        <div class="row"><span>Consistency</span><b>± 0.31 s</b></div>
       </div>
       <div>
-        <div class="k">Strategie paliva</div>
-        <div class="row"><span>Palivo</span><b>19.7 L</b></div>
-        <div class="row"><span>Spotřeba / kolo</span><b>2.3 L</b></div>
-        <div class="row"><span>Do konce závodu</span><b>14 kol</b></div>
-        <div class="row"><span>Dotankovat</span><span class="hl">+12.5 L</span></div>
-        <div class="row"><span>Zastávky v boxu</span><span class="hl">1</span></div>
+        <div class="k">Fuel strategy</div>
+        <div class="row"><span>Fuel</span><b>19.7 L</b></div>
+        <div class="row"><span>Per lap</span><b>2.3 L</b></div>
+        <div class="row"><span>To the finish</span><b>14 laps</b></div>
+        <div class="row"><span>Refuel</span><span class="hl">+12.5 L</span></div>
+        <div class="row"><span>Pit stops</span><span class="hl">1</span></div>
       </div>
     </div>
   </div>
@@ -114,21 +120,50 @@
 
 <section>
   <div class="wrap">
-    <h2>Co PitWise ukazuje</h2>
-    <p class="lead">Ideální na druhý monitor vedle hry. Vše živě, čtené z herní telemetrie.</p>
+    <h2>What PitWise does</h2>
+    <p class="lead">Perfect on a second monitor next to the game. Everything live, read from the game's telemetry.</p>
     <div class="grid">
-      <div class="card" style="border-color:rgba(255,107,107,.4)"><h3>📻 Vysílačka jako v F1</h3><p><b>Podržíš klávesu (jde namapovat na tlačítko volantu), mluvíš, pustíš — inženýr odpoví hlasem.</b> Funguje i když má hra fokus. Řeč rozpoznává Whisper od OpenAI <b>offline, česky</b> — žádný cloud.</p></div>
-      <div class="card" style="border-color:rgba(34,229,132,.4)"><h3>🧠 Odpovídá i bez internetu</h3><p>Palivo, kola, gumy, tempo, box, pozice, rekord — na tohle všechno odpoví <b>okamžitě přímo z telemetrie</b>, zdarma a offline. Volitelně připojíš AI (vlastní klíč) pro volnou konverzaci.</p></div>
-      <div class="card"><h3>🎭 Tvůj inženýr, tvoje pravidla</h3><p>Dej mu <b>jméno</b>, vyber <b>povahu</b> (profík / drsňák / kámoš / analytik), jazyk (<b>29 jazyků</b> včetně češtiny a slovenštiny), hlas i rychlost řeči. Drsňák ti řekne „Palivo je v háji. Box, hned!"</p></div>
-      <div class="card" style="border-color:rgba(58,160,255,.4)"><h3>🗣️ Spotter &amp; závodní kouč</h3><p><b>„Pozor, máš ho VPRAVO!"</b> — hlásí auta vedle tebe, radí v soubojích kolo na kolo, napomene za zablokovaná kola i ničení gum. Když tě předjedou, povzbudí — <b>drsňák tě urazí</b>. Když předjedeš ty, pochválí.</p></div>
-      <div class="card" style="border-color:rgba(255,207,92,.4)"><h3>⏱️ Kde ztrácíš čas</h3><p>Trať rozdělená na <b>10 mini-sektorů</b>. Po každém kole ti řekne: <i>„Úsek 4: ztráta 0,6 s — brzdi později a nes rychlost středem."</i> Konkrétní rada, ne jen čísla.</p></div>
-      <div class="card"><h3>🏋️ Vede trénink i kvalifikaci</h3><p>V tréninku tě provede plánem, vyhodnotí tlaky a dá <b>verdikt setupu</b>. V kvalifikaci hlídá zahřátí gum (<i>„gumy v okně — TEĎ zaber!"</i>), přebytek paliva a po kole řekne, jestli parkovat, nebo to zkusit znovu.</p></div>
-      <div class="card" style="border-color:rgba(34,229,132,.4)"><h3>🔧 Zapíše ti setup do hry (ACC)</h3><p>Řekneš <b>„připrav setup"</b> — a inženýr vezme tvůj setup, nastaví <b>palivo na stint</b>, srovná <b>tlaky podle naměřených dat</b> a uloží ho do ACC. Ve hře ho jen načteš.</p></div>
-      <div class="card"><h3>⛽ Strategie paliva</h3><p>Spotřeba z reálných dat: kolik kol vydržíš, <b>kolik dotankovat</b>, <b>kolik zastávek</b>. Hlásí ti to sám do rádia — „chybí ti 2 kola, šetři nebo box".</p></div>
-      <div class="card"><h3>🗺️ Mapa trati</h3><p>Nakreslí se <b>sama během prvního kola</b> z pozice tvého vozu (AC i ACC), uloží se a příště naskočí hned — s barevnou <b>heatmapou rychlosti</b> a živou tečkou, kde právě jsi.</p></div>
-      <div class="card"><h3>🏆 Rekordy &amp; reference</h3><p><b>Osobní rekord pro každou trať a auto</b> se pamatuje navždy. U známých tratí (Monza, Spa, Nordschleife…) vidíš orientační referenční kolo GT3 — víš, kam se posouvat.</p></div>
-      <div class="card"><h3>📈 Telemetrie jako od profíků</h3><p>Grafy rychlosti, plynu, brzdy a řízení za posledních 30 s, <b>G-metr</b>, teploty <b>i opotřebení gum</b>, pedálové bary, pozice v závodě.</p></div>
-      <div class="card"><h3>▶️ Demo režim</h3><p>Vyzkoušej celou appku i bez spuštěné hry — na simulovaných datech. Uvidíš přesně, co dostaneš.</p></div>
+      <div class="card" style="border-color:rgba(255,107,107,.4)"><h3>📻 Team radio like F1</h3><p><b>Hold a key (mappable to a wheel button), talk, release — the engineer answers by voice.</b> Works even while the game has focus. Speech recognised by OpenAI's Whisper, <b>offline</b> — no cloud.</p></div>
+      <div class="card" style="border-color:rgba(34,229,132,.4)"><h3>🧠 Answers with no internet</h3><p>Fuel, laps, tyres, pace, pit, position, records — he answers all of that <b>instantly from telemetry</b>, free and offline. Optionally connect AI (your own key) for free chat.</p></div>
+      <div class="card"><h3>🎭 Your engineer, your rules</h3><p>Give him a <b>name</b>, pick a <b>personality</b> (pro / tough guy / buddy / analyst), a language, a voice and speech rate. The tough guy tells you “Fuel's gone. Box, now!”</p></div>
+      <div class="card" style="border-color:rgba(58,160,255,.4)"><h3>🗣️ Spotter &amp; coach</h3><p><b>“Careful, he's on your RIGHT!”</b> — calls cars alongside you, advises wheel-to-wheel, warns about lock-ups and tyre abuse. Overtaken? He fires you up — <b>the tough guy roasts you</b>. Overtake? He praises you.</p></div>
+      <div class="card" style="border-color:rgba(255,207,92,.4)"><h3>⏱️ Where you lose time</h3><p>The track split into <b>10 mini-sectors</b>. After each lap: <i>“Sector 4: down 0.6s — brake later and carry more mid-corner speed.”</i> Specific advice, not just numbers.</p></div>
+      <div class="card"><h3>🏋️ Runs practice &amp; qualifying</h3><p>In practice he walks you through a plan, reads your pressures and gives a <b>setup verdict</b>. In qualifying he watches tyre warm-up (<i>“tyres in the window — go NOW!”</i>), fuel, and tells you whether to park it or try again.</p></div>
+      <div class="card" style="border-color:rgba(34,229,132,.4)"><h3>🔧 Writes a setup into the game (ACC)</h3><p>Say <b>“prepare a setup”</b> — he takes your setup, sets <b>stint fuel</b>, trims <b>pressures from measured data</b> and saves it into ACC. Just load it in-game.</p></div>
+      <div class="card"><h3>⛽ Fuel strategy</h3><p>From real data: how many laps you'll last, <b>how much to refuel</b>, <b>how many stops</b>. He calls it over the radio himself — “you're two laps short, save or box”.</p></div>
+      <div class="card"><h3>🗺️ Track map</h3><p>Draws itself <b>during your first lap</b> from your car's position (AC &amp; ACC), saves it and loads instantly next time — with a colour <b>speed heatmap</b> and a live dot.</p></div>
+      <div class="card"><h3>🏆 Records &amp; references</h3><p><b>Personal best for every track and car</b>, kept forever. On known circuits (Monza, Spa, Nordschleife…) you see an approximate GT3 reference lap — you know where to push.</p></div>
+      <div class="card"><h3>📈 Pro-level telemetry</h3><p>Speed, throttle, brake and steering traces for the last 30s, a <b>G-meter</b>, tyre temps <b>and wear</b>, pedal bars, race position.</p></div>
+      <div class="card"><h3>▶️ Demo mode</h3><p>Try the whole app without a running game — on simulated data. See exactly what you get.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap" style="display:flex;justify-content:center">
+    <div class="langs">
+      <h2 style="margin-bottom:6px">Speaks your language</h2>
+      <p class="lead" style="margin-bottom:18px">You talk to your engineer in your own language — and he answers back in it. You're never stuck with English.</p>
+      <div class="l-row">
+        <div class="l-ico">🎙️</div>
+        <div><b>Engineer voice &amp; callouts — 29 languages</b>
+          <p>Every callout, answer and radio message spoken in your language. Offline neural voices available for the major ones.</p>
+          <div class="chips"><span class="chip">English</span><span class="chip">Deutsch</span><span class="chip">Español</span><span class="chip">Français</span><span class="chip">Italiano</span><span class="chip">Polski</span><span class="chip">Português</span><span class="chip">Nederlands</span><span class="chip">Čeština</span><span class="chip">Slovenčina</span><span class="chip">Русский</span><span class="chip">Türkçe</span><span class="chip">+ 17 more</span></div>
+        </div>
+      </div>
+      <div class="l-row">
+        <div class="l-ico">🖥️</div>
+        <div><b>App interface — 9 languages</b>
+          <p>The whole dashboard in your language, switchable any time.</p>
+          <div class="chips"><span class="chip">English</span><span class="chip">Deutsch</span><span class="chip">Español</span><span class="chip">Français</span><span class="chip">Italiano</span><span class="chip">Polski</span><span class="chip">Português</span><span class="chip">Slovenčina</span><span class="chip">Čeština</span></div>
+        </div>
+      </div>
+      <div class="l-row">
+        <div class="l-ico">🎧</div>
+        <div><b>Talk &amp; get answers in your language</b>
+          <p>Push-to-talk speech recognition understands your language and runs 100% offline on your PC.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -136,17 +171,17 @@
 <section>
   <div class="wrap" style="display:flex;justify-content:center">
     <div class="honest">
-      <h3>Na rovinu</h3>
+      <h3>Straight up</h3>
       <ul>
-        <li><b>Assetto Corsa a ACC</b> — plná podpora včetně mapy, spotteru a zápisu setupů.</li>
-        <li><b>F1 23 a iRacing</b> — čerstvě přidané (telemetrie, sektory, spotter, strategie). V F1 23 zapneš ve hře UDP telemetrii, iRacing funguje rovnou. <b>Mapa trati se v nich nekreslí</b> (hry nedávají souřadnice) — vše ostatní ano.</li>
-        <li>Čte jen <b>oficiální telemetrii her</b> — <b>neinjektuje se do hry</b>, žádné riziko banu.</li>
-        <li>Windows 10/11, <b>nic se neinstaluje, není potřeba správce.</b></li>
-        <li>Hlasy i rozpoznávání řeči běží <b>lokálně a offline</b> — nic se nikam neposílá, žádné poplatky.</li>
-        <li class="warn">Rozpoznávání řeči (~80 MB) a přirozený hlas (~85 MB) se stahují <b>jednorázově tlačítkem v appce</b>.</li>
-        <li>Inženýr odpovídá na závodní otázky <b>zdarma z telemetrie</b>. Volná AI konverzace je bonus — vložíš vlastní API klíč (platíš centy přímo Anthropicu, nám nic).</li>
-        <li class="warn">Strategie počítá z ujetých kol — první kolo ještě nemá z čeho počítat.</li>
-        <li class="warn">Windows může u nového programu jednou ukázat SmartScreen upozornění — v balíčku je jednoklikový oprava-skript a návod (viz dotazy níže).</li>
+        <li><b>Assetto Corsa &amp; ACC</b> — full support including the map, spotter and setup writing.</li>
+        <li><b>F1 23 &amp; iRacing</b> — freshly added (telemetry, sectors, spotter, strategy). In F1 23 you enable UDP telemetry, iRacing works out of the box. <b>The track map isn't drawn in them</b> (the games don't expose coordinates) — everything else works.</li>
+        <li>Reads only the games' <b>official telemetry</b> — <b>no injection</b>, no ban risk.</li>
+        <li>Windows 10/11, <b>nothing to install, no admin needed.</b></li>
+        <li>Voices and speech recognition run <b>locally and offline</b> — nothing leaves your PC, no fees.</li>
+        <li class="warn">Speech recognition (~80 MB) and the natural voice (~85 MB) download <b>once, from a button inside the app</b>.</li>
+        <li>The engineer answers racing questions <b>free, from telemetry</b>. Free-form AI chat is a bonus — add your own API key (you pay cents directly to Anthropic, nothing to us).</li>
+        <li class="warn">Strategy is computed from completed laps — the first lap has nothing to calculate from yet.</li>
+        <li class="warn">Windows may show a one-time SmartScreen notice for a new app — the package includes a one-click fix script and a guide (see FAQ).</li>
       </ul>
     </div>
   </div>
@@ -154,70 +189,69 @@
 
 <section>
   <div class="wrap" style="max-width:720px">
-    <h2>Hlášky přímo z rádia</h2>
-    <p class="lead">Skutečné věty, které ti inženýr (povaha: drsňák) řekne přímo v závodě.</p>
+    <h2>Straight from the radio</h2>
+    <p class="lead">Real lines the engineer (personality: tough guy) delivered during test races.</p>
     <div style="font-family:ui-monospace,Consolas,monospace;font-size:.95rem;display:grid;gap:10px">
-      <div class="card" style="padding:14px 18px">📻 <b style="color:var(--red)">„P3?! To bylo slabé — vrať mu to."</b> <span class="faded">— když tě předjedou</span></div>
-      <div class="card" style="padding:14px 18px">📻 <b style="color:var(--accent)">„Úsek 4: ztráta 0,6 s — stejná rychlost středem, chce to dřív na plyn."</b> <span class="faded">— po každém kole</span></div>
-      <div class="card" style="padding:14px 18px">📻 <b style="color:var(--accent2)">„Je vpravo a má na tebe rychlost — nebraň se, soustřeď se na výjezd."</b> <span class="faded">— souboj kolo na kolo</span></div>
-      <div class="card" style="padding:14px 18px">📻 <b style="color:var(--amber)">„Box potvrzen. Palivo 18 litrů, gumy necháváme — čísla máš ode mě."</b> <span class="faded">— vjezd do boxů</span></div>
-      <div class="card" style="padding:14px 18px">📻 <b>„Zablokoval jsi předky — povol brzdu a pak ji zmáčkni znovu."</b> <span class="faded">— kouč brzdění</span></div>
-      <div class="card" style="padding:14px 18px">📻 <b style="color:var(--accent)">„Gumy jsou v okně — TEĎ zaber, tohle je tvoje kolo."</b> <span class="faded">— kvalifikace</span></div>
+      <div class="card" style="padding:14px 18px">📻 <b style="color:var(--red)">“P3?! That was weak — go get him back.”</b> <span class="faded">— when you get overtaken</span></div>
+      <div class="card" style="padding:14px 18px">📻 <b style="color:var(--accent)">“Sector 4: down 0.6s — same mid-corner speed, get on the throttle earlier.”</b> <span class="faded">— after every lap</span></div>
+      <div class="card" style="padding:14px 18px">📻 <b style="color:var(--accent2)">“He's on your right and has the pace — don't defend, focus on your exit.”</b> <span class="faded">— wheel to wheel</span></div>
+      <div class="card" style="padding:14px 18px">📻 <b style="color:var(--amber)">“Box confirmed. Fuel 18 litres, tyres stay — I've got the numbers.”</b> <span class="faded">— pit entry</span></div>
+      <div class="card" style="padding:14px 18px">📻 <b style="color:var(--accent)">“Chequered flag — podium! P3, really proud of that one.”</b> <span class="faded">— at the finish</span></div>
     </div>
   </div>
 </section>
 
-<section id="koupit">
+<section id="buy">
   <div class="wrap">
     <div class="buybox">
-      <div style="color:var(--amber);font-weight:700;font-size:.85rem;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px">🚀 Startovací cena pro první závodníky</div>
-      <div class="big"><s style="opacity:.4;font-size:1.6rem">149</s> 99 <small>Kč jednorázově</small></div>
+      <div style="color:var(--amber);font-weight:700;font-size:.85rem;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px">🚀 Launch price for the first racers</div>
+      <div class="big"><s style="opacity:.4;font-size:1.6rem">€11.99</s> €3.99 <small>one-time</small></div>
       <ul>
-        <li>Závodní inženýr s vysílačkou — mluvíš, odpovídá (offline, česky)</li>
-        <li>Spotter, souboje, kouč brzdění a gum, komentátor s povahou</li>
-        <li>Rozbor ztrát po sektorech + vede trénink a kvalifikaci</li>
-        <li>Zápis setupů do ACC · strategie paliva · mapy · rekordy</li>
-        <li>4 povahy, 29 jazyků · AC, ACC, F1 23, iRacing</li>
-        <li><b>Aktualizace navždy zdarma</b> — kupuješ jednou</li>
+        <li>Race engineer on the radio — you talk, he answers (offline)</li>
+        <li>Spotter, battles, braking &amp; tyre coach, commentator with a personality</li>
+        <li>Corner-by-corner time loss + runs practice and qualifying</li>
+        <li>Writes setups into ACC · fuel strategy · maps · records</li>
+        <li>4 personalities, 29 languages · AC, ACC, F1 23, iRacing</li>
+        <li><b>Free updates forever</b> — buy once</li>
       </ul>
-      <a href="#" class="btn" id="buyBtn">Koupit a stáhnout</a>
-      <p class="faded" style="margin-top:16px">Platba kartou, Apple/Google Pay. Odkaz ke stažení dorazí hned na e-mail.</p>
-      <p style="margin-top:12px;color:var(--accent);font-weight:600">✓ 14 dní záruka vrácení peněz — bez otázek</p>
-      <p class="faded" style="margin-top:12px;font-size:.8rem">Digitální produkt — koupí souhlasíš s okamžitým stažením. Nejsi spokojen? Napiš do 14 dnů na 727 890 216 a peníze vrátíme (řešíme osobně, bez formulářů).</p>
+      <a href="#" class="btn" id="buyBtn">Buy &amp; download</a>
+      <p class="faded" style="margin-top:16px">Card, Apple/Google Pay. Download link straight to your email.</p>
+      <p style="margin-top:12px;color:var(--accent);font-weight:600">✓ 14-day money-back guarantee — no questions</p>
+      <p class="faded" style="margin-top:12px;font-size:.8rem">Digital product — by buying you agree to instant download. Not happy? Email us within 14 days and we'll refund. Handled personally, no forms.</p>
     </div>
   </div>
 </section>
 
 <section>
   <div class="wrap" style="max-width:720px">
-    <h2>Časté dotazy</h2>
-    <details><summary>Jak funguje mluvení na inženýra?</summary><p>V appce si nastavíš klávesu vysílačky (jde namapovat na tlačítko volantu, např. přes MOZA Pit House). Držíš — mluvíš — pustíš. Řeč přepíše Whisper (špičkový rozpoznávač od OpenAI) běžící offline na tvém PC, rozumí česky. Inženýr odpoví hlasem během pár sekund.</p></details>
-    <details><summary>Potřebuju nějaký účet nebo AI klíč?</summary><p>Ne. Na závodní otázky (palivo, kola, gumy, tempo, box, pozice, rekordy) odpovídá inženýr zdarma přímo z telemetrie. AI klíč je volitelný bonus pro volné povídání — platíš pak centy za dotaz přímo Anthropicu, nám nic.</p></details>
-    <details><summary>Nedostanu ban za používání?</summary><p>Ne. PitWise do hry nijak nezasahuje — jen čte data, která hra sama nabízí přes sdílenou paměť (oficiální AC/ACC telemetrie). Anti-cheat nemá co řešit.</p></details>
-    <details><summary>Které hry PitWise podporuje?</summary><p><b>Assetto Corsa a ACC</b> — plná podpora (včetně mapy trati a zápisu setupů v ACC). <b>F1 23</b> — zapneš ve hře Nastavení → Telemetrie → UDP (port 20777) a PitWise ji sám pozná. <b>iRacing</b> — funguje rovnou, spotter dokonce přebírá přesná data ze hry. rFactor 2 / Le Mans Ultimate mají základní podporu.</p></details>
-    <details><summary>Windows mi při prvním spuštění ukázal modré okno (SmartScreen). Co s tím?</summary><p>To je běžné u každého nového programu od malého vývojáře — Windows ho prostě ještě nezná. Klikni „Další informace" → „Přesto spustit" (je to jednorázové). V balíčku najdeš i skript „Oprav blokaci antiviru", který to vyřeší na jedno kliknutí, a verzi spouštěnou přes skript, které se SmartScreen netýká. PitWise neobsahuje nic škodlivého — nic neinstaluje, jen čte telemetrii hry.</p></details>
-    <details><summary>Co když mi to nebude vyhovovat?</summary><p>Napiš do 14 dnů a vrátíme ti peníze. Bez otázek, bez formulářů.</p></details>
-    <details><summary>Musím něco instalovat nebo pouštět jako správce?</summary><p>Ne. Stáhneš jeden soubor, spustíš, hotovo. Žádná instalace, žádný správce.</p></details>
-    <details><summary>Jak zjistím, že mi to bude fungovat?</summary><p>Pusť Demo režim — uvidíš celou appku naživo na simulovaných datech ještě než sedneš do auta.</p></details>
-    <details><summary>Kde to mám mít při hraní?</summary><p>Nejlíp na druhém monitoru vedle hry. Máš i přepínač „Vždy navrchu", pokud jedeš na jednom monitoru v okně.</p></details>
+    <h2>FAQ</h2>
+    <details><summary>How does talking to the engineer work?</summary><p>In the app you set a push-to-talk key (mappable to a wheel button, e.g. via MOZA Pit House). Hold — talk — release. Your speech is transcribed by Whisper (OpenAI's top recogniser) running offline on your PC. The engineer answers by voice within seconds.</p></details>
+    <details><summary>Do I need an account or an AI key?</summary><p>No. Racing questions (fuel, laps, tyres, pace, pit, position, records) are answered for free, straight from telemetry. An AI key is an optional bonus for free-form chat — you then pay cents per question directly to Anthropic, nothing to us.</p></details>
+    <details><summary>Will I get banned for using it?</summary><p>No. PitWise doesn't touch the game — it only reads the data the game itself exposes via shared memory (the official telemetry). There's nothing for anti-cheat to flag.</p></details>
+    <details><summary>Which games are supported?</summary><p><b>Assetto Corsa &amp; ACC</b> — full support (including the track map and setup writing in ACC). <b>F1 23</b> — enable Settings → Telemetry → UDP (port 20777) and PitWise detects it. <b>iRacing</b> — works out of the box; the spotter even uses the game's exact data. rFactor 2 / Le Mans Ultimate have basic support.</p></details>
+    <details><summary>Which languages does it support?</summary><p>The engineer's voice and callouts work in <b>29 languages</b> (English, German, Spanish, French, Italian, Polish, Portuguese, Dutch, Czech, Slovak, Russian, Turkish and more). The app interface is available in <b>9 languages</b>. You talk to him and he answers in your language — all offline.</p></details>
+    <details><summary>Windows showed a blue box (SmartScreen) on first launch. What now?</summary><p>That's normal for any new app from a small developer — Windows just doesn't know it yet. Click “More info” → “Run anyway” (it's a one-time thing). The package also includes a one-click fix script and a script-launched version that SmartScreen doesn't touch. PitWise contains nothing harmful — it installs nothing and only reads the game's telemetry.</p></details>
+    <details><summary>What if it's not for me?</summary><p>Email us within 14 days and we'll refund you. No questions, no forms.</p></details>
+    <details><summary>Do I have to install anything or run as admin?</summary><p>No. Download one file, run it, done. No installation, no admin.</p></details>
+    <details><summary>Where should I keep it while racing?</summary><p>Best on a second monitor next to the game. There's also an “Always on top” toggle if you run a single monitor in windowed mode.</p></details>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    <p>PitWise 🏁 — závodní inženýr pro sim racing · Assetto Corsa · ACC · F1 23 · iRacing · Windows 10/11</p>
-    <p class="faded" style="margin-top:8px">Kontakt: 727 890 216</p>
+    <p>PitWise 🏁 — race engineer for sim racing · Assetto Corsa · ACC · F1 23 · iRacing · Windows 10/11</p>
+    <p class="faded" style="margin-top:8px">Contact: weby.dadak@gmail.com</p>
   </div>
 </footer>
 
 <script>
-  // Az bude hotovy Payhip produkt, vloz sem jeho odkaz (napr. "https://payhip.com/b/XXXX"):
+  // When the Payhip product is ready, put its link here (e.g. "https://payhip.com/b/XXXX"):
   const PAYHIP_URL = "";
   (function () {
     var b = document.getElementById('buyBtn');
     if (!b) return;
     if (PAYHIP_URL) { b.href = PAYHIP_URL; b.target = "_blank"; b.rel = "noopener"; }
-    else { b.href = "tel:+420727890216"; b.textContent = "Napiš mi — spouštím platbu (727 890 216)"; }
+    else { b.href = "mailto:weby.dadak@gmail.com?subject=PitWise"; b.textContent = "Notify me — launching soon"; }
   })();
 </script>
 </body>
