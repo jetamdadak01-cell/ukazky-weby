@@ -1,0 +1,28 @@
+name: Deploy PitWise na Cloudflare Pages
+
+# Spusti se pri kazde zmene webu pitwise/ (auto-deploy) nebo rucne z tlacitka.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'pitwise/**'
+      - '.github/workflows/deploy-pitwise.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Stahnout repo
+        uses: actions/checkout@v4
+
+      - name: Nasadit na Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # deploy slozky pitwise/ do projektu "pitwise"; --branch=main => produkce (pitwise.net)
+          command: pages deploy pitwise --project-name=pitwise --branch=main
