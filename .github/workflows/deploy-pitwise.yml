@@ -24,5 +24,8 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          # deploy slozky pitwise/ do projektu "pitwise"; --branch=main => produkce (pitwise.net)
-          command: pages deploy pitwise --project-name=pitwise --branch=main
+          # bezet PRIMO ve slozce pitwise/ - wrangler hleda functions/ v pracovnim adresari,
+          # takze "pages deploy pitwise" by nasadil web BEZ funkci (/api/update, /api/feedback)
+          workingDirectory: pitwise
+          # --branch=main => produkce (pitwise.net)
+          command: pages deploy . --project-name=pitwise --branch=main
