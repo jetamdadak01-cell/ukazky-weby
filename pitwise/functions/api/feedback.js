@@ -7,15 +7,11 @@ export async function onRequest(context) {
   const { request, env } = context;
   const kv = env.FEEDBACK;
   const admin = env.ADMIN_TOKEN || "";
-  const cors = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
-  };
+  // ZADNY CORS: appka posila z PowerShellu (mimo prohlizec) a admin je same-origin (/admin).
+  // Drivejsi "Access-Control-Allow-Origin: *" zbytecne otviral admin GET (e-maily zakazniku)
+  // cizim webum - odstranen na doporuceni security auditu.
   const json = (obj, status = 200) =>
-    new Response(JSON.stringify(obj), { status, headers: { ...cors, "Content-Type": "application/json" } });
-
-  if (request.method === "OPTIONS") return new Response(null, { headers: cors });
+    new Response(JSON.stringify(obj), { status, headers: { "Content-Type": "application/json", "X-Content-Type-Options": "nosniff", "Cache-Control": "no-store" } });
 
   if (!kv) return json({ ok: false, error: "KV not bound (FEEDBACK)" }, 500);
 
