@@ -1,0 +1,18 @@
+# Bezpecnostni hlavicky (Cloudflare Pages _headers).
+# Plati pro staticke soubory; odpovedi Functions (/api/*) si hlavicky nastavuji samy.
+# POZOR: CSP musi povolit Payhip (checkout overlay tlacitka Koupit) - script/frame/connect.
+# Stripe/PayPal frame-src pro jistotu (kdyby payhip.js vkladal platebni iframe primo do stranky).
+
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://payhip.com https://*.payhip.com; style-src 'self' 'unsafe-inline' https://payhip.com; img-src 'self' data: https://payhip.com https://*.payhip.com; frame-src https://payhip.com https://*.payhip.com https://js.stripe.com https://checkout.stripe.com https://www.paypal.com https://*.paypal.com; connect-src 'self' https://payhip.com https://*.payhip.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self' https://payhip.com https://*.payhip.com; frame-ancestors 'none'; upgrade-insecure-requests
+
+# Admin dashboard ma inline <script> -> vlastni CSP (bez Payhipu, s 'unsafe-inline' skripty).
+# "!" odebere CSP z pravidla /* vyse, jinak by platily obe najednou.
+/admin*
+  ! Content-Security-Policy
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
