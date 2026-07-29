@@ -40,8 +40,10 @@ export async function onRequest(context) {
   if (!valid) return json({ ok: false, error: "invalid license key" }, 403);
 
   // 2) soubor z privatniho repa (Contents API s raw media typem)
+  //    channel=beta -> soubory z beta/ slozky (beta testeri s klicem v aplikaci)
+  const channel = url.searchParams.get("channel") === "beta" ? "beta/" : "";
   const gh = await fetch(
-    "https://api.github.com/repos/" + env.GH_REPO + "/contents/" + names[file] + "?ref=main",
+    "https://api.github.com/repos/" + env.GH_REPO + "/contents/" + channel + names[file] + "?ref=main",
     { headers: { "Authorization": "Bearer " + env.GH_TOKEN, "Accept": "application/vnd.github.raw", "User-Agent": "pitwise-update-endpoint" } }
   );
   if (!gh.ok) return json({ ok: false, error: "file fetch failed " + gh.status }, 502);
