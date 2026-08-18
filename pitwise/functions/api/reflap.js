@@ -34,7 +34,9 @@ export async function onRequest(context) {
     let r = null;
     try { r = await kv.get("ref_" + sim + "_" + track + "_" + layout + "_" + carClass, { type: "json" }); } catch (e) {}
     if (!r || r.v !== 1) return json({ ok: false, error: "not found" }, 404);
-    return json({ ok: true, ref: r });
+    // aid nezverejnovat (anonymni, ale umoznil by korelaci drzitele rekordu napric tratemi)
+    const { aid: _aid, ...pub } = r;
+    return json({ ok: true, ref: pub });
   }
 
   if (request.method !== "POST") return json({ ok: false, error: "method" }, 405);
@@ -74,6 +76,7 @@ export async function onRequest(context) {
     if (np < 0 || np > 1.0001 || np <= lastNp) return json({ ok: false, error: "prof not monotonic" }, 400);
     if (t < 0 || t > ms + 5000) return json({ ok: false, error: "prof time range" }, 400);
     if (kmh < 0 || kmh > 500 || gas < 0 || gas > 1.01 || brk < 0 || brk > 1.01) return json({ ok: false, error: "prof value range" }, 400);
+    if (steer < -3 || steer > 3) return json({ ok: false, error: "prof value range" }, 400);
     lastNp = np;
     clean.push([Math.round(np * 10000) / 10000, Math.round(t), Math.round(kmh * 10) / 10, Math.round(gas * 1000) / 1000, Math.round(brk * 1000) / 1000, Math.round(steer * 1000) / 1000]);
   }
@@ -89,10 +92,10 @@ export async function onRequest(context) {
   if (cur && cur.v === 1 && cur.n >= 10 && ms < cur.ms * 0.88) return json({ ok: false, error: "implausible jump" }, 422);
 
   if (cur && cur.v === 1 && cur.ms <= ms) {
-    // pomalejsi nez ulozene -> jen zvednout citac prispevku (statistika duvery rekordu)
+    // pomalejsi nez ulozene -> citac prispevku zvednout JEN dokud ma vyznam (anti-troll prah
+    // n>=10) - jinak by kazdy pomalejsi POST palil KV zapis (free tier 1000 zapisu/den)
     cur.n = (cur.n || 0) + 1;
-    cur.updated = Date.now();
-    try { await kv.put(key, JSON.stringify(cur)); } catch (e) {}
+    if (cur.n <= 11) { cur.updated = Date.now(); try { await kv.put(key, JSON.stringify(cur)); } catch (e) {} }
     return json({ ok: true, kept: true, best: cur.ms });
   }
 
