@@ -83,6 +83,25 @@ export async function onRequest(context) {
   // profil musi pokryvat skoro cele kolo (jinak by koucink v mezerach mlcel/lhal)
   if (clean[0][0] > 0.05 || clean[clean.length - 1][0] < 0.95) return json({ ok: false, error: "prof coverage" }, 400);
 
+  // VOLITELNA STOPA (Stage 2): [np, x, z] <=400 bodu - absolutni herni souradnice rekordniho
+  // kola. Klienti si ji promitnou na SVOU mapu -> rady o najezdu/apexu/vyjezdu. Bez stopy
+  // (iRacing bez pozice) se zaznam prijme taky - koucink jede jen z pedalu/rychlosti.
+  let line = null;
+  if (Array.isArray(data.line) && data.line.length >= 60 && data.line.length <= 400) {
+    const lc = [];
+    let lnp = -1, okL = true;
+    for (const p of data.line) {
+      if (!Array.isArray(p) || p.length < 3) { okL = false; break; }
+      const np = num(p[0]), x = num(p[1]), z = num(p[2]);
+      if (np === null || x === null || z === null) { okL = false; break; }
+      if (np < 0 || np > 1.0001 || np <= lnp) { okL = false; break; }
+      if (x < -1000000 || x > 1000000 || z < -1000000 || z > 1000000) { okL = false; break; }
+      lnp = np;
+      lc.push([Math.round(np * 10000) / 10000, Math.round(x * 10) / 10, Math.round(z * 10) / 10]);
+    }
+    if (okL && lc.length >= 60 && lc[0][0] <= 0.05 && lc[lc.length - 1][0] >= 0.95) line = lc;
+  }
+
   const key = "ref_" + sim + "_" + track + "_" + layout + "_" + carClass;
   let cur = null;
   try { cur = await kv.get(key, { type: "json" }); } catch (e) {}
@@ -100,6 +119,7 @@ export async function onRequest(context) {
   }
 
   const rec = { v: 1, sim, track, layout, carClass, carModel, ms: Math.round(ms), aid, n: (cur && cur.n ? cur.n : 0) + 1, updated: Date.now(), prof: clean };
+  if (line) rec.line = line;
   try { await kv.put(key, JSON.stringify(rec)); } catch (e) { return json({ ok: false, error: "kv put failed" }, 500); }
   return json({ ok: true, newBest: true, ms: rec.ms });
 }
