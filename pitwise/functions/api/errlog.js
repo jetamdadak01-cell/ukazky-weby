@@ -14,10 +14,17 @@ export async function onRequest(context) {
   if (!kv) return json({ ok: false, error: "KV not bound (FEEDBACK)" }, 500);
 
   if (request.method === "POST") {
+    // stejny hruby per-IP limit jako feedback (errlog davky: appka posila max par za beh)
+    const ip = request.headers.get("cf-connecting-ip") || "0";
+    const rlKey = "rle_" + ip;
+    let rlCnt = 0;
+    try { rlCnt = parseInt((await kv.get(rlKey)) || "0", 10) || 0; } catch (e) {}
+    if (rlCnt >= 40) return json({ ok: false, error: "rate limit" }, 429);
     let data = {};
     try { data = await request.json(); } catch (e) {}
     const items = Array.isArray(data.items) ? data.items.slice(0, 25) : [];
     if (!items.length) return json({ ok: false, error: "empty" }, 400);
+    try { await kv.put(rlKey, String(rlCnt + 1), { expirationTtl: 60 * 60 * 24 }); } catch (e) {}
     const batch = {
       ver: (data.ver || "").toString().slice(0, 20),
       aid: (data.aid || "").toString().slice(0, 40),

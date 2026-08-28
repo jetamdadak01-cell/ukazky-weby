@@ -25,9 +25,13 @@
   .fb .meta .em{color:var(--accent)}
   .fb .msg{white-space:pre-wrap;font-size:.98rem}
   .chip{border:1px solid var(--line);border-radius:999px;padding:2px 9px}
+  .chip.sus{border-color:var(--red);color:var(--red);font-weight:700}
   .err{color:var(--red)} .ok{color:var(--accent)}
   .empty{color:var(--muted);text-align:center;padding:40px 0}
   .search{margin-bottom:14px;width:100%}
+  .fb{position:relative}
+  .del{position:absolute;top:10px;right:12px;background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:6px;padding:2px 8px;font-size:.8rem;cursor:pointer}
+  .del:hover{border-color:var(--red);color:var(--red)}
 </style>
 </head>
 <body>
@@ -39,6 +43,7 @@
     <input id="tok" type="password" placeholder="Admin token" autocomplete="off">
     <button id="load">Load</button>
     <button id="refresh" class="ghost">Refresh</button>
+    <button id="purge" class="ghost" style="display:none">Delete spam</button>
     <label style="color:var(--muted);font-size:.85rem;display:flex;gap:6px;align-items:center"><input type="checkbox" id="remember" style="width:auto"> remember</label>
   </div>
 
@@ -60,15 +65,35 @@
     const rows = ITEMS.filter(it => !q || (it.message||"").toLowerCase().includes(q) || (it.email||"").toLowerCase().includes(q));
     if (!rows.length){ $("#list").innerHTML = '<div class="empty">No feedback' + (ITEMS.length ? ' matches your filter.' : ' yet.') + '</div>'; return; }
     $("#list").innerHTML = rows.map(it => `
-      <div class="fb">
+      <div class="fb" data-key="${esc(it._key||'')}">
+        <button class="del" title="Delete">✕</button>
         <div class="meta">
           <span>${fmtDate(it.ts)}</span>
           ${it.email ? `<span class="em">${esc(it.email)}</span>` : '<span>no email</span>'}
           ${it.country ? `<span class="chip">${esc(it.country)}</span>` : ''}
           ${it.ver ? `<span class="chip">v${esc(it.ver)}</span>` : ''}
+          ${it.sus ? '<span class="chip sus">⚠ attack payload</span>' : ''}
         </div>
         <div class="msg">${esc(it.message)}</div>
       </div>`).join("");
+  }
+
+  function isJunk(it){
+    const m = (it.message||"").trim();
+    return it.sus || m === "test" || /<script|onerror\s*=|<img\b|<svg\b|javascript:|document\.cookie|localStorage/i.test(m);
+  }
+
+  async function delKeys(keys){
+    const tok = $("#tok").value.trim();
+    if (!tok || !keys.length) return;
+    for (let i = 0; i < keys.length; i += 50){
+      const batch = keys.slice(i, i + 50);
+      await fetch(API + "?token=" + encodeURIComponent(tok) + "&keys=" + encodeURIComponent(batch.join(",")), { method: "DELETE" });
+    }
+    ITEMS = ITEMS.filter(it => !keys.includes(it._key));
+    $("#status").innerHTML = '<b>' + ITEMS.length + '</b> messages';
+    $("#purge").style.display = ITEMS.some(isJunk) ? "inline-block" : "none";
+    render();
   }
 
   async function load(){
@@ -83,6 +108,7 @@
       ITEMS = d.items || [];
       $("#status").innerHTML = '<b>' + ITEMS.length + '</b> messages';
       $("#search").style.display = ITEMS.length ? "block" : "none";
+      $("#purge").style.display = ITEMS.some(isJunk) ? "inline-block" : "none";
       render();
     } catch(e){
       $("#status").innerHTML = '<span class="err">Could not reach the API. Is this running on Cloudflare (not GitHub Pages)?</span>';
@@ -91,6 +117,15 @@
 
   $("#load").addEventListener("click", load);
   $("#refresh").addEventListener("click", load);
+  $("#purge").addEventListener("click", () => {
+    const junk = ITEMS.filter(isJunk).map(it => it._key).filter(Boolean);
+    if (junk.length && confirm("Delete " + junk.length + " spam/attack messages?")) delKeys(junk);
+  });
+  $("#list").addEventListener("click", e => {
+    const b = e.target.closest(".del"); if (!b) return;
+    const key = b.closest(".fb").dataset.key;
+    if (key && confirm("Delete this message?")) delKeys([key]);
+  });
   $("#search").addEventListener("input", render);
   $("#tok").addEventListener("keydown", e => { if (e.key === "Enter") load(); });
 
