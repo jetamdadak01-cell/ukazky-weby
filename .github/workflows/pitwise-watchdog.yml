@@ -28,7 +28,7 @@ jobs:
           ALWAYS: ${{ inputs.always && '1' || '' }}
         run: |
           if [ -z "$TOKEN" ]; then
-            echo "::error::Chybi secret PITWISE_ADMIN_TOKEN"; exit 1
+            echo "::warning::Secret PITWISE_ADMIN_TOKEN neni nastaveny - hlidac preskocen (vse je videt i na pitwise.net/admin)."; exit 0
           fi
           URL="https://pitwise.net/api/watchdog?token=$TOKEN"
           [ -n "$ALWAYS" ] && URL="$URL&always=1"
