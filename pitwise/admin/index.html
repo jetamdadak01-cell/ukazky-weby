@@ -4,132 +4,366 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
-<title>PitWise — Feedback admin</title>
+<title>PitWise — admin</title>
 <style>
-  :root{--bg:#0b0e14;--card:#161b27;--line:#232a3a;--txt:#e6ebf5;--muted:#9aa6bd;--accent:#22e584;--amber:#ffcf5c;--red:#ff6b6b;}
+  :root{--bg:#0b0e14;--card:#161b27;--line:#232a3a;--txt:#e6ebf5;--muted:#9aa6bd;--accent:#22e584;--amber:#ffcf5c;--red:#ff6b6b;--blue:#3aa0ff;}
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--txt);line-height:1.55;padding:24px}
-  .wrap{max-width:820px;margin:0 auto}
+  .wrap{max-width:900px;margin:0 auto}
   h1{font-size:1.4rem;display:flex;align-items:center;gap:10px;margin-bottom:4px}
   h1 .g{color:var(--accent)}
   .sub{color:var(--muted);font-size:.9rem;margin-bottom:20px}
-  .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:20px}
-  input{background:var(--card);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:10px 12px;font-size:.95rem}
+  .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+  input,select,textarea{background:var(--card);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:10px 12px;font-size:.95rem;font-family:inherit}
   input#tok{flex:1;min-width:200px}
   button{background:var(--accent);color:#04140b;border:0;border-radius:8px;padding:10px 18px;font-weight:700;cursor:pointer;font-size:.95rem}
   button.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+  button.ghost:hover{border-color:var(--muted)}
+  button.danger{background:var(--red);color:#2a0707}
+  button.small{padding:5px 11px;font-size:.82rem}
+  .tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:18px;flex-wrap:wrap}
+  .tabs button{background:transparent;color:var(--muted);border:0;border-bottom:2px solid transparent;border-radius:0;padding:10px 14px;font-weight:600}
+  .tabs button.on{color:var(--accent);border-bottom-color:var(--accent)}
+  .tabs .badge{display:inline-block;background:var(--red);color:#2a0707;border-radius:999px;padding:0 7px;font-size:.72rem;margin-left:6px;font-weight:800}
   .stat{color:var(--muted);font-size:.9rem;margin-bottom:14px}
   .stat b{color:var(--txt)}
-  .fb{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:12px}
-  .fb .meta{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:.8rem;margin-bottom:8px}
-  .fb .meta .em{color:var(--accent)}
-  .fb .msg{white-space:pre-wrap;font-size:.98rem}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:12px;position:relative}
+  .meta{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:.8rem;margin-bottom:8px;align-items:center}
+  .meta .em{color:var(--accent)}
+  .msg{white-space:pre-wrap;font-size:.98rem}
   .chip{border:1px solid var(--line);border-radius:999px;padding:2px 9px}
   .chip.sus{border-color:var(--red);color:var(--red);font-weight:700}
-  .err{color:var(--red)} .ok{color:var(--accent)}
+  .pill{border-radius:999px;padding:2px 10px;font-size:.78rem;font-weight:800;letter-spacing:.3px}
+  .pill.refunded{background:rgba(34,229,132,.15);color:var(--accent)}
+  .pill.pending{background:rgba(255,207,92,.15);color:var(--amber)}
+  .pill.dry{background:rgba(58,160,255,.15);color:var(--blue)}
+  .pill.failed{background:rgba(255,107,107,.18);color:var(--red)}
+  .pill.denied,.pill.already{background:rgba(154,166,189,.15);color:var(--muted)}
+  .err{color:var(--red)} .ok{color:var(--accent)} .warn{color:var(--amber)}
   .empty{color:var(--muted);text-align:center;padding:40px 0}
   .search{margin-bottom:14px;width:100%}
-  .fb{position:relative}
   .del{position:absolute;top:10px;right:12px;background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:6px;padding:2px 8px;font-size:.8rem;cursor:pointer}
   .del:hover{border-color:var(--red);color:var(--red)}
+  .log{font-family:ui-monospace,Consolas,monospace;font-size:.78rem;color:var(--muted);white-space:pre-wrap;margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+  .acts{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .cfg{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:16px}
+  .cfg .row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+  .cfg label{display:block;font-size:.78rem;color:var(--muted);margin-bottom:4px}
+  .cfg input{width:110px}
+  .mode{font-weight:800}
+  .mode.live{color:var(--red)} .mode.dry{color:var(--blue)} .mode.off{color:var(--muted)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .kpi .n{font-size:1.5rem;font-weight:800}
+  .kpi .l{font-size:.76rem;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+  table{width:100%;border-collapse:collapse;font-size:.88rem}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.4px}
+  tr.refunded td{opacity:.5;text-decoration:line-through}
+  .hide{display:none}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>Pit<span class="g">Wise</span> · Feedback admin</h1>
-  <p class="sub">Private dashboard — feedback submitted from the app lands here.</p>
+  <h1>Pit<span class="g">Wise</span> · admin</h1>
+  <p class="sub">Private dashboard — feedback, refunds, sales and errors from the app.</p>
 
   <div class="bar">
     <input id="tok" type="password" placeholder="Admin token" autocomplete="off">
     <button id="load">Load</button>
-    <button id="refresh" class="ghost">Refresh</button>
-    <button id="purge" class="ghost" style="display:none">Delete spam</button>
+    <button id="digest" class="ghost" title="Run the watchdog now (dry — sends nothing)">Run digest</button>
     <label style="color:var(--muted);font-size:.85rem;display:flex;gap:6px;align-items:center"><input type="checkbox" id="remember" style="width:auto"> remember</label>
   </div>
 
+  <div class="tabs" id="tabs">
+    <button data-t="fb" class="on">Feedback <span class="badge hide" id="b-fb"></span></button>
+    <button data-t="rf">Refunds <span class="badge hide" id="b-rf"></span></button>
+    <button data-t="sl">Sales</button>
+    <button data-t="er">Errors</button>
+  </div>
+
   <div id="status" class="stat"></div>
-  <input id="search" class="search" placeholder="Filter messages…" style="display:none">
-  <div id="list"></div>
+
+  <!-- ================= FEEDBACK ================= -->
+  <div id="tab-fb">
+    <div class="bar">
+      <input id="search" class="search" placeholder="Filter messages…">
+      <button id="purge" class="ghost hide">Delete spam</button>
+    </div>
+    <div id="fbList"></div>
+  </div>
+
+  <!-- ================= REFUNDS ================= -->
+  <div id="tab-rf" class="hide">
+    <div class="cfg">
+      <div class="row">
+        <div>
+          <label>Mode</label>
+          <select id="c-mode">
+            <option value="off">off — queue only</option>
+            <option value="dry">dry — simulate, no money</option>
+            <option value="live">live — really refund</option>
+          </select>
+        </div>
+        <div><label>Window (days)</label><input id="c-win" type="number" min="0" max="3650"></div>
+        <div><label>Max per refund (cents)</label><input id="c-max" type="number" min="0"></div>
+        <div><label>Max per 24 h</label><input id="c-cap" type="number" min="0" max="100"></div>
+        <button id="c-save">Save</button>
+      </div>
+      <p class="stat" style="margin:12px 0 0" id="c-info"></p>
+    </div>
+    <div id="rfList"></div>
+  </div>
+
+  <!-- ================= SALES ================= -->
+  <div id="tab-sl" class="hide">
+    <div class="grid" id="slKpi"></div>
+    <div id="slList"></div>
+  </div>
+
+  <!-- ================= ERRORS ================= -->
+  <div id="tab-er" class="hide">
+    <div class="grid" id="erKpi"></div>
+    <input id="erSearch" class="search" placeholder="Filter error lines…">
+    <div id="erList"></div>
+  </div>
 </div>
 
 <script>
-  const $ = (s) => document.querySelector(s);
-  const API = "/api/feedback";
-  let ITEMS = [];
+  var $ = function(s){ return document.querySelector(s); };
+  var D = { fb: [], rf: null, sl: null, er: [] };
+  var TAB = "fb";
 
+  function tok(){ return $("#tok").value.trim(); }
+  function esc(s){ return (s||"").toString().replace(/[&<>]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]; }); }
   function fmtDate(ts){ try { return new Date(ts).toLocaleString(); } catch(e){ return ""; } }
-  function esc(s){ return (s||"").replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+  function money(c, cur){ return ((c||0)/100).toFixed(2) + " " + (cur||""); }
 
-  function render(){
-    const q = ($("#search").value || "").toLowerCase();
-    const rows = ITEMS.filter(it => !q || (it.message||"").toLowerCase().includes(q) || (it.email||"").toLowerCase().includes(q));
-    if (!rows.length){ $("#list").innerHTML = '<div class="empty">No feedback' + (ITEMS.length ? ' matches your filter.' : ' yet.') + '</div>'; return; }
-    $("#list").innerHTML = rows.map(it => `
-      <div class="fb" data-key="${esc(it._key||'')}">
-        <button class="del" title="Delete">✕</button>
-        <div class="meta">
-          <span>${fmtDate(it.ts)}</span>
-          ${it.email ? `<span class="em">${esc(it.email)}</span>` : '<span>no email</span>'}
-          ${it.country ? `<span class="chip">${esc(it.country)}</span>` : ''}
-          ${it.ver ? `<span class="chip">v${esc(it.ver)}</span>` : ''}
-          ${it.sus ? '<span class="chip sus">⚠ attack payload</span>' : ''}
-        </div>
-        <div class="msg">${esc(it.message)}</div>
-      </div>`).join("");
+  async function api(path, opts){
+    var sep = path.indexOf("?") >= 0 ? "&" : "?";
+    var r = await fetch(path + sep + "token=" + encodeURIComponent(tok()), opts || {});
+    var d = await r.json().catch(function(){ return { ok:false, error:"bad json" }; });
+    return { http: r.status, d: d };
   }
 
+  /* ---------------- FEEDBACK ---------------- */
   function isJunk(it){
-    const m = (it.message||"").trim();
+    var m = (it.message||"").trim();
     return it.sus || m === "test" || /<script|onerror\s*=|<img\b|<svg\b|javascript:|document\.cookie|localStorage/i.test(m);
   }
-
-  async function delKeys(keys){
-    const tok = $("#tok").value.trim();
-    if (!tok || !keys.length) return;
-    for (let i = 0; i < keys.length; i += 50){
-      const batch = keys.slice(i, i + 50);
-      await fetch(API + "?token=" + encodeURIComponent(tok) + "&keys=" + encodeURIComponent(batch.join(",")), { method: "DELETE" });
+  function renderFb(){
+    var q = ($("#search").value || "").toLowerCase();
+    var rows = D.fb.filter(function(it){ return !q || (it.message||"").toLowerCase().indexOf(q) >= 0 || (it.email||"").toLowerCase().indexOf(q) >= 0; });
+    $("#purge").classList.toggle("hide", !D.fb.some(isJunk));
+    if (!rows.length){ $("#fbList").innerHTML = '<div class="empty">No feedback' + (D.fb.length ? ' matches your filter.' : ' yet.') + '</div>'; return; }
+    $("#fbList").innerHTML = rows.map(function(it){
+      return '<div class="card" data-key="' + esc(it._key||'') + '">' +
+        '<button class="del" title="Delete">✕</button>' +
+        '<div class="meta"><span>' + fmtDate(it.ts) + '</span>' +
+        (it.email ? '<span class="em">' + esc(it.email) + '</span>' : '<span>no email</span>') +
+        (it.country ? '<span class="chip">' + esc(it.country) + '</span>' : '') +
+        (it.ver ? '<span class="chip">v' + esc(it.ver) + '</span>' : '') +
+        (it.sus ? '<span class="chip sus">⚠ attack payload</span>' : '') +
+        '</div><div class="msg">' + esc(it.message) + '</div></div>';
+    }).join("");
+  }
+  async function delFb(keys){
+    if (!keys.length) return;
+    for (var i = 0; i < keys.length; i += 50){
+      await api("/api/feedback?keys=" + encodeURIComponent(keys.slice(i, i+50).join(",")), { method: "DELETE" });
     }
-    ITEMS = ITEMS.filter(it => !keys.includes(it._key));
-    $("#status").innerHTML = '<b>' + ITEMS.length + '</b> messages';
-    $("#purge").style.display = ITEMS.some(isJunk) ? "inline-block" : "none";
-    render();
+    D.fb = D.fb.filter(function(it){ return keys.indexOf(it._key) < 0; });
+    renderFb(); counts();
+  }
+
+  /* ---------------- REFUNDS ---------------- */
+  function renderRf(){
+    var r = D.rf;
+    if (!r){ $("#rfList").innerHTML = '<div class="empty">Not loaded.</div>'; return; }
+    var c = r.cfg || {};
+    $("#c-mode").value = c.mode || "dry";
+    $("#c-win").value = c.windowDays; $("#c-max").value = c.maxCents; $("#c-cap").value = c.dailyCap;
+    var procs = [];
+    if (r.processors && r.processors.stripe) procs.push("Stripe");
+    if (r.processors && r.processors.paypal) procs.push("PayPal");
+    $("#c-info").innerHTML =
+      'Mode <span class="mode ' + esc(c.mode) + '">' + esc((c.mode||"").toUpperCase()) + '</span> · ' +
+      'processors: <b>' + (procs.length ? procs.join(" + ") : '<span class="err">none configured — money cannot move</span>') + '</b> · ' +
+      'auto-refunded in last 24 h: <b>' + (r.refunded24h||0) + '</b>' +
+      (c.mode === "live" ? ' · <span class="warn">live mode really sends money</span>' : '');
+
+    if (!r.items || !r.items.length){ $("#rfList").innerHTML = '<div class="empty">No refund requests.</div>'; return; }
+    $("#rfList").innerHTML = r.items.map(function(t){
+      var act = "";
+      if (t.status === "pending" || t.status === "dry" || t.status === "failed")
+        act += '<button class="small" data-a="approve" data-k="' + esc(t._key) + '">Refund now</button>';
+      if (t.status !== "denied")
+        act += '<button class="small ghost" data-a="deny" data-k="' + esc(t._key) + '">Deny</button>';
+      act += '<button class="small ghost" data-a="delete" data-k="' + esc(t._key) + '">Delete</button>';
+      return '<div class="card">' +
+        '<div class="meta">' +
+          '<span class="pill ' + esc(t.status) + '">' + esc(t.status) + '</span>' +
+          '<span>' + fmtDate(t.ts) + '</span>' +
+          '<span class="em">' + esc(t.email) + '</span>' +
+          (t.country ? '<span class="chip">' + esc(t.country) + '</span>' : '') +
+          '<span class="chip">key ' + esc(t.key) + '</span>' +
+          (t.amountCents ? '<span class="chip">' + money(t.amountCents, t.currency) + (t.processor ? ' · ' + esc(t.processor) : '') + '</span>' : '') +
+        '</div>' +
+        '<div class="msg">' + (t.reason ? esc(t.reason) : '<span style="color:var(--muted)">no reason given</span>') + '</div>' +
+        '<div class="log">' + esc((t.log||[]).join("\n")) + '</div>' +
+        '<div class="acts">' + act + '</div></div>';
+    }).join("");
+  }
+
+  /* ---------------- SALES ---------------- */
+  function renderSl(){
+    var s = D.sl;
+    if (!s || !s.items){ $("#slList").innerHTML = '<div class="empty">Nothing yet — sales only appear here after the Payhip webhook is set up.</div>'; $("#slKpi").innerHTML = ""; return; }
+    var live = s.items.filter(function(x){ return !x.refundedAt; });
+    var gross = live.reduce(function(a, x){ return a + (x.price||0); }, 0);
+    var back = s.items.filter(function(x){ return x.refundedAt; }).reduce(function(a, x){ return a + (x.refundedCents||0); }, 0);
+    var cur = (s.items[0] && s.items[0].currency) || "";
+    var rate = s.count ? Math.round(s.refunded / s.count * 100) : 0;
+    $("#slKpi").innerHTML =
+      kpi(s.count, "sales") + kpi(money(gross, cur), "kept") +
+      kpi(s.refunded, "refunded") + kpi(rate + " %", "refund rate") + kpi(money(back, cur), "given back");
+    $("#slList").innerHTML = '<table><tr><th>date</th><th>email</th><th>amount</th><th>via</th><th>state</th></tr>' +
+      s.items.slice(0, 300).map(function(x){
+        return '<tr class="' + (x.refundedAt ? 'refunded' : '') + '"><td>' + fmtDate(x.date) + '</td><td>' + esc(x.email) + '</td>' +
+          '<td>' + money(x.price, x.currency) + '</td><td>' + esc(x.paymentType||"") + '</td>' +
+          '<td>' + (x.refundedAt ? 'refunded ' + esc(x.refundVia||"") : 'ok') + '</td></tr>';
+      }).join("") + '</table>';
+  }
+  function kpi(n, l){ return '<div class="kpi"><div class="n">' + esc(n) + '</div><div class="l">' + esc(l) + '</div></div>'; }
+
+  /* ---------------- ERRORS ---------------- */
+  // stejne kategorie jako hlidac v /api/watchdog - at admin i Discord mluvi stejnou reci
+  var CATS = [
+    ["microphone",  /\b(mic|ptt|whisper|wavein|mic-open|mic-format|silent|empty)\b/i],
+    ["antivirus",   /(antivir|defender|zasada rizeni|application control|blocked by|quarantin)/i],
+    ["ai key",      /(api_key_invalid|invalid.?api.?key|401|403|quota|429|billing)/i],
+    ["ai server",   /(503|502|overload|unavailable|timeout|deadline)/i],
+    ["voice",       /(piper|eleven|tts|voice|speak|audio|wasapi|winmm)/i],
+    ["update",      /(update|download|0xc0000142|unzip|zip|manifest)/i],
+    ["telemetry",   /(shared ?memory|acpmf|rfactor|rf2|iracing|lmu|plugin|telemetr)/i],
+    ["wheel",       /(rawinput|joystick|wheel|hid|bind)/i]
+  ];
+  function classify(s){ for (var i=0;i<CATS.length;i++) if (CATS[i][1].test(s)) return CATS[i][0]; return "other"; }
+  function renderEr(){
+    var q = ($("#erSearch").value || "").toLowerCase();
+    var lines = [];
+    D.er.forEach(function(b){
+      (b.items||[]).forEach(function(it){
+        var txt = (it.src ? it.src + ": " : "") + (it.msg||"");
+        lines.push({ ts: b.ts, ver: b.ver, aid: b.aid, country: b.country, txt: txt, cat: classify(txt) });
+      });
+    });
+    var cats = {}, ppl = {};
+    lines.forEach(function(l){ cats[l.cat] = (cats[l.cat]||0)+1; (ppl[l.cat] = ppl[l.cat] || {})[l.aid] = 1; });
+    $("#erKpi").innerHTML = Object.keys(cats).sort(function(a,b){ return cats[b]-cats[a]; })
+      .map(function(c){ return kpi(cats[c] + " / " + Object.keys(ppl[c]).length, c + " · lines / people"); }).join("");
+    var rows = lines.filter(function(l){ return !q || l.txt.toLowerCase().indexOf(q) >= 0 || (l.ver||"").indexOf(q) >= 0; }).slice(0, 400);
+    if (!rows.length){ $("#erList").innerHTML = '<div class="empty">No errors' + (lines.length ? ' match your filter.' : ' logged.') + '</div>'; return; }
+    $("#erList").innerHTML = '<table><tr><th>when</th><th>cat</th><th>ver</th><th>who</th><th>message</th></tr>' +
+      rows.map(function(l){
+        return '<tr><td>' + fmtDate(l.ts) + '</td><td>' + esc(l.cat) + '</td><td>' + esc(l.ver||"") + '</td>' +
+          '<td>' + esc((l.aid||"").slice(0,6)) + (l.country ? " " + esc(l.country) : "") + '</td>' +
+          '<td>' + esc(l.txt) + '</td></tr>';
+      }).join("") + '</table>';
+  }
+
+  /* ---------------- spolecne ---------------- */
+  function counts(){
+    var nf = D.fb.filter(isJunk).length;
+    setBadge("b-fb", nf);
+    setBadge("b-rf", D.rf ? D.rf.pending : 0);
+  }
+  function setBadge(id, n){
+    var el = $("#" + id);
+    el.textContent = n || "";
+    el.classList.toggle("hide", !n);
+  }
+  function showTab(t){
+    TAB = t;
+    ["fb","rf","sl","er"].forEach(function(x){ $("#tab-" + x).classList.toggle("hide", x !== t); });
+    Array.prototype.forEach.call(document.querySelectorAll(".tabs button"), function(b){ b.classList.toggle("on", b.dataset.t === t); });
   }
 
   async function load(){
-    const tok = $("#tok").value.trim();
-    if (!tok){ $("#status").innerHTML = '<span class="err">Enter your admin token.</span>'; return; }
-    if ($("#remember").checked) localStorage.setItem("pw_admin_tok", tok); else localStorage.removeItem("pw_admin_tok");
+    if (!tok()){ $("#status").innerHTML = '<span class="err">Enter your admin token.</span>'; return; }
+    if ($("#remember").checked) localStorage.setItem("pw_admin_tok", tok()); else localStorage.removeItem("pw_admin_tok");
     $("#status").textContent = "Loading…";
     try {
-      const r = await fetch(API + "?token=" + encodeURIComponent(tok));
-      const d = await r.json();
-      if (!r.ok || !d.ok){ $("#status").innerHTML = '<span class="err">' + (d.error === "unauthorized" ? "Wrong token." : ("Error: " + (d.error||r.status))) + '</span>'; return; }
-      ITEMS = d.items || [];
-      $("#status").innerHTML = '<b>' + ITEMS.length + '</b> messages';
-      $("#search").style.display = ITEMS.length ? "block" : "none";
-      $("#purge").style.display = ITEMS.some(isJunk) ? "inline-block" : "none";
-      render();
+      var res = await Promise.all([api("/api/feedback"), api("/api/refund"), api("/api/payhip-hook"), api("/api/errlog")]);
+      if (res[0].d && res[0].d.error === "unauthorized"){ $("#status").innerHTML = '<span class="err">Wrong token.</span>'; return; }
+      D.fb = (res[0].d && res[0].d.items) || [];
+      D.rf = res[1].d && res[1].d.ok ? res[1].d : null;
+      D.sl = res[2].d && res[2].d.ok ? res[2].d : null;
+      D.er = (res[3].d && res[3].d.items) || [];
+      var bits = [
+        '<b>' + D.fb.length + '</b> feedback',
+        '<b>' + (D.rf ? D.rf.count : 0) + '</b> refund requests' + (D.rf && D.rf.pending ? ' (<span class="warn">' + D.rf.pending + ' waiting</span>)' : ''),
+        '<b>' + (D.sl ? D.sl.count : 0) + '</b> sales',
+        '<b>' + D.er.length + '</b> error batches'
+      ];
+      $("#status").innerHTML = bits.join(" · ");
+      renderFb(); renderRf(); renderSl(); renderEr(); counts();
     } catch(e){
       $("#status").innerHTML = '<span class="err">Could not reach the API. Is this running on Cloudflare (not GitHub Pages)?</span>';
     }
   }
 
+  /* ---------------- udalosti ---------------- */
   $("#load").addEventListener("click", load);
-  $("#refresh").addEventListener("click", load);
-  $("#purge").addEventListener("click", () => {
-    const junk = ITEMS.filter(isJunk).map(it => it._key).filter(Boolean);
-    if (junk.length && confirm("Delete " + junk.length + " spam/attack messages?")) delKeys(junk);
-  });
-  $("#list").addEventListener("click", e => {
-    const b = e.target.closest(".del"); if (!b) return;
-    const key = b.closest(".fb").dataset.key;
-    if (key && confirm("Delete this message?")) delKeys([key]);
-  });
-  $("#search").addEventListener("input", render);
-  $("#tok").addEventListener("keydown", e => { if (e.key === "Enter") load(); });
+  $("#tabs").addEventListener("click", function(e){ var b = e.target.closest("button[data-t]"); if (b) showTab(b.dataset.t); });
+  $("#search").addEventListener("input", renderFb);
+  $("#erSearch").addEventListener("input", renderEr);
+  $("#tok").addEventListener("keydown", function(e){ if (e.key === "Enter") load(); });
 
-  const saved = localStorage.getItem("pw_admin_tok");
+  $("#purge").addEventListener("click", function(){
+    var junk = D.fb.filter(isJunk).map(function(it){ return it._key; }).filter(Boolean);
+    if (junk.length && confirm("Delete " + junk.length + " spam/attack messages?")) delFb(junk);
+  });
+  $("#fbList").addEventListener("click", function(e){
+    var b = e.target.closest(".del"); if (!b) return;
+    var key = b.closest(".card").dataset.key;
+    if (key && confirm("Delete this message?")) delFb([key]);
+  });
+
+  $("#rfList").addEventListener("click", async function(e){
+    var b = e.target.closest("button[data-a]"); if (!b) return;
+    var a = b.dataset.a, k = b.dataset.k;
+    if (a === "approve" && !confirm("Refund this one NOW? Real money leaves your account.")) return;
+    if (a === "delete" && !confirm("Delete this ticket? (does not undo a refund)")) return;
+    b.disabled = true; b.textContent = "…";
+    var r = await api("/api/refund?action=" + a + "&id=" + encodeURIComponent(k), { method: "PUT" });
+    if (!r.d.ok) alert("Failed: " + (r.d.error || r.http));
+    else if (a === "approve" && r.d.status !== "refunded") alert("Result: " + r.d.status + "\n\n" + (r.d.log||[]).slice(-3).join("\n"));
+    load();
+  });
+
+  $("#c-save").addEventListener("click", async function(){
+    var mode = $("#c-mode").value;
+    if (mode === "live" && !confirm("LIVE mode means PitWise will send real money back on its own, without asking you.\n\nOnly switch this on once a dry run showed the payment matching is correct. Continue?")) return;
+    var r = await api("/api/refund?action=config", {
+      method: "PUT", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mode: mode, windowDays: +$("#c-win").value, maxCents: +$("#c-max").value, dailyCap: +$("#c-cap").value })
+    });
+    if (!r.d.ok) alert("Save failed: " + (r.d.error || r.http)); else load();
+  });
+
+  $("#digest").addEventListener("click", async function(){
+    var r = await api("/api/watchdog?dry=1");
+    if (!r.d.ok) { alert("Watchdog: " + (r.d.error || r.http)); return; }
+    var d = r.d;
+    alert("Since " + d.windowFrom.slice(0,16).replace("T"," ") + ":\n\n" +
+      "errors: " + d.errors + "\n" + JSON.stringify(d.byCategory) + "\n\n" +
+      "feedback: " + d.feedback + "\nsales: " + d.sales + "\nrefunds waiting: " + d.refunds.pending +
+      (d.newCategories.length ? "\n\nNEW ERROR TYPE: " + d.newCategories.join(", ") : "") +
+      (d.spikes.length ? "\nSPIKE: " + d.spikes.join(", ") : ""));
+  });
+
+  var saved = localStorage.getItem("pw_admin_tok");
   if (saved){ $("#tok").value = saved; $("#remember").checked = true; load(); }
 </script>
 </body>

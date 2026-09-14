@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PitWise — Refund</title>
+<meta name="description" content="Ask for your PitWise refund here. 14 days, no questions.">
+<meta name="robots" content="noindex">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160"><rect x="2" y="2" width="156" height="156" rx="34" fill="%230e1016"/><circle cx="73" cy="94" r="10" fill="%2334e284"/></svg>'>
+<style>
+  :root{--bg:#0b0e14;--card:#161b27;--line:#232a3a;--txt:#e6ebf5;--muted:#9aa6bd;--accent:#22e584;--amber:#ffcf5c;--red:#ff6b6b;--radius:14px}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:
+    radial-gradient(900px 500px at 0% 10%,rgba(34,229,132,.08),transparent),var(--bg);
+    color:var(--txt);line-height:1.6;padding:40px 20px}
+  .wrap{max-width:560px;margin:0 auto}
+  h1{font-size:1.8rem;letter-spacing:-.5px;margin-bottom:10px}
+  h1 .g{color:var(--accent)}
+  .lead{color:var(--muted);margin-bottom:26px}
+  form{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+  label{display:block;font-size:.85rem;color:var(--muted);margin:14px 0 6px}
+  label:first-of-type{margin-top:0}
+  input,textarea{width:100%;background:#0e131d;border:1px solid var(--line);color:var(--txt);
+    border-radius:10px;padding:12px 14px;font-size:.98rem;font-family:inherit}
+  input:focus,textarea:focus{outline:none;border-color:var(--accent)}
+  textarea{min-height:84px;resize:vertical}
+  .why{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .why button{background:transparent;border:1px solid var(--line);color:var(--muted);
+    border-radius:999px;padding:6px 12px;font-size:.82rem;cursor:pointer}
+  .why button:hover,.why button.on{border-color:var(--accent);color:var(--accent)}
+  .go{width:100%;margin-top:20px;background:linear-gradient(135deg,var(--accent),#12b46a);color:#04140b;
+    border:0;border-radius:12px;padding:15px;font-weight:800;font-size:1.02rem;cursor:pointer}
+  .go[disabled]{opacity:.55;cursor:default}
+  .note{color:var(--muted);font-size:.82rem;margin-top:14px}
+  .out{margin-top:18px;border-radius:var(--radius);padding:18px;display:none;border:1px solid var(--line)}
+  .out.ok{display:block;border-color:var(--accent);background:rgba(34,229,132,.07)}
+  .out.wait{display:block;border-color:var(--amber);background:rgba(255,207,92,.07)}
+  .out.bad{display:block;border-color:var(--red);background:rgba(255,107,107,.07)}
+  .out b{display:block;margin-bottom:6px;font-size:1.05rem}
+  a{color:var(--accent)}
+  footer{text-align:center;color:var(--muted);font-size:.85rem;margin-top:30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Pit<span class="g">Wise</span> — refund</h1>
+  <p class="lead">Within 14 days of buying, you get your money back. No questions asked — this form is just faster than email.</p>
+
+  <form id="f">
+    <label for="key">License key (from your Payhip receipt)</label>
+    <input id="key" autocomplete="off" spellcheck="false" placeholder="XXXXX-XXXXX-XXXXX-XXXXX" required>
+
+    <label for="email">E-mail you bought with</label>
+    <input id="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+
+    <label for="reason">What went wrong? (optional, but it genuinely helps me fix it)</label>
+    <div class="why" id="why">
+      <button type="button" data-w="The engineer does not hear me / microphone">Mic doesn't work</button>
+      <button type="button" data-w="No sound / the engineer stays silent">No voice</button>
+      <button type="button" data-w="My game is not detected">Game not detected</button>
+      <button type="button" data-w="Antivirus blocks it">Antivirus</button>
+      <button type="button" data-w="Not what I expected">Not for me</button>
+    </div>
+    <textarea id="reason" placeholder="Anything else…"></textarea>
+
+    <button class="go" id="go" type="submit">Request refund</button>
+    <p class="note">Your license key is switched off when the refund goes through — the app keeps running but stops getting updates.</p>
+  </form>
+
+  <div class="out" id="out"></div>
+
+  <footer>Rather talk to a human? <a href="mailto:weby.dadak@gmail.com">weby.dadak@gmail.com</a> · <a href="/">back to PitWise</a></footer>
+</div>
+
+<script>
+  var $ = function(s){ return document.querySelector(s); };
+
+  // rychle duvody: klik prida vetu do textarea (a zvyrazni se), dalsi klik ji odebere
+  $("#why").addEventListener("click", function(e){
+    var b = e.target.closest("button"); if (!b) return;
+    var ta = $("#reason"), w = b.dataset.w;
+    if (b.classList.contains("on")) {
+      b.classList.remove("on");
+      ta.value = ta.value.replace(w + ". ", "").replace(w, "").trim();
+    } else {
+      b.classList.add("on");
+      ta.value = (ta.value ? ta.value.trim() + " " : "") + w + ". ";
+    }
+  });
+
+  function show(cls, title, text){
+    var o = $("#out");
+    o.className = "out " + cls;
+    o.innerHTML = "<b></b><span></span>";
+    o.querySelector("b").textContent = title;
+    o.querySelector("span").textContent = text;
+  }
+
+  $("#f").addEventListener("submit", async function(e){
+    e.preventDefault();
+    var btn = $("#go");
+    btn.disabled = true; btn.textContent = "Working…";
+    try {
+      var r = await fetch("/api/refund", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          key: $("#key").value.trim(),
+          email: $("#email").value.trim(),
+          reason: $("#reason").value.trim()
+        })
+      });
+      var d = await r.json();
+      if (d.status === "refunded")            show("ok",   "Refunded.", d.message);
+      else if (d.status === "already_refunded") show("ok", "Already refunded.", d.message);
+      else if (d.ok)                          show("wait", "Request received.", d.message);
+      else if (r.status === 429)              show("bad",  "Too many requests.", "Try again tomorrow, or just email me.");
+      else                                    show("bad",  "That didn't work.", d.error || "Please email weby.dadak@gmail.com and I'll sort it out by hand.");
+    } catch (err) {
+      show("bad", "Could not reach the server.", "Please email weby.dadak@gmail.com and I'll sort it out by hand.");
+    }
+    btn.disabled = false; btn.textContent = "Request refund";
+  });
+</script>
+</body>
+</html>

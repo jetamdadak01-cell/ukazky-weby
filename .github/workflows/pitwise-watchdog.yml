@@ -1,0 +1,43 @@
+name: PitWise hlidac (denni hlaseni)
+
+# Cloudflare Pages Functions umi reagovat jen na HTTP pozadavek - cas jim nikdo nehlida.
+# Proto tenhle cron: jednou denne zavola /api/watchdog, ktery porovna dnesek s minulym behem
+# a posle rozdil do Discordu (novy druh chyby, skok, cekajici refundy, feedback, prodeje).
+#
+# POTREBUJE JEDEN SECRET v repu (Settings > Secrets and variables > Actions):
+#   PITWISE_ADMIN_TOKEN  = stejny token jako ADMIN_TOKEN v Cloudflare Pages
+# Discord webhook si drzi Cloudflare (promenna DISCORD_WEBHOOK) - tady o nem nic nevime.
+
+on:
+  schedule:
+    - cron: '0 6 * * *'      # 06:00 UTC = 08:00 v lete / 07:00 v zime
+  workflow_dispatch:
+    inputs:
+      always:
+        description: 'Poslat hlaseni i kdyz se nic noveho nestalo'
+        type: boolean
+        default: true
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Zavolat hlidace
+        env:
+          TOKEN: ${{ secrets.PITWISE_ADMIN_TOKEN }}
+          ALWAYS: ${{ inputs.always && '1' || '' }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::Chybi secret PITWISE_ADMIN_TOKEN"; exit 1
+          fi
+          URL="https://pitwise.net/api/watchdog?token=$TOKEN"
+          [ -n "$ALWAYS" ] && URL="$URL&always=1"
+          # -sS = tise, ale chyby ukaz; telo ulozime a vypiseme (secret v nem neni)
+          CODE=$(curl -sS -o out.json -w '%{http_code}' --max-time 60 "$URL")
+          echo "HTTP $CODE"
+          # hlaseni do logu behu, at je videt i bez Discordu
+          head -c 4000 out.json || true
+          echo
+          if [ "$CODE" != "200" ]; then
+            echo "::error::Hlidac vratil HTTP $CODE"; exit 1
+          fi
