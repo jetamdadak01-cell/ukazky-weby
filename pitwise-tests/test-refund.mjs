@@ -24,7 +24,8 @@ let W = {};
 function world(over = {}) {
   W = Object.assign({
     licenseEnabled: true, licenseKnown: true,
-    charges: [{ id: "ch_1", amount: 399, currency: "eur", status: "succeeded", refunded: false, amount_refunded: 0, paid: true, billing_details: { email: "a@b.com" } }],
+    charges: [{ id: "ch_1", amount: 399, currency: "eur", status: "succeeded", refunded: false, amount_refunded: 0, paid: true, created: Math.floor((Date.now() - 2 * 86400000) / 1000), billing_details: { email: "a@b.com" } }],
+    customers: [],
     refundFails: false,
     calls: [],
   }, over);
@@ -36,7 +37,8 @@ function world(over = {}) {
     }
     if (u.includes("/license/disable")) { W.licenseEnabled = false; return J({ ok: true }); }
     if (u.includes("/license/enable")) { W.licenseEnabled = true; return J({ ok: true }); }
-    if (u.includes("/v1/charges/search") || u.includes("/v1/customers/search")) return J({ data: [] });
+    if (u.includes("/v1/customers/search")) return J({ data: W.customers });
+    if (u.includes("/v1/charges/search")) return J({ data: [] });
     if (u.includes("/v1/charges")) return J({ data: W.charges, has_more: false });
     if (u.includes("/v1/refunds")) {
       if (W.refundFails) return J({ error: { message: "charge already refunded" } }, 402);
@@ -216,6 +218,48 @@ console.log("\n14) Bez klice procesora se penize nikdy nepohnou");
   const t = (await tickets(kv))[0];
   ok(t.status === "pending", "pending");
   ok(/zadny klic procesora/.test(t.log.join(" ")), "log to rika narovinu");
+}
+
+console.log("\n15) BEZ zaznamu v knize: stari se vezme z data platby u Stripu");
+{
+  world({ customers: [{ id: "cus_1" }], charges: [{ id: "ch_5", amount: 399, currency: "eur", status: "succeeded", refunded: false, amount_refunded: 0, paid: true, created: 1789140554, billing_details: { email: "nova@b.com" } }] });
+  const kv = makeKV({ cfg_refund: JSON.stringify({ mode: "live", windowDays: 14 }) });
+  const d = await (await refund({ request: post({ key: "LIC-5", email: "nova@b.com" }), env: env(kv) })).json();
+  ok(d.status === "refunded", "vraceno i kdyz nakup v knize neni (" + d.status + ")");
+  const t = (await tickets(kv))[0];
+  ok(/stari overeno podle platby/.test(t.log.join(" ")), "log rika, ze stari vzal z platby");
+  ok(didRefund(), "refund odesel");
+}
+
+console.log("\n16) BEZ zaznamu v knize + stara platba: rucni fronta, zadne penize");
+{
+  world({ customers: [{ id: "cus_1" }], charges: [{ id: "ch_6", amount: 399, currency: "eur", status: "succeeded", refunded: false, amount_refunded: 0, paid: true, created: 1784215754, billing_details: { email: "stary@b.com" } }] });
+  const kv = makeKV({ cfg_refund: JSON.stringify({ mode: "live", windowDays: 14 }) });
+  await refund({ request: post({ key: "LIC-6", email: "stary@b.com" }), env: env(kv) });
+  const t = (await tickets(kv))[0];
+  ok(t.status === "pending", "pending (" + t.status + ")");
+  ok(!didRefund(), "zadny refund");
+  ok(/60 dni stara/.test(t.log.join(" ")), "log uvadi stari platby");
+}
+
+console.log("\n17) BEZ zaznamu v knize + platba bez data: rucni fronta");
+{
+  world({ customers: [{ id: "cus_1" }], charges: [{ id: "ch_7", amount: 399, currency: "eur", status: "succeeded", refunded: false, amount_refunded: 0, paid: true, billing_details: { email: "bezdata@b.com" } }] });
+  const kv = makeKV({ cfg_refund: JSON.stringify({ mode: "live", windowDays: 14 }) });
+  await refund({ request: post({ key: "LIC-7", email: "bezdata@b.com" }), env: env(kv) });
+  const t = (await tickets(kv))[0];
+  ok(t.status === "pending", "pending (" + t.status + ")");
+  ok(!didRefund(), "radeji nevrati nic, nez aby hadal stari");
+}
+
+console.log("\n18) BEZ zaznamu v knize: strop plati dal");
+{
+  world({ customers: [{ id: "cus_1" }], charges: [{ id: "ch_8", amount: 4900, currency: "eur", status: "succeeded", refunded: false, amount_refunded: 0, paid: true, created: 1789313354, billing_details: { email: "drahy@b.com" } }] });
+  const kv = makeKV({ cfg_refund: JSON.stringify({ mode: "live", windowDays: 14, maxCents: 600 }) });
+  await refund({ request: post({ key: "LIC-8", email: "drahy@b.com" }), env: env(kv) });
+  const t = (await tickets(kv))[0];
+  ok(t.status === "pending", "49 EUR nad stropem 6 EUR -> pending");
+  ok(!didRefund(), "zadny refund");
 }
 
 console.log("\n=================================");

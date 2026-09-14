@@ -200,6 +200,23 @@ async function processRefund(env, kv, t, sale, cfg, opts) {
   if (!pay) { t.status = "pending"; return; }
   t.log.push(stamp("platba nalezena: " + pay.processor + " " + pay.id + " " + fmtMoney(pay.amountCents, pay.currency) + " (" + pay.how + ")"));
 
+  // Nakup neni v knize -> stari se overuje TEDY, podle data nalezene platby.
+  // (Kdyz je v knize, stari uz overila policy() driv a sem se s tim nechodi.)
+  if (!sale && !opts.skipPolicy && cfg.windowDays > 0) {
+    if (!pay.created) {
+      t.status = "pending";
+      t.log.push(stamp("platba nema datum a v knize nakup neni -> stari nejde overit, rucni fronta"));
+      return;
+    }
+    const days = (Date.now() - pay.created) / 86400000;
+    if (days > cfg.windowDays) {
+      t.status = "pending";
+      t.log.push(stamp("platba je " + Math.round(days) + " dni stara (okno " + cfg.windowDays + " dni) -> rucni fronta"));
+      return;
+    }
+    t.log.push(stamp("stari overeno podle platby: " + Math.round(days) + " dni, veslo se do okna " + cfg.windowDays + " dni"));
+  }
+
   if (!opts.skipPolicy && cfg.maxCents > 0 && pay.amountCents > cfg.maxCents) {
     t.status = "pending";
     t.log.push(stamp("castka " + fmtMoney(pay.amountCents, pay.currency) + " je nad stropem " + (cfg.maxCents / 100).toFixed(2) + " -> rucni fronta"));
@@ -248,8 +265,12 @@ async function processRefund(env, kv, t, sale, cfg, opts) {
 }
 
 // Politika: co smi projit bez cloveka.
+// POZOR na navaznost: kdyz nakup NENI v knize (zakaznik koupil driv, nez zacal chodit webhook,
+// nebo webhook jeste neni nastaveny), NEVRACIME rovnou "ne" - stari se overi az podle data
+// platby u procesora (viz processRefund). Driv to koncilo tady a do rucni fronty tak padalo
+// UPLNE VSECHNO, dokud nebyla kniha plna = automatika fakticky nefungovala.
 function policy(sale, cfg) {
-  if (!sale) return { ok: false, why: "neznamy nakup (nejde overit stari)" };
+  if (!sale) return { ok: true, deferred: true };
   if (cfg.windowDays > 0) {
     const days = (Date.now() - (sale.date || 0)) / 86400000;
     if (days > cfg.windowDays) return { ok: false, why: "nakup je " + Math.round(days) + " dni stary (okno " + cfg.windowDays + ")" };
@@ -306,7 +327,7 @@ async function sGet(sk, path) {
 
 async function stripeFind(sk, email, aroundMs, log) {
   const em = (email || "").toLowerCase();
-  const hit = (c, how) => ({ processor: "stripe", id: c.id, amountCents: c.amount, currency: (c.currency || "").toUpperCase(), how });
+  const hit = (c, how) => ({ processor: "stripe", id: c.id, amountCents: c.amount, currency: (c.currency || "").toUpperCase(), created: (c.created || 0) * 1000, how });
 
   // A) zname datum nakupu -> vypis plateb v okne +-2 dny (spolehlive, bez vyhledavaciho indexu)
   if (aroundMs) {
@@ -400,6 +421,7 @@ async function paypalFind(env, email, aroundMs, log) {
     processor: "paypal", id: ti.transaction_id,
     amountCents: Math.round(Math.abs(parseFloat(ti.transaction_amount.value)) * 100),
     currency: (ti.transaction_amount.currency_code || "").toUpperCase(),
+    created: Date.parse(ti.transaction_initiation_date || ti.transaction_updated_date || "") || 0,
     how: "e-mail platce" + (aroundMs ? " + datum nakupu" : " (okno bez data nakupu)"),
   };
 }
