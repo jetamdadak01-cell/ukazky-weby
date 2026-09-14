@@ -58,6 +58,24 @@
   .langs .l-ico{font-size:1.6rem;line-height:1}
   .langs b{color:var(--txt)} .langs p{color:var(--muted);font-size:.95rem;margin-top:2px}
   .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+  .betakey{background:var(--card);border:2px solid var(--accent);border-radius:var(--radius);
+    padding:22px;max-width:720px;box-shadow:0 0 44px rgba(34,229,132,.14);text-align:center}
+  .betakey .k{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px}
+  .betakey code{display:block;font-family:ui-monospace,Consolas,monospace;font-weight:800;
+    color:var(--accent);font-size:clamp(1.1rem,4vw,1.8rem);letter-spacing:1px;margin:10px 0 4px;
+    word-break:break-all;cursor:pointer;user-select:all}
+  .betakey .warn{color:var(--amber);font-weight:700;font-size:.9rem}
+  .betakey button{margin-top:14px;background:var(--accent);color:#04140b;font-weight:800;
+    border:0;border-radius:10px;padding:11px 26px;font-size:.95rem;cursor:pointer;font-family:inherit}
+  .betakey button:hover{filter:brightness(1.08)}
+  .steps{list-style:none;counter-reset:st;max-width:720px;margin-top:22px}
+  .steps li{counter-increment:st;position:relative;padding:13px 0 13px 52px;color:var(--muted);
+    border-top:1px solid var(--line)}
+  .steps li:first-child{border-top:0}
+  .steps li b{color:var(--txt)}
+  .steps li::before{content:counter(st);position:absolute;left:0;top:11px;width:32px;height:32px;
+    border-radius:999px;background:var(--accent);color:#04140b;font-weight:800;
+    display:flex;align-items:center;justify-content:center;font-size:.95rem}
   .chip{font-size:.8rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:3px 11px}
   .buybox{max-width:460px;margin:0 auto;text-align:center;background:var(--card);
     border:1px solid var(--line);border-radius:var(--radius);padding:34px}
@@ -246,6 +264,45 @@
   </div>
 </section>
 
+<section id="beta">
+  <div class="wrap">
+    <h2>Already own PitWise? Drive the beta 🧪</h2>
+    <p class="lead">The beta is free for everyone who owns PitWise — it's where the next version gets tested before it reaches everybody. Right now I need one specific thing from it: <b>laps</b>.</p>
+
+    <div class="card" style="max-width:720px;margin-bottom:24px">
+      <h3>🏁 Why laps are the whole point</h3>
+      <p style="margin-bottom:12px">The beta learns <b>from the fastest clean lap on a track</b> and then coaches everyone else against it — corner by corner, in their own language. The record holder's line gets drawn on your map, and the corner breakdown starts saying <i>“vs the fastest community lap”</i> instead of “vs your best lap”.</p>
+      <p>That pool is brand new, and right now it is close to empty. A pool of one person is just you racing yourself. So every clean lap you set makes the engineer smarter for the next driver — and if you're the quick one, <b>your lap becomes the reference everybody else gets coached against</b>.</p>
+    </div>
+
+    <div class="betakey">
+      <div class="k">Beta key</div>
+      <code id="betaKey">PITWISE_BETA.TESTERS</code>
+      <div class="warn">All capitals — it is case sensitive</div>
+      <button id="copyBeta" type="button">Copy key</button>
+    </div>
+
+    <ol class="steps">
+      <li>Open PitWise and go to <b>Settings</b>.</li>
+      <li>Open the <b>App</b> tab and scroll down to the buttons.</li>
+      <li>Click <b>“Get the BETA version (testers)”</b> and paste the key above.</li>
+      <li>Drive clean laps. Any sim, any track, any car — if you can pick, <b>Spa in GT3</b> is where everyone else is pooling up.</li>
+    </ol>
+
+    <div class="honest" style="margin-top:26px">
+      <h3>Before you switch</h3>
+      <ul>
+        <li>You need to own PitWise — the beta downloads through your licence key.</li>
+        <li>Anonymous data sharing has to be <b>on</b> (Settings → Application), or your laps never reach the pool.</li>
+        <li class="warn">Clean laps only — a lap with a track-limit cut doesn't count, by design.</li>
+        <li class="warn">It's a beta, so things can break. The same button puts you back on the stable version at any time.</li>
+      </ul>
+    </div>
+
+    <p class="faded" style="margin-top:22px;max-width:720px">Found something broken? Use the feedback form inside the app, or the <a href="https://discord.gg/nKBeDhBzym" style="color:var(--accent);font-weight:700;text-decoration:none">Discord</a> — bug reports go straight to the developer. Telling me your sim, car and language helps a lot.</p>
+  </div>
+</section>
+
 <section id="community">
   <div class="wrap">
     <h2>Join the community</h2>
@@ -330,5 +387,6 @@
 </footer>
 
 <script src="https://payhip.com/payhip.js" type="text/javascript"></script>
+<script src="beta.js" defer></script>
 </body>
 </html>
