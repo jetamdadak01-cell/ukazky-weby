@@ -3,8 +3,13 @@
 //                            agregatu per (sim|track|layout|carClass). NEuklada per-submission
 //                            (free tier = 1000 zapisu/den; 1 zapis na session, ne na kolo).
 // KV: pouzije binding "TELEMETRY" kdyz existuje, jinak spadne na "FEEDBACK" (agg_ prefix, zadna
-//     kolize s fb_). Volitelny env INGEST_TOKEN = sdilene tajemstvi proti spamu (kdyz je nastavene,
-//     vyzaduje se; kdyz ne, spolehame na tvrdou validaci).
+//     kolize s fb_). Volitelny env TELEMETRY_INGEST_TOKEN = sdilene tajemstvi proti spamu (kdyz je
+//     nastavene, vyzaduje se; kdyz ne, spolehame na tvrdou validaci).
+// PROC VLASTNI PROMENNA (20.9.2026): reflap.js cte INGEST_TOKEN a token posila kazdy klient od 2.27.0.
+//     Sem ale token NEPOSILA ZADNA vydana verze (ani 2.28.1) - Start-TelFlush v appce ho ma az od
+//     verze po 2.28.1 (staged). Kdyby oba endpointy cetly tutez promennou, zapnuti ochrany reflapu by
+//     potichu odriznulo prumery od VSECH uzivatelu. TELEMETRY_INGEST_TOKEN zapnout az kdyz v errlogu
+//     nezbyde zadna verze <= 2.28.1.
 //
 // Blob v KV (klic agg_<sim>_<track>_<layout>_<carClass>):
 //   { v, sim, track, layout, carClass, updated,
@@ -37,8 +42,8 @@ export async function onRequest(context) {
   if (request.method !== "POST") return json({ ok: false, error: "method" }, 405);
   if (!kv) return json({ ok: false, error: "KV not bound (TELEMETRY/FEEDBACK)" }, 500);
 
-  // volitelna ochrana proti spamu: kdyz je INGEST_TOKEN nastaveny, musi sedet
-  const need = env.INGEST_TOKEN || "";
+  // volitelna ochrana proti spamu: kdyz je TELEMETRY_INGEST_TOKEN nastaveny, musi sedet (viz hlavicka)
+  const need = env.TELEMETRY_INGEST_TOKEN || "";
   if (need) {
     const got = request.headers.get("x-ingest-token") || new URL(request.url).searchParams.get("t") || "";
     if (got !== need) return json({ ok: false, error: "unauthorized" }, 401);
