@@ -4,13 +4,25 @@
 // CORS zapnute (na rozdil od feedback.js): tyto prumery muze cist i prohlizec/web.
 // Cte stejny blob, ktery zapisuje telemetry.js (klic agg_<sim>_<track>_<layout>_<carClass>).
 
-const SIMS = ["ac", "acc", "lmu", "rf2", "ir", "f1"];
+const SIMS = ["ac", "acc", "lmu", "rf2", "ir", "f1", "ams2"];
 const MIN_LAPS = 20;   // pod timto poctem NEreportujeme "komunitni" cislo (aby to nebyl 1 clovek)
+// UVERITELNOST BESTU (30.9.2026): best se vrati jen kdyz je >= 80 % prumeru, jinak null -> klient
+// (Apply-CrowdResult: [int]$null = 0, Get-CrowdRefMs/Get-RefLap berou jen > 0) spadne na best vozu,
+// pak na pevnou tabulku. Naladeno na 48 zivych klicich (1.10.2026): nesmysly 0,29-0,80 (iRacing
+// Oschersleben 29,5 s / 102 s, Charlotte 33 s / 104 s, Bathurst GT3 80,6 s / 127 s, Monza GT3
+// 86,4 s / 108,5 s), realne besty s prumerem nafouknutym out-lapy/boxy 0,82-0,83 (AC i ACC Spa GT3,
+// rF2 COTA GT3) - 0,85 by je schovalo. Pasmo 0,79-0,82 je smisene (Charlotte other 0,798 nejspis
+// realny ovalovy cas -> schovan; Road America GT3 0,817 nejspis mix layoutu -> ukazan). Best vozu se
+// meri proti prumeru TOHO vozu (lapMean z telemetry.js, od 30.9.2026), dokud nema CAR_MIN_LAPS kol,
+// tak proti prumeru tridy.
+const BEST_MIN_RATIO = 0.80;
+const CAR_MIN_LAPS = 10;
 
 function idSafe(s, max) {
   return (s || "").toString().toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, max || 40);
 }
 function meanOf(a) { return a && a.n > 0 ? a.mean : null; }
+function plausibleBest(best, mean) { return best != null && isFinite(best) && best > 0 && mean > 0 && best >= BEST_MIN_RATIO * mean; }
 function pitMode(hist) {
   let best = null, bestC = -1;
   for (const k in hist) { if (hist[k] > bestC) { bestC = hist[k]; best = parseInt(k, 10); } }
@@ -50,7 +62,7 @@ export async function onRequest(context) {
 
   const avg = {
     lapMsAvg: Math.round(meanOf(a.lap)),
-    lapMsBest: a.lap.best != null ? Math.round(a.lap.best) : null,
+    lapMsBest: plausibleBest(a.lap.best, a.lap.mean) ? Math.round(a.lap.best) : null,
     fuelLPerLap: meanOf(a.fuel) != null ? Math.round(meanOf(a.fuel) * 100) / 100 : null,
     wearPctPerLap: meanOf(a.wear) != null ? Math.round(meanOf(a.wear) * 100) / 100 : null,
     pitLapMode: pitMode(a.pitHist || {}),
@@ -61,9 +73,10 @@ export async function onRequest(context) {
   let car = null;
   if (carModel && a.byCar && a.byCar[carModel]) {
     const bc = a.byCar[carModel];
+    const carRef = (bc.lapN || 0) >= CAR_MIN_LAPS ? bc.lapMean : a.lap.mean;
     car = {
       fuelLPerLap: bc.fuelN > 0 ? Math.round(bc.fuelMean * 100) / 100 : null,
-      lapMsBest: bc.best != null ? Math.round(bc.best) : null,
+      lapMsBest: plausibleBest(bc.best, carRef) ? Math.round(bc.best) : null,
       n: bc.n,
     };
   }
