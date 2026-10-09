@@ -138,6 +138,14 @@ export async function onRequest(context) {
     await kv.put(tKey, JSON.stringify(t));
     return json({ ok: true, status: "already_refunded", message: "This purchase has already been refunded." });
   }
+  // --- 1b) patri ten klic tomuhle e-mailu? Payhip license/verify vraci buyer_email. Bez teto kontroly by
+  //     drzitel JAKEHOKOLIV platneho klice mohl napsat cizi e-mail a vratit cizi platbu (hosty gcus_ uz najdeme).
+  //     Nesedi -> jen rucni fronta (clovek rozhodne); Payhip e-mail nevrati -> beze zmeny.
+  const owner = String((lic.data && (lic.data.buyer_email || lic.data.email)) || "").trim().toLowerCase();
+  if (owner && owner !== email) {
+    t.keyEmailMismatch = true;
+    t.log.push(stamp("licencni klic patri jinemu e-mailu (" + mask(owner) + ") - automaticky nevracim, rucni fronta"));
+  }
 
   // --- 2) nakup z ucetni knihy (webhook /api/payhip-hook) ---
   const sales = await salesByEmail(kv, email);
@@ -195,8 +203,14 @@ async function processRefund(env, kv, t, sale, cfg, opts) {
     return;
   }
 
+  // klic patri jinemu e-mailu (1b) -> automaticky nikdy; rucni schvaleni z adminu (skipPolicy) projde
+  if (t.keyEmailMismatch && !opts.skipPolicy) {
+    t.status = "pending"; t.log.push(stamp("klic a e-mail nesedi -> rucni fronta, zadne penize"));
+    return;
+  }
+
   // --- najit platbu u procesora (JEDNOZNACNE, jinak rucne) ---
-  const pay = await findPayment(env, t, sale);
+  const pay = await findPayment(env, t, sale, lookbackDays(cfg, opts));
   if (!pay) { t.status = "pending"; return; }
   t.log.push(stamp("platba nalezena: " + pay.processor + " " + pay.id + " " + fmtMoney(pay.amountCents, pay.currency) + " (" + pay.how + ")"));
 
@@ -297,14 +311,30 @@ async function overDailyCap(kv, cfg) {
 
 /* ========================= HLEDANI PLATBY ========================= */
 
-async function findPayment(env, t, sale) {
+const DAY_MS = 86400000;
+const LOOKBACK_MAX_DAYS = 180;   // rucni schvaleni / okno 0: jak daleko zpet se platba hleda
+const STRIPE_MAX_PAGES = 10;     // 10 x 100 plateb na jedno hledani (Cloudflare ma strop subrequestu)
+const BLOCKED = { blocked: true };   // "nasel jsem neco, co automaticky refund zakazuje" -> dal nehledat
+
+// Kdyz nakup NENI v knize, datum nakupu nezname a platba se hleda v poslednich N dnech.
+// Automaticky: okno politiky + 2 dny rezervy (platba kousek za oknem se tak najde a v logu
+// stoji "je X dni stara", ne jen "nenasla se"). Rucni schvaleni z adminu okno obchazi -> 180 dni.
+function lookbackDays(cfg, opts) {
+  if (opts.skipPolicy || !(cfg.windowDays > 0)) return LOOKBACK_MAX_DAYS;
+  return Math.min(LOOKBACK_MAX_DAYS, cfg.windowDays + 2);
+}
+
+async function findPayment(env, t, sale, lookback) {
   const around = sale && sale.date ? sale.date : 0;
+  lookback = lookback || LOOKBACK_MAX_DAYS;
+  let blocked = false;
   if (env.STRIPE_SECRET_KEY) {
-    const r = await stripeFind(env.STRIPE_SECRET_KEY, t.email, around, t.log);
-    if (r) return r;
+    const r = await stripeFind(env.STRIPE_SECRET_KEY, t.email, around, lookback, t.log);
+    if (r && r.blocked) blocked = true;          // 2+ plateb / uz vraceno / neuplny vypis: PayPal uz nezkouset
+    else if (r) return r;
   }
-  if (env.PAYPAL_CLIENT_ID && env.PAYPAL_SECRET) {
-    const r = await paypalFind(env, t.email, around, t.log);
+  if (!blocked && env.PAYPAL_CLIENT_ID && env.PAYPAL_SECRET) {
+    const r = await paypalFind(env, t.email, around, lookback, t.log);
     if (r) return r;
   }
   if (!env.STRIPE_SECRET_KEY && !env.PAYPAL_CLIENT_ID) t.log.push(stamp("zadny klic procesora v Cloudflare -> penize musi vratit clovek"));
@@ -313,8 +343,31 @@ async function findPayment(env, t, sale) {
 }
 
 /* ---------- Stripe ---------- */
-const chEmail = (c) => ((c.billing_details && c.billing_details.email) || c.receipt_email || (c.metadata && c.metadata.email) || "").toLowerCase();
+// PROC VYPIS A NE HLEDANI: Payhip zaklada kupujiciho ve Stripu jako HOSTA (gcus_...), ne jako
+// zakaznika (cus_...). Host neni v /v1/customers ani v /v1/customers/search ("0 zakazniku"),
+// a Stripe Search API u plateb e-mail neumi vubec - pole pro charges jsou jen amount, created,
+// currency, customer, metadata, status, refunded, disputed a udaje karty; description, receipt_email
+// ani billing_details.email v nem nejsou (overeno v docs.stripe.com/search). Platba se proto bere
+// VYPISEM /v1/charges v casovem okne a e-mail se porovnava tady: billing_details.email,
+// receipt_email, metadata.email a description (tam ho Payhip dava).
+// Prava klice rk_: vypis /v1/charges = "Charges" read (zahrnuto v Charges write), hledani
+// zakaznika = "Customers" read, refund = "Refunds" write. Nic dalsiho se nevola.
+const chEmails = (c) => {
+  const out = new Set();
+  for (const v of [c.billing_details && c.billing_details.email, c.receipt_email, c.metadata && c.metadata.email]) {
+    if (v) out.add(String(v).trim().toLowerCase());
+  }
+  // description: e-mail sam ("jan@x.cz") nebo ve vete ("Order for jan@x.cz") -> rozsekat na slova
+  // a porovnavat CELA slova; podretezec by k a@b.com pridal i xa@b.com
+  // apostrof NENI oddelovac (o'brien@x.com je platna adresa - jinak by z ni vzniklo brien@x.com); uvozovky/tecky jen z okraju
+  for (const w of String(c.description || "").toLowerCase().split(/[\s<>()\[\]{},;:"|]+/)) {
+    const x = w.replace(/^[.'`]+|[.'`]+$/g, "");
+    if (x.includes("@")) out.add(x);
+  }
+  return out;
+};
 const chUsable = (c) => c.status === "succeeded" && !c.refunded && !c.amount_refunded && c.paid !== false;
+const chRefunded = (c) => c.status === "succeeded" && (c.refunded || c.amount_refunded > 0);
 
 async function sGet(sk, path) {
   try {
@@ -325,36 +378,78 @@ async function sGet(sk, path) {
   } catch (e) { return { error: String(e).slice(0, 120) }; }
 }
 
-async function stripeFind(sk, email, aroundMs, log) {
+// Vypis plateb po strankach (nejnovejsi prvni). complete=false = vypis nedobehl do konce okna,
+// takze nejde rict, ze nalezena platba je JEDINA.
+async function sListCharges(sk, query) {
+  let items = [], after = "";
+  for (let p = 0; p < STRIPE_MAX_PAGES; p++) {
+    const r = await sGet(sk, "/v1/charges?limit=100" + query + (after ? "&starting_after=" + encodeURIComponent(after) : ""));
+    if (r.error) return { error: r.error, items };
+    if (!r.data) return { error: "prazdna odpoved Stripu", items };   // 200 bez JSON -> rucni fronta, ne pad
+    const page = r.data.data || [];
+    items = items.concat(page);
+    if (!r.data.has_more || !page.length) return { items, complete: true };
+    after = page[page.length - 1].id;
+  }
+  return { items, complete: false };
+}
+
+async function stripeFind(sk, email, aroundMs, lookback, log) {
   const em = (email || "").toLowerCase();
   const hit = (c, how) => ({ processor: "stripe", id: c.id, amountCents: c.amount, currency: (c.currency || "").toUpperCase(), created: (c.created || 0) * 1000, how });
+  const now = Date.now();
+  // zname datum nakupu (kniha) -> +-2 dny kolem nej; nezname -> poslednich N dni az do ted
+  const fromMs = aroundMs ? aroundMs - 2 * DAY_MS : now - lookback * DAY_MS;
+  const toMs = aroundMs ? aroundMs + 2 * DAY_MS : now;
+  const where = aroundMs ? "+-2 dny od nakupu" : "poslednich " + lookback + " dni";
+  const created = "&created%5Bgte%5D=" + Math.floor(fromMs / 1000) + "&created%5Blte%5D=" + Math.ceil(toMs / 1000);
 
-  // A) zname datum nakupu -> vypis plateb v okne +-2 dny (spolehlive, bez vyhledavaciho indexu)
-  if (aroundMs) {
-    const from = Math.floor((aroundMs - 2 * 86400000) / 1000), to = Math.floor((aroundMs + 2 * 86400000) / 1000);
-    const r = await sGet(sk, "/v1/charges?limit=100&created%5Bgte%5D=" + from + "&created%5Blte%5D=" + to);
-    if (r.error) log.push(stamp("Stripe vypis plateb selhal: " + r.error));
-    else {
-      const all = (r.data.data || []).filter(chUsable);
-      const byEmail = all.filter(c => chEmail(c) === em);
-      if (byEmail.length === 1) return hit(byEmail[0], "e-mail + datum nakupu");
-      if (byEmail.length > 1) { log.push(stamp("Stripe: " + byEmail.length + " plateb na stejny e-mail v okne - nechavam cloveku")); return null; }
-      log.push(stamp("Stripe: v okne +-2 dny zadna platba na " + em + (r.data.has_more ? " (a vypis byl oriznuty na 100)" : "")));
+  // A) vsechny platby v okne, e-mail porovnany tady (najde i hosty gcus_ - e-mail maji v description)
+  const ls = await sListCharges(sk, created);
+  if (ls.error) log.push(stamp("Stripe vypis plateb selhal: " + ls.error));
+  else {
+    const mine = ls.items.filter(c => chEmails(c).has(em));
+    const usable = mine.filter(chUsable);
+    if (usable.length > 1) {
+      log.push(stamp("Stripe: " + usable.length + " nevracenych plateb na " + em + " (" + where + ": " + usable.map(c => c.id).join(", ") + ") - nechavam cloveku"));
+      return BLOCKED;
     }
+    if (usable.length === 1) {
+      if (!ls.complete) {
+        log.push(stamp("Stripe: vypis plateb (" + where + ") je delsi nez " + (STRIPE_MAX_PAGES * 100) + " - nejde overit, ze " + usable[0].id + " je jedina platba na " + em + " - nechavam cloveku"));
+        return BLOCKED;
+      }
+      return hit(usable[0], aroundMs ? "e-mail + datum nakupu" : "e-mail v platbe, " + where);
+    }
+    const done = mine.filter(chRefunded);
+    if (done.length) {
+      // jedina platba na tenhle e-mail uz (i castecne) vracena = podruhe se nevraci, at rozhodne clovek
+      log.push(stamp("Stripe: platba na " + em + " uz je vracena (" + done.map(c => c.id).join(", ") + ") - podruhe nevracim, nechavam cloveku"));
+      return BLOCKED;
+    }
+    log.push(stamp("Stripe: v okne (" + where + ") zadna platba na " + em + (ls.complete ? "" : " (vypis oriznuty na " + (STRIPE_MAX_PAGES * 100) + ")")));
   }
 
-  // B) neznamy nakup -> zakaznik podle e-mailu a jeho platby
-  //    (Stripe umi hledat e-mail jen u zakazniku, u plateb ne - proto tenhle dvoukrok)
-  const cs = await sGet(sk, "/v1/customers/search?limit=10&query=" + encodeURIComponent('email:"' + em + '"'));
+  // B) zalozni cesta pro skutecne zakazniky (cus_...), kdyby e-mail byl jen na zakaznikovi a ne
+  //    na platbe. Hosty (gcus_) od Payhipu tohle hledani nenajde nikdy - proto az druhe.
+  const q = 'email:"' + em.replace(/["\\]/g, "\\$&") + '"';
+  const cs = await sGet(sk, "/v1/customers/search?limit=10&query=" + encodeURIComponent(q));
   if (cs.error) { log.push(stamp("Stripe hledani zakaznika selhalo: " + cs.error)); return null; }
-  const custs = (cs.data.data || []);
-  if (custs.length !== 1) { log.push(stamp("Stripe: e-mailu " + em + " odpovida " + custs.length + " zakazniku - nechavam cloveku")); return null; }
-  const ch = await sGet(sk, "/v1/charges?limit=100&customer=" + encodeURIComponent(custs[0].id));
+  const custs = ((cs.data && cs.data.data) || []);
+  if (custs.length !== 1) { log.push(stamp("Stripe: e-mailu " + em + " odpovida " + custs.length + " zakazniku (Payhip zaklada hosty gcus_, ty tohle hledani nevidi) - nechavam cloveku")); return null; }
+  // se znamym datem nakupu jen platby kolem nej; bez nej vsechny (stari pak overi processRefund)
+  const ch = await sGet(sk, "/v1/charges?limit=100&customer=" + encodeURIComponent(custs[0].id) + (aroundMs ? created : ""));
   if (ch.error) { log.push(stamp("Stripe vypis plateb zakaznika selhal: " + ch.error)); return null; }
-  const usable = (ch.data.data || []).filter(chUsable);
-  if (usable.length === 1) return hit(usable[0], "zakaznik podle e-mailu");
-  log.push(stamp("Stripe: zakaznik ma " + usable.length + " nevracenych plateb - nechavam cloveku"));
-  return null;
+  if (!ch.data) { log.push(stamp("Stripe vypis plateb zakaznika: prazdna odpoved - nechavam cloveku")); return null; }
+  const all = (ch.data.data || []);
+  const usable = all.filter(chUsable);
+  if (usable.length === 1 && !ch.data.has_more) return hit(usable[0], "zakaznik podle e-mailu");
+  if (!usable.length && all.some(chRefunded)) {
+    log.push(stamp("Stripe: zakaznik ma platbu uz vracenou - podruhe nevracim, nechavam cloveku"));
+    return BLOCKED;
+  }
+  log.push(stamp("Stripe: zakaznik ma " + usable.length + (ch.data.has_more ? "+" : "") + " nevracenych plateb - nechavam cloveku"));
+  return usable.length ? BLOCKED : null;
 }
 
 async function stripeRefund(sk, chargeId, idemSeed) {
@@ -392,13 +487,16 @@ async function ppToken(env) {
   } catch (e) { return { error: String(e).slice(0, 120) }; }
 }
 
-async function paypalFind(env, email, aroundMs, log) {
+async function paypalFind(env, email, aroundMs, lookback, log) {
   const tk = await ppToken(env);
   if (tk.error) { log.push(stamp("PayPal prihlaseni selhalo: " + tk.error)); return null; }
-  // Reporting API umi max 31 dni na dotaz; bez data nakupu bereme okno kolem poslednich dvou tydnu.
-  const center = aroundMs || (Date.now() - 15 * 86400000);
-  const from = ppDate(Math.max(center - 3 * 86400000, Date.now() - 366 * 86400000));
-  const to = ppDate(Math.min(center + 3 * 86400000, Date.now()));
+  // Reporting API umi max 31 dni na dotaz. Zname datum nakupu -> +-3 dny kolem nej; bez nej
+  // poslednich N dni AZ DO TED (N = okno politiky + rezerva, nejvys 30). Driv tu bylo
+  // "15 dni zpet +-3 dny" = jen 12.-18. den zpet, takze cerstvy nakup mimo knihu se nenasel nikdy.
+  const now = Date.now();
+  const days = Math.min(30, Math.max(1, lookback || 30));
+  const from = ppDate(aroundMs ? Math.max(aroundMs - 3 * DAY_MS, now - 366 * DAY_MS) : now - days * DAY_MS);
+  const to = ppDate(aroundMs ? Math.min(aroundMs + 3 * DAY_MS, now) : now);
   const u = ppBase(env) + "/v1/reporting/transactions?fields=transaction_info,payer_info&page_size=100&page=1"
     + "&transaction_status=S&start_date=" + encodeURIComponent(from) + "&end_date=" + encodeURIComponent(to);
   let j = null;
@@ -409,6 +507,11 @@ async function paypalFind(env, email, aroundMs, log) {
   } catch (e) { log.push(stamp("PayPal vypis transakci selhal: " + String(e).slice(0, 100))); return null; }
 
   const em = (email || "").toLowerCase();
+  // vic nez 1 stranka (100 transakci) = z 1. stranky nejde rict, ze nalezena platba je JEDINA -> clovek
+  if (j && (parseInt(j.total_pages, 10) || 1) > 1) {
+    log.push(stamp("PayPal: vypis ma " + j.total_pages + " stranek - jedinecnost platby nejde overit - nechavam cloveku"));
+    return null;
+  }
   const rows = (j && j.transaction_details) || [];
   const cands = rows.filter(x => {
     const pe = ((x.payer_info && x.payer_info.email_address) || "").toLowerCase();
@@ -422,7 +525,7 @@ async function paypalFind(env, email, aroundMs, log) {
     amountCents: Math.round(Math.abs(parseFloat(ti.transaction_amount.value)) * 100),
     currency: (ti.transaction_amount.currency_code || "").toUpperCase(),
     created: Date.parse(ti.transaction_initiation_date || ti.transaction_updated_date || "") || 0,
-    how: "e-mail platce" + (aroundMs ? " + datum nakupu" : " (okno bez data nakupu)"),
+    how: "e-mail platce" + (aroundMs ? " + datum nakupu" : ", poslednich " + days + " dni"),
   };
 }
 
