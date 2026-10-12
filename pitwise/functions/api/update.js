@@ -24,20 +24,33 @@ export async function onRequest(context) {
   if (!key) return json({ ok: false, error: "license key required" }, 403);
   if (!env.PAYHIP_API_KEY || !env.GH_TOKEN || !env.GH_REPO) return json({ ok: false, error: "endpoint not configured" }, 500);
 
-  // 1) overeni licencniho klice u Payhipu (prazdna/chybova odpoved = neplatny)
-  let valid = false;
-  try {
-    const product = env.PAYHIP_PRODUCT || "mquCD";
-    const v = await fetch(
-      "https://payhip.com/api/v1/license/verify?product_link=" + encodeURIComponent(product) + "&license_key=" + encodeURIComponent(key),
-      { headers: { "payhip-api-key": env.PAYHIP_API_KEY } }
-    );
-    if (v.ok) {
-      const j = await v.json().catch(() => null);
-      valid = !!(j && j.data && j.data.enabled);
+  // 1) overeni licencniho klice u Payhipu. 403 JEN kdyz Payhip klic opravdu odmitne (4xx / enabled=false);
+  //    Payhip nedostupny (5xx, 429, sit) = 503 - klient by jinak hlasil "neplatny licencni klic" (FR 11.10.2026).
+  //    Klic z e-mailu casto prijde s mezerou / neviditelnym znakem uprostred nebo malymi pismeny -> 2. pokus normalizovany.
+  const product = env.PAYHIP_PRODUCT || "mquCD";
+  const verify = async (k) => {
+    try {
+      const v = await fetch(
+        "https://payhip.com/api/v1/license/verify?product_link=" + encodeURIComponent(product) + "&license_key=" + encodeURIComponent(k),
+        { headers: { "payhip-api-key": env.PAYHIP_API_KEY } }
+      );
+      if (v.ok) {
+        const j = await v.json().catch(() => null);
+        return j && j.data && j.data.enabled ? "valid" : "invalid";
+      }
+      return v.status >= 500 || v.status === 429 ? "down" : "invalid";
+    } catch (e) {
+      return "down";
     }
-  } catch (e) {}
-  if (!valid) return json({ ok: false, error: "invalid license key" }, 403);
+  };
+  let res = await verify(key);
+  const norm = key.replace(/[\s\u200B-\u200D\u2060\uFEFF]/g, "").toUpperCase();
+  if (res !== "valid" && norm && norm !== key) {
+    const r2 = await verify(norm);
+    if (r2 === "valid" || res === "invalid") res = r2;
+  }
+  if (res === "down") return json({ ok: false, error: "license server unavailable, try again later" }, 503);
+  if (res !== "valid") return json({ ok: false, error: "invalid license key" }, 403);
 
   // 2) soubor z privatniho repa (Contents API s raw media typem)
   //    channel=beta -> soubory z beta/ slozky (beta testeri s klicem v aplikaci)
