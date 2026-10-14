@@ -1,6 +1,11 @@
 // Cloudflare Pages Function — sber chyb z aplikace PitWise (vzdalena diagnostika)
 //   POST /api/errlog             -> ulozi davku chyb do KV (prefix err_, TTL 30 dni)
-//   GET  /api/errlog?token=XXX   -> vrati vsechny chyby (jen s admin tokenem)
+//   GET  /api/errlog?token=XXX   -> davky NEJNOVEJSI PRVNI, po strankach (jen s admin tokenem)
+//        &limit=N     davek na stranku (vychozi 500, max 900)
+//        &aid=XXX     jen davky jednoho uzivatele (cele anon id nebo jeho zacatek)
+//        &since=MS    jen davky s ts >= MS (unix ms)
+//        &cursor=XXX  dalsi stranka: hodnota "cursor" z predchozi odpovedi
+//      odpoved { ok, count, items, cursor, list_complete, total } - list_complete=false => existuje dalsi stranka
 // Pouziva STEJNY KV namespace jako feedback ("FEEDBACK") - zadna dalsi konfigurace v CF.
 // Data jsou anonymni: verze, anonymni id (hash), zeme, chybove radky (bez e-mailu).
 
@@ -44,26 +49,72 @@ export async function onRequest(context) {
       })),
     };
     const key = "err_" + batch.ts + "_" + Math.random().toString(36).slice(2, 8);
-    await kv.put(key, JSON.stringify(batch), { expirationTtl: 60 * 60 * 24 * 30 });
+    // metadata (aid, ver) vraci uz kv.list -> GET s &aid= nemusi cist cizi davky
+    await kv.put(key, JSON.stringify(batch), { expirationTtl: 60 * 60 * 24 * 30, metadata: { aid: batch.aid, ver: batch.ver } });
     if (dk) { try { await kv.put(dk, "1", { expirationTtl: 60 * 60 * 24 * 30 }); } catch (e) {} }
     return json({ ok: true });
   }
 
   if (request.method === "GET") {
-    const token = new URL(request.url).searchParams.get("token") || "";
+    const q = new URL(request.url).searchParams;
+    const token = q.get("token") || "";
     if (!admin || token !== admin) return json({ ok: false, error: "unauthorized" }, 401);
-    const list = await kv.list({ prefix: "err_" });
+    // STRANKOVANI (14.10.2026): drive kv.list bez kurzoru = max 1000 klicu ABECEDNE = tech NEJSTARSICH + 1 get na klic.
+    // Nad 1000 davek by zmizely prave nejnovejsi a GET by narazil na limit ~1000 KV operaci na volani.
+    // Ted: vypis vsech klicu (1 operace na 1000 klicu), serazeni od nejnovejsiho, get jen pro jednu stranku.
+    // Cas je v nazvu klice (err_<ts>_<rnd>) -> since bez cteni; aid z metadat (davky pred 14.10. je nemaji -> get).
+    const limit = Math.min(900, Math.max(1, parseInt(q.get("limit") || "", 10) || 500));
+    const aid = (q.get("aid") || "").slice(0, 40);
+    const since = parseInt(q.get("since") || "", 10) || 0;
+    const cursor = q.get("cursor") || "";
+    if (cursor && !/^err_\d+_[A-Za-z0-9]*$/.test(cursor)) return json({ ok: false, error: "bad cursor" }, 400);
+    const keys = [];
+    let ops = 0, lc = "";
+    do {
+      const r = await kv.list(lc ? { prefix: "err_", cursor: lc } : { prefix: "err_" });
+      ops++;
+      keys.push(...r.keys);
+      lc = r.list_complete ? "" : r.cursor;
+    } while (lc && ops < 50);
+    keys.sort((a, b) => (a.name < b.name ? 1 : a.name > b.name ? -1 : 0));
+    // cursor = posledni zpracovany klic predchozi stranky -> pokracuje se klici starsimi nez on
+    let pos = cursor ? keys.findIndex(k => k.name < cursor) : 0;
+    if (pos < 0) pos = keys.length;
+    let budget = 950 - ops, hitSince = false;
     const items = [];
-    for (const k of list.keys) {
-      const v = await kv.get(k.name);
-      if (v) { try { const o = JSON.parse(v); o._key = k.name; items.push(o); } catch (e) {} }
+    while (pos < keys.length && items.length < limit && budget > 0 && !hitSince) {
+      const want = Math.min(25, budget, limit - items.length), names = [];
+      while (pos < keys.length && names.length < want) {
+        const k = keys[pos];
+        if (since && keyTs(k.name) < since) { hitSince = true; break; }
+        pos++;
+        const ma = k.metadata && typeof k.metadata.aid === "string" ? k.metadata.aid : null;
+        if (aid && ma !== null && !ma.startsWith(aid)) continue;
+        names.push(k.name);
+      }
+      if (!names.length) continue;
+      const vals = await Promise.all(names.map(n => kv.get(n)));
+      budget -= names.length;
+      vals.forEach((v, j) => {
+        if (!v) return;
+        try {
+          const o = JSON.parse(v);
+          if (aid && !String(o.aid || "").startsWith(aid)) return;
+          o._key = names[j]; items.push(o);
+        } catch (e) {}
+      });
     }
-    items.sort((a, b) => b.ts - a.ts);
-    return json({ ok: true, count: items.length, items });
+    // poradi items = poradi klicu (nejnovejsi prvni), proto uz se neradi podle ts
+    const done = hitSince || pos >= keys.length;
+    const next = done ? null : pos > 0 ? keys[pos - 1].name : cursor || null;
+    return json({ ok: true, count: items.length, items, cursor: next, list_complete: done, total: keys.length });
   }
 
   return json({ ok: false, error: "method" }, 405);
 }
+
+// err_<ts>_<rnd> -> ts (ms). Stejne jako ve watchdog.js.
+function keyTs(name) { return parseInt((name.split("_")[1] || "0"), 10) || 0; }
 
 // SHA-256 -> hex. Pouziva se jen na rate-limit klice, aby se do KV nikdy neulozila IP.
 async function sha256hex(s) {

@@ -14,12 +14,12 @@ const api = join(here, "..", "pitwise", "functions", "api");
 const build = join(here, "_build");
 
 mkdirSync(build, { recursive: true });
-for (const [from, to] of [["refund.js", "refund.mjs"], ["payhip-hook.js", "hook.mjs"], ["watchdog.js", "watchdog.mjs"]]) {
+for (const [from, to] of [["refund.js", "refund.mjs"], ["payhip-hook.js", "hook.mjs"], ["watchdog.js", "watchdog.mjs"], ["errlog.js", "errlog.mjs"]]) {
   copyFileSync(join(api, from), join(build, to));
 }
 
 let bad = 0;
-for (const t of ["test-refund.mjs", "test-watchdog.mjs"]) {
+for (const t of ["test-refund.mjs", "test-watchdog.mjs", "test-errlog.mjs"]) {
   console.log("\n########## " + t + " ##########");
   const r = spawnSync(process.execPath, [join(here, t)], { stdio: "inherit" });
   if (r.status !== 0) bad++;
