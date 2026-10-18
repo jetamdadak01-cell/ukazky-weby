@@ -15,7 +15,8 @@ const SNAP = "wd_last";
 
 // Kategorie chyb. Poradi ROZHODUJE - prvni shoda vyhrava, takze specificke vzory patri nahoru.
 const CATS = [
-  ["mikrofon",   /\b(mic|ptt|whisper|wavein|mic-open|mic-format|silent|empty)\b/i],
+  ["licence-server", /srv-update-/],   // /api/update: Payhip odmitl NASE klice (jinak by "401" spadlo do ai-klic)
+  ["mikrofon",  /\b(mic|ptt|whisper|wavein|mic-open|mic-format|silent|empty)\b/i],
   ["antivirus",  /(antivir|defender|zasada rizeni|application control|blocked by|quarantin)/i],
   ["ai-klic",    /(api_key_invalid|invalid.?api.?key|401|403|quota|429|billing)/i],
   ["ai-server",  /(503|502|overload|unavailable|timeout|deadline)/i],
@@ -45,7 +46,7 @@ export async function onRequest(context) {
   // Cteme JEN davky novejsi nez posledni beh - cas je primo v nazvu klice (err_<ts>_<rnd>).
   const cats = {}, vers = {}, people = {}, samples = {};
   let errNew = 0;
-  for (const k of (await kv.list({ prefix: "err_" })).keys) {
+  for (const k of await listAll(kv, "err_")) {
     if (keyTs(k.name) <= since) continue;
     const v = await kv.get(k.name);
     if (!v) continue;
@@ -62,7 +63,7 @@ export async function onRequest(context) {
 
   // ---------- feedback ----------
   const fbNew = [];
-  for (const k of (await kv.list({ prefix: "fb_" })).keys) {
+  for (const k of await listAll(kv, "fb_")) {
     if (keyTs(k.name) <= since) continue;
     const v = await kv.get(k.name);
     if (!v) continue;
@@ -112,6 +113,7 @@ export async function onRequest(context) {
   if (worth && env.DISCORD_WEBHOOK && !dry) {
     const L = [];
     L.push("**PitWise · denni hlaseni** (" + new Date(since).toISOString().slice(5, 16).replace("T", " ") + " -> ted)");
+    if (cats["licence-server"]) L.push("**LICENCE SERVER: problem s NASIMI Payhip klici " + cats["licence-server"] + "x - zakaznici mozna nemohou aktualizovat, zkontroluj PAYHIP_API_KEY / PAYHIP_PRODUCT_SECRET** (" + (samples["licence-server"] || "").slice(0, 120) + ")");
     if (rq.failed) L.push("**REFUND SELHAL " + rq.failed + "x - sahni na to rucne**");
     if (rq.pending) L.push("**Zadosti o refund cekaji na tebe: " + rq.pending + "**  -> https://pitwise.net/admin");
     if (rq.refunded || rq.dryRun) L.push("Refundy: " + rq.refunded + " automaticky vraceno" + (rq.dryRun ? ", " + rq.dryRun + " v dry-run (penize neodesly)" : ""));
@@ -144,6 +146,18 @@ export async function onRequest(context) {
 }
 
 function keyTs(name) { return parseInt((name.split("_")[1] || "0"), 10) || 0; }
+// kv.list vraci max 1000 klicu ABECEDNE (= nejstarsi) -> bez kurzoru by nad 1000 davek zmizely prave nejnovejsi
+async function listAll(kv, prefix) {
+  const keys = [];
+  let lc = "", ops = 0;
+  do {
+    const r = await kv.list(lc ? { prefix, cursor: lc } : { prefix });
+    ops++;
+    keys.push(...(r.keys || []));
+    lc = r.list_complete === false && r.cursor ? r.cursor : "";
+  } while (lc && ops < 50);
+  return keys;
+}
 function classify(s) {
   for (const [name, re] of CATS) if (re.test(s)) return name;
   return "ostatni";

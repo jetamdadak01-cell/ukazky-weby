@@ -87,6 +87,37 @@ console.log("\n6) Spatny token");
   ok(r.status === 401, "401");
 }
 
+console.log("\n7) Davka z /api/update (Payhip odmitl nase klice) = licence-server, tucne nahore");
+{
+  const kv = makeKV(Object.assign(
+    { wd_last: JSON.stringify({ ts: now - 86400e3, cats: { "ai-klic": 40 }, vers: { "2.29.8": 9 } }) },
+    Object.fromEntries([
+      errBatch(now - 60e3, "server", "server-update", ["Payhip v1 401: our API credentials were rejected - customers cannot update"], "srv-update-auth"),
+      errBatch(now - 120e3, "2.29.8", "p1", ["gemini 403 API_KEY_INVALID"], "ai-chat"),
+    ].map(([k, v]) => [k[0], v]))
+  ));
+  sent = [];
+  const d = await (await run(kv)).json();
+  ok(d.byCategory["licence-server"] === 1 && d.byCategory["ai-klic"] === 1, "licence-server 1x, ai-klic 1x (" + JSON.stringify(d.byCategory) + ")");
+  ok(/LICENCE SERVER/.test(sent[0] || "") && sent[0].indexOf("LICENCE SERVER") < sent[0].indexOf("Chyby"), "Discord: LICENCE SERVER nahore");
+}
+
+console.log("\n8) kv.list strankuje kurzorem (nad 1000 klicu by jinak zmizely nejnovejsi)");
+{
+  const kv = makeKV(Object.fromEntries([
+    errBatch(now - 7200e3, "2.29.8", "p1", ["mic err=silent"]),
+    errBatch(now - 60e3, "2.29.8", "p2", ["mic err=empty"]),
+  ].map(([k, v]) => [k[0], v])));
+  const all = kv.list;
+  kv.list = async ({ prefix, cursor }) => {                 // 1 klic na stranku
+    const ks = (await all({ prefix })).keys.sort((a, b) => (a.name < b.name ? -1 : 1));
+    const i = cursor ? parseInt(cursor, 10) : 0;
+    return { keys: ks.slice(i, i + 1), list_complete: i + 1 >= ks.length, cursor: String(i + 1) };
+  };
+  const d = await (await run(kv, "&dry=1")).json();
+  ok(d.errors === 2, "precte obe stranky (" + d.errors + ")");
+}
+
 console.log("\n=================================");
 console.log(pass + " proslo, " + fail + " selhalo");
 process.exit(fail ? 1 : 0);
