@@ -335,5 +335,134 @@ console.log("\n8) zdroj update.js je ciste ASCII (zadne neviditelne znaky v rege
   ok(srcText.split("\n").filter(l => /\.replace\(/.test(l)).every(l => /^[\x00-\x7F]*$/.test(l)), "radek s normalizaci je ASCII");
 }
 
+console.log("\n9) hodnoty z dashboardu: uvozovky / mezery / zalomeni / neviditelne znaky se orezou");
+{
+  payhip = { v1: realV1, v2: realV2 };
+  const kv = makeKV();
+  ok(isFile(await call(q(GOOD), mkEnv({ v1: '"' + API + '"', kv }))), "API key v uvozovkach -> soubor");
+  const s = await call(q(GOOD), mkEnv({ v1: true, v2: " " + SECRET + "\r\n", kv }));
+  ok(isFile(s) && calls.filter(c => c.api === "v1").length === 0, "secret s mezerou a CRLF -> v2 platny, v1 se nevola");
+  ok(isFile(await call(q(GOOD), mkEnv({ v2: "'" + SECRET + "'", kv }))), "secret v apostrofech -> soubor");
+  ok(isFile(await call(q(GOOD), mkEnv({ v1: API.slice(0, 5) + ZW + API.slice(5), kv }))), "zero-width znak uprostred API key -> soubor");
+  ok(isFile(await call(q(GOOD), mkEnv({ v1: API.slice(0, 6) + "\n" + API.slice(6), kv }))), "zalomeni uprostred API key -> soubor (ne 503 down)");
+  const LRM = String.fromCharCode(0x200E), NBSP = String.fromCharCode(0xA0), LQ = String.fromCharCode(0x201C), RQ = String.fromCharCode(0x201D);
+  ok(isFile(await call(q(GOOD), mkEnv({ v1: LRM + API + NBSP, kv }))), "LRM + nezlomitelna mezera kolem API key -> soubor");
+  ok(isFile(await call(q(GOOD), mkEnv({ v2: LQ + SECRET + RQ, kv }))), "typograficke uvozovky kolem secretu -> soubor");
+  ok(errKeys(kv).length === 0, "orezane hodnoty -> zadna davka do errlogu");
+  const ekv = makeKV();
+  const e = await call(q(GOOD), mkEnv({ v1: '""', kv: ekv }));
+  ok(AUTH(e) && calls.length === 0, "API key jen z uvozovek -> 503 auth bez dotazu na Payhip (ne tichy 500)");
+  ok(srcs(ekv).join() === "srv-update-auth" && /empty after removing quotes/.test(JSON.parse(ekv._m.get(errKeys(ekv)[0]).v).items[0].msg), "-> davka srv-update-auth 'empty after removing quotes'");
+  ok(AUTH(await call(q(GOOD), mkEnv({ v1: "  ", v2: "''", kv: makeKV() }))), "oba jen mezery/uvozovky -> 503 auth");
+}
+
+console.log("\n10) prohozene PAYHIP_API_KEY <-> PAYHIP_PRODUCT_SECRET -> aktualizace jdou + 1 davka srv-update-swapped");
+{
+  payhip = { v1: realV1, v2: realV2 };
+  const kv = makeKV();
+  const env = mkEnv({ v1: SECRET, v2: API, kv });                // prohozene v Cloudflare
+  const r = await call(q(GOOD), env);
+  ok(isFile(r), "prohozene klice + platny klic -> soubor (" + r.status + ")");
+  ok(calls.filter(c => c.api !== "gh").map(c => c.api).join() === "v2,v1,v2", "poradi v2,v1 (puvodni) -> v2 prohozene (" + calls.map(c => c.api).join() + ")");
+  ok(srcs(kv).join() === "srv-update-swapped", "1 davka srv-update-swapped, zadna auth/degraded (" + srcs(kv).join() + ")");
+  const all = [...kv._m.values()].map(x => x.v).join("|");
+  ok(![GOOD, API, SECRET].some(x => all.includes(x)), "v davce neni klic zakaznika, API key ani secret");
+  ok(isFile(await call(q(GOOD), env)) && errKeys(kv).length === 1, "druhy pozadavek do hodiny -> zadna druha davka");
+  ok(INVALID(await call(q("NOPE-NOPE-NOPE-NOPE"), env)), "prohozene klice + neznamy klic -> 403 invalid (ne 503)");
+  ok(isFile(await call(q("abcd-efgh-ijkl-mnop"), env)), "prohozene klice + maly pismena -> normalizovany pokus -> soubor");
+  // prohozene poradi Payhip nepotvrdi (je dole) -> zustava 503 auth, ne "swapped"
+  const kv2 = makeKV();
+  payhip = { v1: (k, c) => new Response("", { status: c === API ? 503 : 401 }), v2: (k, c) => new Response("", { status: c === SECRET ? 503 : 401 }) };
+  ok(AUTH(await call(q(GOOD), mkEnv({ v1: SECRET, v2: API, kv: kv2 }))), "prohozene, ale Payhip dole -> 503 auth");
+  ok(srcs(kv2).join() === "srv-update-auth", "-> davka srv-update-auth, ne swapped (" + srcs(kv2).join() + ")");
+  // ciste spatne hodnoty spravneho tvaru -> prohozeni se nezkousi (zadne zbytecne dotazy)
+  payhip = { v1: realV1, v2: realV2 };
+  ok(AUTH(await call(q(GOOD), mkEnv({ v1: "acct_STARY", v2: "prod_sk_STARY", kv: makeKV() }))) && calls.length === 2, "spatne hodnoty spravneho tvaru -> jen 2 dotazy (" + calls.length + ")");
+  // API key v obou polich -> v2 s API key = 401, zaloha v1 zachrani (prohozeni stejnych hodnot nema smysl)
+  ok(isFile(await call(q(GOOD), mkEnv({ v1: API, v2: API, kv: makeKV() }))) && calls.filter(c => c.api !== "gh").length === 2, "stejna hodnota v obou -> v2 401, zaloha v1 -> soubor, 2 dotazy");
+  // secret v obou polich -> v2 hned platny
+  ok(isFile(await call(q(GOOD), mkEnv({ v1: SECRET, v2: SECRET, kv: makeKV() }))), "secret v obou -> v2 platny -> soubor");
+  // API key vlozeny do PAYHIP_PRODUCT_SECRET (bez prod_sk_) + stary API key -> prohozene poradi: v2 401, v1 platny
+  const kv3 = makeKV();
+  ok(isFile(await call(q(GOOD), mkEnv({ v1: "acct_STARY", v2: API, kv: kv3 }))), "API key v poli secretu + stary API key -> soubor");
+  ok(calls.filter(c => c.api !== "gh").map(c => c.api).join() === "v2,v1,v2,v1", "poradi v2,v1 -> v2,v1 prohozene (" + calls.map(c => c.api).join() + ")");
+  ok(srcs(kv3).join() === "srv-update-swapped", "-> 1 davka srv-update-swapped (" + srcs(kv3).join() + ")");
+  // REVIEW 24.10.: secret JINEHO produktu v PAYHIP_API_KEY + stara hodnota v PAYHIP_PRODUCT_SECRET.
+  // Prohozene: v2 s cizim secretem = 400 na vsechno ("invalid"), v1 se starou hodnotou = 401 -> NESMI to byt 403 vsem.
+  const OTHER_SK = "prod_sk_OTHERPRODUCT";
+  for (const stale of ["prod_sk_STARY", "acct_STARY"]) {
+    payhip = { v1: realV1, v2: (k, c, u) => c === OTHER_SK ? new Response("", { status: 400 }) : realV2(k, c, u) };
+    const kv4 = makeKV();
+    const env4 = mkEnv({ v1: OTHER_SK, v2: stale, kv: kv4 });
+    ok(AUTH(await call(q(GOOD), env4)), "cizi secret v API key + " + stale + " -> platici zakaznik 503 auth (NE 403)");
+    ok(AUTH(await call(q("abcd-efgh-ijkl-mnop"), env4)), "  ... i s malymi pismeny -> 503 auth");
+    ok(srcs(kv4).join() === "srv-update-auth", "  ... davka srv-update-auth, ne swapped (" + srcs(kv4).join() + ")");
+  }
+  // polovicni prohozeni: v PAYHIP_API_KEY je NAS secret, v PAYHIP_PRODUCT_SECRET stara hodnota -> platici dostane soubor
+  payhip = { v1: realV1, v2: realV2 };
+  const kv5 = makeKV();
+  const env5 = mkEnv({ v1: SECRET, v2: "acct_STARY", kv: kv5 });
+  ok(isFile(await call(q(GOOD), env5)) && srcs(kv5).join() === "srv-update-swapped", "nas secret v API key + stara hodnota -> soubor + swapped");
+  ok(AUTH(await call(q("NOPE-NOPE-NOPE-NOPE"), env5)), "  ... neznamy klic -> 503 (v prohozenem poradi 1 hodnota odmitnuta), ne 403");
+}
+
+console.log("\n11) diagnostika ?diag=1&token= (jen tvar hodnot + zivy test, nikdy hodnoty)");
+{
+  const { createHash } = await import("node:crypto");
+  const sha8 = s => createHash("sha256").update("pitwise-diag:" + s).digest("hex").slice(0, 8);
+  const rawSha8 = s => createHash("sha256").update(s).digest("hex").slice(0, 8);
+  const dq = (t) => "diag=1" + (t === undefined ? "" : "&token=" + t);
+  const denv = (o) => ({ ...mkEnv(o), ADMIN_TOKEN: "T0ken" });
+  payhip = { v1: realV1, v2: realV2 };
+  for (const [qq, env, name] of [[dq(), denv({ v1: true }), "bez tokenu"], [dq("spatny"), denv({ v1: true }), "spatny token"],
+    [dq("T0ke"), denv({ v1: true }), "kratsi token"], [dq("T0ken"), mkEnv({ v1: true }), "ADMIN_TOKEN nenastaveny"]]) {
+    const r = await call(qq, env);
+    ok(r.status === 401 && r.d.error === "unauthorized" && calls.length === 0, "diag " + name + " -> 401 bez dotazu na Payhip");
+  }
+  ok((await call(dq("T0ken"), denv({ v1: true }), { method: "POST" })).status === 405, "diag POST -> 405");
+  const g = await call(dq("T0ken"), denv({ v1: '"' + API + '"', v2: true }));
+  ok(g.status === 200 && g.d.ok && g.d.verdict === "ok", "spravne klice -> verdict ok (" + (g.d && g.d.verdict) + ")");
+  ok(g.d.probe.v1_with_PAYHIP_API_KEY.http === 200 && g.d.probe.v1_with_PAYHIP_API_KEY.means === "accepted", "v1 s API key: 200 accepted");
+  ok(g.d.probe.v2_with_PAYHIP_PRODUCT_SECRET.http === 400 && g.d.probe.v2_with_PAYHIP_PRODUCT_SECRET.means === "accepted", "v2 se secretem: 400 accepted");
+  ok(g.d.probe.v1_with_PAYHIP_PRODUCT_SECRET.means === "rejected" && g.d.probe.v2_with_PAYHIP_API_KEY.means === "rejected", "obracene poradi: rejected");
+  const ca = g.d.creds.PAYHIP_API_KEY, cs = g.d.creds.PAYHIP_PRODUCT_SECRET;
+  ok(ca.set && ca.quoted && ca.cleanedUp && ca.len === API.length + 2 && ca.cleanLen === API.length && !ca.looksLikeProductSecret, "tvar API key: uvozovky, orezano, delky");
+  ok(ca.fp8 === sha8(API) && cs.fp8 === sha8(SECRET) && cs.looksLikeProductSecret && !cs.cleanedUp, "fp8 = sha256('pitwise-diag:'+orezana hodnota), secret prod_sk_");
+  ok(ca.fp8 !== rawSha8(API) && !g.text.includes(rawSha8(API)), "fp8 NENI zacatek sha256(API key) = podpisu Payhip webhooku");
+  ok(/NOT verified/.test(g.d.hint) && /re-paste it cleanly/.test(g.d.hint), "hint: vazba na produkt neoverena + upozorneni na orezanou hodnotu");
+  ok(![API, SECRET, "acct_api_key", "SECRET456", "SECRET123"].some(x => g.text.includes(x)), "v odpovedi diag neni API key ani secret (ani jejich casti)");
+  ok(calls.every(c => c.key === "PWDIAG-0000-0000-0000"), "diag testuje jen vymysleny licencni klic");
+  ok((await call(dq("T0ken"), denv({ v1: SECRET, v2: API }))).d.verdict === "swapped", "prohozene -> verdict swapped");
+  const w = await call(dq("T0ken"), denv({ v1: "acct_STARY", v2: "prod_sk_STARY" }));
+  ok(w.d.verdict === "both-rejected" && /CURRENT API key/.test(w.d.hint), "oba spatne -> both-rejected + navod");
+  const o = await call(dq("T0ken"), denv({ v1: true }));
+  ok(o.d.verdict === "ok-api-key-only" && o.d.probe.v2_with_PAYHIP_PRODUCT_SECRET.means === "not set" && !o.d.creds.PAYHIP_PRODUCT_SECRET.set, "jen API key -> ok-api-key-only, secret not set");
+  ok((await call(dq("T0ken"), denv({ v1: "acct_STARY", v2: true }))).d.verdict === "ok-product-secret-only", "jen secret funguje -> ok-product-secret-only");
+  payhip = { v1: () => new Response("", { status: 503 }), v2: () => new Response("", { status: 502 }) };
+  ok((await call(dq("T0ken"), denv({ v1: true, v2: true }))).d.verdict === "payhip-unclear", "Payhip dole -> payhip-unclear");
+  // REVIEW 24.10.: jen JEDNA promenna se secretem v poli API key -> update da 503, diag nesmi rict "swapped, jde to"
+  payhip = { v1: realV1, v2: realV2 };
+  const wv = await call(dq("T0ken"), denv({ v1: SECRET }));
+  ok(wv.d.verdict === "wrong-variable" && /do NOT work/.test(wv.d.hint), "jen secret v PAYHIP_API_KEY -> wrong-variable (" + wv.d.verdict + ")");
+  ok(AUTH(await call(q(GOOD), mkEnv({ v1: SECRET }))), "  ... a update opravdu 503 (shoda s diag)");
+  ok((await call(dq("T0ken"), denv({ v2: API }))).d.verdict === "wrong-variable", "jen API key v PAYHIP_PRODUCT_SECRET -> wrong-variable");
+  ok((await call(dq("T0ken"), denv({ v1: SECRET, v2: "prod_sk_STARY" }))).d.verdict === "swapped", "nas secret v API key + stary secret -> swapped");
+  ok(isFile(await call(q(GOOD), mkEnv({ v1: SECRET, v2: "prod_sk_STARY", kv: makeKV() }))), "  ... a update opravdu jde (shoda s diag)");
+  // 429 na prohozenych sondach -> payhip-unclear, ne both-rejected
+  payhip = { v1: (k, c, u) => c === API ? realV1(k, c, u) : new Response("", { status: c === "acct_STARY" ? 401 : 429 }),
+    v2: (k, c) => new Response("", { status: c === "prod_sk_STARY" ? 401 : 429 }) };
+  ok((await call(dq("T0ken"), denv({ v1: "acct_STARY", v2: "prod_sk_STARY" }))).d.verdict === "payhip-unclear", "429 na prohozenych sondach -> payhip-unclear");
+  // v2 200 s neprectitelnym telem -> unclear (shoda s classify)
+  payhip = { v1: () => new Response("", { status: 401 }), v2: () => new Response("<html>", { status: 200 }) };
+  const ht = await call(dq("T0ken"), denv({ v1: "acct_STARY", v2: "prod_sk_X" }));
+  ok(ht.d.probe.v2_with_PAYHIP_PRODUCT_SECRET.means === "unclear", "v2 200 bez JSON -> unclear");
+  // tvar: typograficke uvozovky a neviditelne znaky
+  payhip = { v1: realV1, v2: realV2 };
+  const sq = await call(dq("T0ken"), denv({ v1: String.fromCharCode(0x201C) + API + String.fromCharCode(0x201D) }));
+  ok(sq.d.creds.PAYHIP_API_KEY.quoted && sq.d.creds.PAYHIP_API_KEY.nonAscii && sq.d.creds.PAYHIP_API_KEY.cleanLen === API.length && sq.d.verdict === "ok-api-key-only", "typograficke uvozovky -> quoted, nonAscii, orezano, funguje");
+  payhip = { v1: realV1, v2: realV2 };
+  ok(isFile(await call(q(GOOD) + "&diag=0", mkEnv({ v1: true }))), "diag=0 -> normalni update");
+}
+
 console.log("\n" + pass + " OK, " + fail + " FAIL");
 process.exit(fail ? 1 : 0);
