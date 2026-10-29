@@ -1,5 +1,6 @@
 // Cloudflare Pages Function — licencovane auto-aktualizace PitWise
-//   GET /api/update?file=ps1|exe&key=LICENCNI-KLIC
+//   GET /api/update?file=ps1|exe|check&key=LICENCNI-KLIC
+//   file=check = jen overeni klice (licencni brana v aplikaci): 200 {ok:true} / 403 / 503, GitHub nepotrebuje
 //   1) overi licencni klic u Payhipu (jen platici zakaznici)
 //   2) kdyz je platny, vrati soubor z PRIVATNIHO GitHub repa
 // Vyzaduje env promenne (Cloudflare Pages > Settings > Environment variables):
@@ -31,12 +32,22 @@ export async function onRequest(context) {
   const file = url.searchParams.get("file") || "";
   const key = (url.searchParams.get("key") || "").trim();
 
-  if (!names[file]) return json({ ok: false, error: "bad file param (ps1|exe)" }, 400);
+  const check = file === "check";
+  if (!check && !names[file]) return json({ ok: false, error: "bad file param (ps1|exe)" }, 400);
   if (!key) return json({ ok: false, error: "license key required" }, 403);
   const rawSet = !!(env.PAYHIP_API_KEY || env.PAYHIP_PRODUCT_SECRET);
-  if (!rawSet || !env.GH_TOKEN || !env.GH_REPO) return json({ ok: false, error: "endpoint not configured" }, 500);
+  if (!rawSet || (!check && (!env.GH_TOKEN || !env.GH_REPO))) return json({ ok: false, error: "endpoint not configured" }, 500);
   // licencni klic ma ~25 znaku; obri retezec by jen delal 414 u Payhipu (= falesny poplach "nase klice")
   if (key.length > 200) return json({ ok: false, error: "invalid license key" }, 403);
+  // per-IP limit pro file=check (zkouseni klicu nesmi vycerpat Payhip limit), stejny vzor jako errlog.js; bez KV FEEDBACK limit neni
+  if (check && env.FEEDBACK) {
+    const kv = env.FEEDBACK;
+    const rlKey = "rlc_" + (await sha256hex("pitwise-rl:" + (request.headers.get("cf-connecting-ip") || "0"))).slice(0, 24);
+    let rlCnt = 0;
+    try { rlCnt = parseInt((await kv.get(rlKey)) || "0", 10) || 0; } catch (e) {}
+    if (rlCnt >= 20) return json({ ok: false, error: "too many attempts, try again later" }, 429);
+    try { await kv.put(rlKey, String(rlCnt + 1), { expirationTtl: 60 * 60 }); } catch (e) {}
+  }
   // zapis do errlogu (+ Discord) na pozadi - nikdy nezdrzi ani neshodi odpoved
   const later = (p) => { p = p.catch(() => {}); try { if (typeof context.waitUntil === "function") context.waitUntil(p); } catch (e) {} };
   const AUTH503 = () => json({ ok: false, error: "license check temporarily unavailable on our side, try again later" }, 503);
@@ -126,6 +137,7 @@ export async function onRequest(context) {
     "Payhip v2 rejected a key that v1 accepts - PAYHIP_PRODUCT_SECRET is probably for another product (or PAYHIP_PRODUCT is wrong)"));
   if (res === "down") return json({ ok: false, error: "license server unavailable, try again later" }, 503);
   if (res !== "valid") return json({ ok: false, error: "invalid license key" }, 403);
+  if (check) return json({ ok: true });
 
   // 2) soubor z privatniho repa (Contents API s raw media typem)
   //    channel=beta -> soubory z beta/ slozky (beta testeri s klicem v aplikaci)

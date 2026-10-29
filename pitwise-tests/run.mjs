@@ -19,7 +19,7 @@ for (const [from, to] of [["refund.js", "refund.mjs"], ["payhip-hook.js", "hook.
 }
 
 let bad = 0;
-for (const t of ["test-refund.mjs", "test-watchdog.mjs", "test-errlog.mjs", "test-update.mjs"]) {
+for (const t of ["test-refund.mjs", "test-watchdog.mjs", "test-errlog.mjs", "test-update.mjs", "test-update-check.mjs"]) {
   console.log("\n########## " + t + " ##########");
   const r = spawnSync(process.execPath, [join(here, t)], { stdio: "inherit" });
   if (r.status !== 0) bad++;
