@@ -48,6 +48,18 @@ export async function onRequest(context) {
     if (rlCnt >= 20) return json({ ok: false, error: "too many attempts, try again later" }, 429);
     try { await kv.put(rlKey, String(rlCnt + 1), { expirationTtl: 60 * 60 }); } catch (e) {}
   }
+  // casove omezeny klic (PWT-..., vydava admin pres /api/keys): overeni u nas v KV, Payhip o nem nevi. Vyprseny = stejne 403 jako neplatny.
+  // Check bez timed=1 = stara appka, ktera by klic navzdy ulozila jako potvrzeny (LicOk) a expirace by neplatila -> odmitnout.
+  // Stahovani souboru timed=1 nechce: stara appka se timto klicem musi umet aktualizovat.
+  const timedKey = key.toUpperCase();
+  if (timedKey.startsWith("PWT-")) {
+    if (check && !url.searchParams.has("timed")) return json({ ok: false, error: "invalid license key" }, 403);
+    let rec;
+    try { rec = JSON.parse(await env.FEEDBACK.get("tkey_" + timedKey)); }
+    catch (e) { return json({ ok: false, error: "license server unavailable, try again later" }, 503); }
+    if (!rec || !(Date.now() < rec.exp)) return json({ ok: false, error: "invalid license key" }, 403);
+    return check ? json({ ok: true }) : sendFile(env, url, names[file], json);
+  }
   // zapis do errlogu (+ Discord) na pozadi - nikdy nezdrzi ani neshodi odpoved
   const later = (p) => { p = p.catch(() => {}); try { if (typeof context.waitUntil === "function") context.waitUntil(p); } catch (e) {} };
   const AUTH503 = () => json({ ok: false, error: "license check temporarily unavailable on our side, try again later" }, 503);
@@ -138,12 +150,15 @@ export async function onRequest(context) {
   if (res === "down") return json({ ok: false, error: "license server unavailable, try again later" }, 503);
   if (res !== "valid") return json({ ok: false, error: "invalid license key" }, 403);
   if (check) return json({ ok: true });
+  return sendFile(env, url, names[file], json);
+}
 
-  // 2) soubor z privatniho repa (Contents API s raw media typem)
-  //    channel=beta -> soubory z beta/ slozky (beta testeri s klicem v aplikaci)
+// 2) soubor z privatniho repa (Contents API s raw media typem)
+//    channel=beta -> soubory z beta/ slozky (beta testeri s klicem v aplikaci)
+async function sendFile(env, url, name, json) {
   const channel = url.searchParams.get("channel") === "beta" ? "beta/" : "";
   const gh = await fetch(
-    "https://api.github.com/repos/" + env.GH_REPO + "/contents/" + channel + names[file] + "?ref=main",
+    "https://api.github.com/repos/" + env.GH_REPO + "/contents/" + channel + name + "?ref=main",
     { headers: { "Authorization": "Bearer " + env.GH_TOKEN, "Accept": "application/vnd.github.raw", "User-Agent": "pitwise-update-endpoint" } }
   );
   if (!gh.ok) return json({ ok: false, error: "file fetch failed " + gh.status }, 502);
@@ -152,7 +167,7 @@ export async function onRequest(context) {
     status: 200,
     headers: {
       "Content-Type": "application/octet-stream",
-      "Content-Disposition": 'attachment; filename="' + names[file] + '"',
+      "Content-Disposition": 'attachment; filename="' + name + '"',
       "Cache-Control": "no-store",
     },
   });

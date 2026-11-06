@@ -80,6 +80,7 @@
     <button data-t="rf">Refunds <span class="badge hide" id="b-rf"></span></button>
     <button data-t="sl">Sales</button>
     <button data-t="er">Errors</button>
+    <button data-t="ky">Keys</button>
   </div>
 
   <div id="status" class="stat"></div>
@@ -127,11 +128,24 @@
     <input id="erSearch" class="search" placeholder="Filter error lines…">
     <div id="erList"></div>
   </div>
+
+  <!-- ================= KEYS ================= -->
+  <div id="tab-ky" class="hide">
+    <div class="cfg">
+      <div class="row">
+        <div><label for="k-exp">Expires</label><input id="k-exp" type="datetime-local" style="min-width:210px"></div>
+        <div><label for="k-note">Note (who is it for)</label><input id="k-note" maxlength="200"></div>
+        <button id="k-new">Create key</button>
+      </div>
+      <p class="stat" style="margin:12px 0 0">The app checks these keys online at every start, so a new date applies from the next start. A new key can take about a minute to work.</p>
+    </div>
+    <div id="kyList"></div>
+  </div>
 </div>
 
 <script>
   var $ = function(s){ return document.querySelector(s); };
-  var D = { fb: [], rf: null, sl: null, er: [] };
+  var D = { fb: [], rf: null, sl: null, er: [], ky: [] };
   var TAB = "fb";
 
   function tok(){ return $("#tok").value.trim(); }
@@ -272,6 +286,27 @@
       }).join("") + '</table>';
   }
 
+  /* ---------------- KEYS ---------------- */
+  // datetime-local chce mistni cas bez zony
+  function localInput(ms){ return new Date(ms - new Date(ms).getTimezoneOffset() * 60000).toISOString().slice(0, 16); }
+  function renderKy(){
+    if (!D.ky.length){ $("#kyList").innerHTML = '<div class="empty">No time-limited keys yet.</div>'; return; }
+    $("#kyList").innerHTML = '<table><tr><th>key</th><th>note</th><th>state</th><th>expires</th><th></th></tr>' +
+      D.ky.map(function(x){
+        var live = Date.now() < x.exp;
+        return '<tr data-k="' + esc(x.key) + '"><td style="user-select:all;white-space:nowrap">' + esc(x.key) + '</td><td>' + esc(x.note) + '</td>' +
+          '<td>' + (live ? 'active' : 'expired') + '</td>' +
+          '<td><input type="datetime-local" aria-label="New expiry for ' + esc(x.key) + '" value="' + localInput(x.exp) + '"></td>' +
+          '<td style="white-space:nowrap"><button class="ghost" data-a="set">Save date</button>' +
+          (live ? ' <button class="ghost" data-a="now">Expire now</button>' : '') + '</td></tr>';
+      }).join("") + '</table>';
+  }
+  async function saveKey(method, body){
+    var r = await api("/api/keys", { method: method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    if (!r.d.ok) alert("Failed: " + (r.d.error || r.http));
+    return r.d;
+  }
+
   /* ---------------- spolecne ---------------- */
   function counts(){
     var nf = D.fb.filter(isJunk).length;
@@ -285,7 +320,7 @@
   }
   function showTab(t){
     TAB = t;
-    ["fb","rf","sl","er"].forEach(function(x){ $("#tab-" + x).classList.toggle("hide", x !== t); });
+    ["fb","rf","sl","er","ky"].forEach(function(x){ $("#tab-" + x).classList.toggle("hide", x !== t); });
     Array.prototype.forEach.call(document.querySelectorAll(".tabs button"), function(b){ b.classList.toggle("on", b.dataset.t === t); });
   }
 
@@ -294,12 +329,13 @@
     if ($("#remember").checked) localStorage.setItem("pw_admin_tok", tok()); else localStorage.removeItem("pw_admin_tok");
     $("#status").textContent = "Loading…";
     try {
-      var res = await Promise.all([api("/api/feedback"), api("/api/refund"), api("/api/payhip-hook"), api("/api/errlog")]);
+      var res = await Promise.all([api("/api/feedback"), api("/api/refund"), api("/api/payhip-hook"), api("/api/errlog"), api("/api/keys")]);
       if (res[0].d && res[0].d.error === "unauthorized"){ $("#status").innerHTML = '<span class="err">Wrong token.</span>'; return; }
       D.fb = (res[0].d && res[0].d.items) || [];
       D.rf = res[1].d && res[1].d.ok ? res[1].d : null;
       D.sl = res[2].d && res[2].d.ok ? res[2].d : null;
       D.er = (res[3].d && res[3].d.items) || [];
+      D.ky = (res[4].d && res[4].d.items) || [];
       var bits = [
         '<b>' + D.fb.length + '</b> feedback',
         '<b>' + (D.rf ? D.rf.count : 0) + '</b> refund requests' + (D.rf && D.rf.pending ? ' (<span class="warn">' + D.rf.pending + ' waiting</span>)' : ''),
@@ -307,7 +343,7 @@
         '<b>' + D.er.length + '</b> error batches'
       ];
       $("#status").innerHTML = bits.join(" · ");
-      renderFb(); renderRf(); renderSl(); renderEr(); counts();
+      renderFb(); renderRf(); renderSl(); renderEr(); renderKy(); counts();
     } catch(e){
       $("#status").innerHTML = '<span class="err">Could not reach the API. Is this running on Cloudflare (not GitHub Pages)?</span>';
     }
@@ -328,6 +364,22 @@
     var b = e.target.closest(".del"); if (!b) return;
     var key = b.closest(".card").dataset.key;
     if (key && confirm("Delete this message?")) delFb([key]);
+  });
+
+  $("#k-new").addEventListener("click", async function(){
+    var exp = new Date($("#k-exp").value).getTime();
+    if (!exp){ alert("Pick an expiry date first."); return; }
+    var d = await saveKey("POST", { exp: exp, note: $("#k-note").value });
+    // KV seznam muze par sekund zpozdit -> novy klic ukazat hned
+    if (d.ok){ D.ky.unshift(d); $("#k-note").value = ""; renderKy(); }
+  });
+  $("#kyList").addEventListener("click", async function(e){
+    var b = e.target.closest("button[data-a]"); if (!b) return;
+    var tr = b.closest("tr"), it = D.ky.filter(function(x){ return x.key === tr.dataset.k; })[0];
+    var exp = b.dataset.a === "now" ? Date.now() : new Date(tr.querySelector("input").value).getTime();
+    if (!exp){ alert("Pick a date first."); return; }
+    if (b.dataset.a === "now" && !confirm("Expire " + it.key + " now?")) return;
+    if ((await saveKey("PUT", { key: it.key, exp: exp })).ok){ it.exp = exp; renderKy(); }
   });
 
   $("#rfList").addEventListener("click", async function(e){
